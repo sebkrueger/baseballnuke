@@ -203,10 +203,34 @@ function  bbnuke_get_game_results($game_id)
     {
       $gresults[] = $row;
     }
+  else
+    return false;
 
   return $gresults;
 }
 
+
+function  bbnuke_get_players_from_team( $team, $season )
+{
+  global $wpdb;
+
+  $query = 'SELECT pl.playerID, pl.firstname, pl.middlename, pl.lastname
+              FROM ' . $wpdb->prefix . 'baseballNuke_players AS pl
+             WHERE teamName = "' . $team . '" AND season = "' . $season . '" ';
+  $result = mysql_query($query);
+  if ($result)
+    if (mysql_num_rows($result))
+      while ( $row = mysql_fetch_array($result) )
+      {
+        $players[] = $row;
+      }
+    else
+      return false;
+  else
+    return false;
+
+  return $players;
+}
 
 
 function  bbnuke_get_game_player_results($game_id, $season)
@@ -259,11 +283,185 @@ function  bbnuke_get_game_player_results($game_id, $season)
 
 
 
+function  bbnuke_update_game_results()
+{
+  global $wpdb;
+
+  $game_id = bbnuke_get_option('bbnuke_game_edit_id');
+  $season  = bbnuke_get_option('bbnuke_results_season');
+  $def      = bbnuke_get_defaults();
+  $hometeam = $def['defaultTeam'];
+
+  $error_flag = NULL;
+
+  //  check if entry exists
+  $query = 'SELECT * FROM ' . $wpdb->prefix . 'baseballNuke_boxscores WHERE gameID = ' . $game_id . ' ';
+  $result = mysql_query($query);
+  if (mysql_num_rows($result))
+    $new_entry = false;
+  else
+    $new_entry = true;
+
+  if ($new_entry)
+  {
+    //  insert game results
+    $query = 'INSERT INTO ' . $wpdb->prefix . 'baseballNuke_boxscores SET ';
+
+    for ( $i = 1; $i < 10; $i++ )
+    {
+      $query .= ' v' . $i . ' = ' . (int)$_POST['v' . $i] . ', ';
+      $query .= ' h' . $i . ' = ' . (int)$_POST['h' . $i] . ', ';
+    }
+
+    $query .= '  vhits = ' . (int)$_POST['vhits'] . ', ' .
+           '  vruns = ' . (int)$_POST['vruns'] . ', ' .
+           '  verr  = ' . (int)$_POST['verr'] . ', ' .
+           '  hhits = ' . (int)$_POST['hhits'] . ', ' .
+           '  hruns = ' . (int)$_POST['hruns'] . ', ' .
+           '  herr  = ' . (int)$_POST['herr'] . ', ' .
+           '  notes = "' . $_POST['notes'] . '", ' .
+           '  gameID = ' . $game_id . ' ';
+    $result = mysql_query($query);
+    if (mysql_error())
+      $error_flag = 1;
+  }
+  else
+  {
+    //  update game results
+    $query = 'UPDATE ' . $wpdb->prefix . 'baseballNuke_boxscores SET ';
+
+    for ( $i = 1; $i < 10; $i++ )
+    {
+      $query .= ' v' . $i . ' = ' . (int)$_POST['v' . $i] . ', ';
+      $query .= ' h' . $i . ' = ' . (int)$_POST['h' . $i] . ', ';
+    }
+
+    $query .= '  vhits = ' . (int)$_POST['vhits'] . ', ' .
+           '  vruns = ' . (int)$_POST['vruns'] . ', ' .
+           '  verr  = ' . (int)$_POST['verr'] . ', ' .
+           '  hhits = ' . (int)$_POST['hhits'] . ', ' .
+           '  hruns = ' . (int)$_POST['hruns'] . ', ' .
+           '  herr  = ' . (int)$_POST['herr'] . ', ' .
+           '  notes = "' . $_POST['notes'] . '" ' .
+           ' WHERE gameID = ' . $game_id . ' ';
+    $result = mysql_query($query);
+    if (mysql_error())
+      $error_flag = 1;
+  }
+
+  //  get players with id's
+  $players = bbnuke_get_players_from_team( $hometeam, $season );
+  //  check if entries exists
+  $presults    = bbnuke_get_game_player_results($game_id, $season);
+  if (!$presults)
+    $new_entry = true;
+  else
+    $new_entry = false;
+
+  //  update/insert player game results
+  foreach ( $players as $player )
+  {
+    $player_id = $player['playerID'];
+
+    if ( !isset($_POST[$player_id . '_chkbxDNP']) )
+    {
+      if (isset($_POST[$player_id . '_piWin']))
+        $piWin = 1;
+      else
+        $piWin = 0;
+      if (isset($_POST[$player_id . '_piLose']))
+        $piLose = 1;
+      else
+        $piLose = 0;
+      if (isset($_POST[$player_id . '_piSave']))
+        $piSave = 1;
+      else
+        $piSave = 0;
+      if ($new_entry)
+      {
+        $query = 'INSERT INTO ' . $wpdb->prefix . 'baseballNuke_stats SET ' .
+               '   battOrd  = ' . (int)$_POST[$player_id . '_battOrd'] . ',
+                   pitchOrd = ' . (int)$_POST[$player_id . '_pitchOrd'] . ',
+                   baAB     = ' . (int)$_POST[$player_id . '_baAB'] . ',
+                   ba1b     = ' . (int)$_POST[$player_id . '_ba1b'] . ',
+                   ba2b     = ' . (int)$_POST[$player_id . '_ba2b'] . ',
+                   ba3b     = ' . (int)$_POST[$player_id . '_ba3b'] . ',
+                   baHR     = ' . (int)$_POST[$player_id . '_baHR'] . ',
+                   baRBI    = ' . (int)$_POST[$player_id . '_baRBI'] . ',
+                   baBB     = ' . (int)$_POST[$player_id . '_baBB'] . ',
+                   baK      = ' . (int)$_POST[$player_id . '_baK'] . ',
+                   baSB     = ' . (int)$_POST[$player_id . '_baSB'] . ',
+                   piWin    = ' . $piWin . ',
+                   piLose   = ' . $piLose . ',
+                   piSave   = ' . $piSave . ',
+                   piIP     = ' . (float)$_POST[$player_id . '_piIP'] . ',
+                   piHits   = ' . (int)$_POST[$player_id . '_piHits'] . ',
+                   piRuns   = ' . (int)$_POST[$player_id . '_piRuns'] . ',
+                   piER     = ' . (int)$_POST[$player_id . '_piER'] . ',
+                   piWalks  = ' . (int)$_POST[$player_id . '_piWalks'] . ',
+                   piSO     = ' . (int)$_POST[$player_id . '_piSO'] . ',
+                   baRuns   = ' . (int)$_POST[$player_id . '_baRuns'] . ',
+                   baRE     = ' . (int)$_POST[$player_id . '_baRE'] . ',
+                   baFC     = ' . (int)$_POST[$player_id . '_baFC'] . ',
+                   baHP     = ' . (int)$_POST[$player_id . '_baHP'] . ',
+                   baLOB    = ' . (int)$_POST[$player_id . '_baLOB'] . ',
+                   fiPO     = ' . (int)$_POST[$player_id . '_fiPO'] . ',
+                   fiA      = ' . (int)$_POST[$player_id . '_fiA'] . ',
+                   fiE      = ' . (int)$_POST[$player_id . '_fiE'] . ',
+                   gameID   = ' . $game_id . ',
+                   playerID = ' . $player_id . ' ';
+       }
+       else
+       {
+        $query = 'UPDATE ' . $wpdb->prefix . 'baseballNuke_stats SET ' .
+               '   battOrd  = ' . (int)$_POST[$player_id . '_battOrd'] . ',
+                   pitchOrd = ' . (int)$_POST[$player_id . '_pitchOrd'] . ',
+                   baAB     = ' . (int)$_POST[$player_id . '_baAB'] . ',
+                   ba1b     = ' . (int)$_POST[$player_id . '_ba1b'] . ',
+                   ba2b     = ' . (int)$_POST[$player_id . '_ba2b'] . ',
+                   ba3b     = ' . (int)$_POST[$player_id . '_ba3b'] . ',
+                   baHR     = ' . (int)$_POST[$player_id . '_baHR'] . ',
+                   baRBI    = ' . (int)$_POST[$player_id . '_baRBI'] . ',
+                   baBB     = ' . (int)$_POST[$player_id . '_baBB'] . ',
+                   baK      = ' . (int)$_POST[$player_id . '_baK'] . ',
+                   baSB     = ' . (int)$_POST[$player_id . '_baSB'] . ',
+                   piWin    = ' . $piWin . ',
+                   piLose   = ' . $piLose . ',
+                   piSave   = ' . $piSave . ',
+                   piIP     = ' . (float)$_POST[$player_id . '_piIP'] . ',
+                   piHits   = ' . (int)$_POST[$player_id . '_piHits'] . ',
+                   piRuns   = ' . (int)$_POST[$player_id . '_piRuns'] . ',
+                   piER     = ' . (int)$_POST[$player_id . '_piER'] . ',
+                   piWalks  = ' . (int)$_POST[$player_id . '_piWalks'] . ',
+                   piSO     = ' . (int)$_POST[$player_id . '_piSO'] . ',
+                   baRuns   = ' . (int)$_POST[$player_id . '_baRuns'] . ',
+                   baRE     = ' . (int)$_POST[$player_id . '_baRE'] . ',
+                   baFC     = ' . (int)$_POST[$player_id . '_baFC'] . ',
+                   baHP     = ' . (int)$_POST[$player_id . '_baHP'] . ',
+                   baLOB    = ' . (int)$_POST[$player_id . '_baLOB'] . ',
+                   fiPO     = ' . (int)$_POST[$player_id . '_fiPO'] . ',
+                   fiA      = ' . (int)$_POST[$player_id . '_fiA'] . ',
+                   fiE      = ' . (int)$_POST[$player_id . '_fiE'] . '
+             WHERE gameID   = ' . $game_id . ' AND playerID = ' . $player_id . ' ';
+       }
+      $result = mysql_query($query);
+      if (mysql_error())
+        $error_flag = 1;
+    }
+  }
+
+  if ($error_flag)
+    return false;
+  else 
+    return true;
+}
+
+
 function  bbnuke_get_game($game_id)
 {
   global $wpdb;
 
-  $query  = "SELECT gameID, visitingTeam, homeTeam, gameDate, gameTime, field, homeScore, visitScore FROM " . $wpdb->prefix . "baseballNuke_schedule WHERE gameID = " . $game_id . " ";
+  $query  = "SELECT gameID, visitingTeam, homeTeam, gameDate, gameTime, field, homeScore, visitScore, season FROM " . $wpdb->prefix . "baseballNuke_schedule WHERE gameID = " . $game_id . " ";
   $result = mysql_query($query);
   if ($result)
     $game   = mysql_fetch_array($result);
@@ -299,9 +497,8 @@ function  bbnuke_add_schedule()
   $gtime = $_POST['bbnuke_schedules_edit_gtime'];
   $field = $_POST['bbnuke_schedules_edit_field_select'];
 
-  $query  = "INSERT INTO " . $wpdb->prefix . "baseballNuke_schedule SET visitingTeam='$vteam', homeTeam='$hteam', gameDate='$gdate', gameTime='$gtime', field='$field', homeScore='$hscore', visitScore='$vscore' ";
+  $query  = "INSERT INTO " . $wpdb->prefix . "baseballNuke_schedule SET visitingTeam='$vteam', homeTeam='$hteam', gameDate='$gdate', gameTime='$gtime', field='$field', homeScore='$hscore', visitScore='$vscore', season='$season' ";
   $result = mysql_query($query);
-
   if (mysql_error())
     return false;
 
@@ -361,13 +558,14 @@ function  bbnuke_add_tournament()
   $defs = bbnuke_get_defaults();
   $hteam = $defs['defaultTeam'];
 
+  $season = $_POST['bbnuke_tournaments_edit_select_season'];
   $gdate = $_POST['bbnuke_tournaments_edit_gdate'];
   $gtime = $_POST['bbnuke_tournaments_edit_gtime'];
   $field = $_POST['bbnuke_tournaments_edit_field_select'];
   $type  = $_POST['bbnuke_tournaments_edit_type_select'];
   $notes = $_POST['bbnuke_tournaments_edit_notes'];
 
-  $query = "INSERT INTO " . $wpdb->prefix . "baseballNuke_schedule SET visitingTeam='tournament',homeTeam='$hteam',gameDate='$gdate',gameTime='$gtime',field='$field',notes='$notes' ";
+  $query = "INSERT INTO " . $wpdb->prefix . "baseballNuke_schedule SET visitingTeam='tournament',homeTeam='$hteam',gameDate='$gdate',gameTime='$gtime',field='$field',notes='$notes',season='$season' ";
   $result = mysql_query($query);
 
   if ($result)
@@ -506,12 +704,13 @@ function  bbnuke_add_practice()
   $defs = bbnuke_get_defaults();
   $hteam = $defs['defaultTeam'];
 
+  $season = $_POST['bbnuke_practice_edit_select_season'];
   $gdate = $_POST['bbnuke_practice_edit_gdate'];
   $gtime = $_POST['bbnuke_practice_edit_gtime'];
   $field = $_POST['bbnuke_practice_edit_field_select'];
   $notes = $_POST['bbnuke_practice_edit_notes'];
 
-  $query = "INSERT INTO " . $wpdb->prefix . "baseballNuke_schedule SET visitingTeam='practice',homeTeam='$hteam',gameDate='$gdate',gameTime='$gtime',field='$field',notes='$notes' ";
+  $query = "INSERT INTO " . $wpdb->prefix . "baseballNuke_schedule SET visitingTeam='practice',homeTeam='$hteam',gameDate='$gdate',gameTime='$gtime',field='$field',notes='$notes',season='$season' ";
   $result = mysql_query($query);
 
   if ($result)
@@ -600,29 +799,6 @@ function  bbnuke_upload_file()
 }
 
 
-function  bbnuke_set_edit_field( $string )
-{
-  $pos = strpos( $string, 'bbnuke_edit_field_');
-  $pos1= strpos( $string, '_btn', $pos);
-  $id = (int)substr( $string, ($pos + 18), ($pos1 - ($pos + 18)) );
-
-  bbnuke_update_option('bbnuke_location_edit_id', $id);
-
-  return;
-}
-
-
-
-function  bbnuke_set_edit_player( $string )
-{
-  $pos = strpos( $string, 'bbnuke_edit_player_');
-  $pos1= strpos( $string, '_btn', $pos);
-  $id = (int)substr( $string, ($pos + 19), ($pos1 - ($pos + 19)) );
-
-  bbnuke_update_option('bbnuke_players_edit_id', $id);
-
-  return;
-}
 
 
 function  bbnuke_get_seasons()
@@ -1085,7 +1261,7 @@ function  bbnuke_delete_season($year)
 {
   global $wpdb;
 
-  $query = "DELETE FROM " . $wpdb->prefix . "baseballNuke_teams WHERE season = " . $year . " ";
+  $query = 'DELETE FROM ' . $wpdb->prefix . 'baseballNuke_teams WHERE season = "' . $year . '" ';
   $result = mysql_query($query);
 
   return;

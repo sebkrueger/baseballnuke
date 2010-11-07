@@ -5,7 +5,7 @@ Plugin Uri: http://www.flyingdogsbaseball.com/wp-plugins/baseballNuke
 Tags: phpnuke, baseball, team management, baseballNuke
 Requires at least: 2.7
 Tested up to: WP 3.0.1
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 
 
 
@@ -130,5 +130,11 @@ Game Results - Select Game Results from the baseballNuke Menu.  Verify
 = 1.0.0 =
 - first version of the plugin released 
 
+= 1.0.1 =
+- problem with delete season in settings page fixed
+- error on fields page: update of locations fixed
+- error on schedule, practise, tournaments page: add has not set the season in the INSERT sql
+- screenshot added
+- game results admin page: update of game results added + add of game results added
 
 `<?php code(); // goes in backticks ?>`

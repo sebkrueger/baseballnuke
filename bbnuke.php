@@ -3,7 +3,7 @@
 Plugin Name: baseballNuke 
 Plugin URI: http://www.flyingdogsbaseball.com/wp-plugins/baseballnuke
 Description: baseballNuke is a wordpress plugin based on the module for the CMS phpnuke <a href="http://phpnuke.org" target="_blank">http://phpnuke.org</a> for the administration of a single baseball team.  baseballNuke is a complete team management tool and information source.  It provides team and individual information about the players including schedule, field directions, player stats, team stats, player profiles and game results.
-Version: 1.0.0
+Version: 1.0.1
 Author: Shawn Grimes, Christian Gnoth 
 Author URI: http://claimid.com/shawn
 License: GPL2
@@ -402,37 +402,35 @@ function bbnuke_plugin_create_players_page()
 
   //  check if one edit button is pressed
   $edit_player = false;
-  foreach( $_POST as $key => $value )
+  if ( $_POST['bbnuke_delete_player_id'] == 'none' )
   {
-    if ( !(strpos( $key, 'bbnuke_edit_player_') === false) )
+    foreach( $_POST as $key => $value )
     {
-      bbnuke_set_edit_player($key);
-      $edit_player = true;
-      break;
+      if ( !(strpos( $key, 'bbnuke_edit_player_') === false) )
+      {
+        $pos = strpos( $key, 'bbnuke_edit_player_');
+        $pos1= strpos( $key, '_btn', $pos);
+        $id = (int)substr( $key, ($pos + 18), ($pos1 - ($pos + 18)) );
+        bbnuke_update_option('bbnuke_players_edit_id', $id);
+        $edit_player = true;
+        break;
+      }
     }
   }
 
   if ( $_POST['bbnuke_delete_player_btn'] )
   {
-    if ( empty($_POST['bbnuke_delete_player_id']) )
-    {
-      echo '<div id="message" class="updated fade">';
-      echo '<strong>No Player selected !!!</strong></div>';
-    }
-    else
-    {
-      $player_id = $_POST['bbnuke_delete_player_id'];
-      $season    = $_POST['bbnuke_player_edit_season'];
-      bbnuke_delete_player($player_id, $season);
-      echo '<div id="message" class="updated fade">';
-      echo '<strong>Player deleted !!!</strong></div>';
-    }
+    $player_id = $_POST['bbnuke_delete_player_id'];
+    $season    = $_POST['bbnuke_player_edit_season'];
+    bbnuke_delete_player($player_id, $season);
+    echo '<div id="message" class="updated fade">';
+    echo '<strong>Player deleted !!!</strong></div>';
   }
 
   if ( $_POST['bbnuke_save_player_btn'] )
   {
     //  check if new player or edit player
-    if ( empty($_POST['bbnuke_delete_player_id']) )
+    if ( $_POST['bbnuke_delete_player_id'] == 'none' )
     {
       //  new player
       $player_id = $_POST['bbnuke_delete_player_id'];
@@ -510,7 +508,17 @@ function bbnuke_plugin_create_players_page()
   }
 
 
-  bbnuke_plugin_print_players_option_page($edit_player);
+  $ret = bbnuke_plugin_print_players_option_page($edit_player);
+
+  switch ($ret)
+  {
+    case -1:
+      echo '<div id="message" class="error fade">';
+      echo '<strong>No Players assigned to team !!!</strong></div>';
+      break;
+    default:
+      break;
+  }
 
   return;
 }
@@ -540,18 +548,21 @@ function  bbnuke_plugin_create_tournaments_page()
 
   //  check if one delete button is pressed
   $tournament_deleted = false;
-  foreach( $_POST as $key => $value )
+  if ( $_POST['bbnuke_game_delete_id'] == 'none' )
   {
-    if ( !(strpos( $key, 'bbnuke_delete_tournament_') === false) )
+    foreach( $_POST as $key => $value )
     {
-      $pos = strpos( $key, 'bbnuke_delete_tournament_');
-      $pos1= strpos( $key, '_btn');
-      $id = (int)substr( $key, ($pos + 25), ($pos1 - ($pos + 25)) );
+      if ( !(strpos( $key, 'bbnuke_delete_tournament_') === false) )
+      {
+        $pos = strpos( $key, 'bbnuke_delete_tournament_');
+        $pos1= strpos( $key, '_btn');
+        $id = (int)substr( $key, ($pos + 25), ($pos1 - ($pos + 25)) );
 
-      bbnuke_delete_game( $id );
-      $tournament_deleted = true;
-      $game_id = $id;
-      break;
+        bbnuke_delete_game( $id );
+        $tournament_deleted = true;
+        $game_id = $id;
+        break;
+      }
     }
   }
   if ($tournament_deleted)
@@ -572,7 +583,7 @@ function  bbnuke_plugin_create_tournaments_page()
   if ( $_POST['bbnuke_save_tournament_btn'] )
   {
     //  check if new tournament or edit
-    if ( empty($_POST['bbnuke_game_delete_id']) )
+    if ( $_POST['bbnuke_game_delete_id'] == 'none' )
     {
       //  new tournament
       $ret        = bbnuke_add_tournament($fieldname, $directions);
@@ -634,18 +645,21 @@ function  bbnuke_plugin_create_practice_page()
 
   //  check if one delete button is pressed
   $practice_deleted = false;
-  foreach( $_POST as $key => $value )
+  if ( $_POST['bbnuke_game_delete_id'] == 'none' )
   {
-    if ( !(strpos( $key, 'bbnuke_delete_practice_') === false) )
+    foreach( $_POST as $key => $value )
     {
-      $pos = strpos( $key, 'bbnuke_delete_practice_');
-      $pos1= strpos( $key, '_btn');
-      $id = (int)substr( $key, ($pos + 23), ($pos1 - ($pos + 23)) );
+      if ( !(strpos( $key, 'bbnuke_delete_practice_') === false) )
+      {
+        $pos = strpos( $key, 'bbnuke_delete_practice_');
+        $pos1= strpos( $key, '_btn');
+        $id = (int)substr( $key, ($pos + 23), ($pos1 - ($pos + 23)) );
 
-      bbnuke_delete_game( $id );
-      $practice_deleted = true;
-      $game_id = $id;
-      break;
+        bbnuke_delete_game( $id );
+        $practice_deleted = true;
+        $game_id = $id;
+        break;
+      }
     }
   }
   if ($practice_deleted)
@@ -666,7 +680,7 @@ function  bbnuke_plugin_create_practice_page()
   if ( $_POST['bbnuke_save_practice_btn'] )
   {
     //  check if new practice or edit practice
-    if ( empty($_POST['bbnuke_game_delete_id']) )
+    if ( $_POST['bbnuke_game_delete_id'] == 'none' )
     {
       //  new practice
       $ret        = bbnuke_add_practice();
@@ -741,7 +755,10 @@ function  bbnuke_plugin_create_fields_page()
   {
     if ( !(strpos( $key, 'bbnuke_edit_field_') === false) )
     {
-      bbnuke_set_edit_field($key);
+      $pos = strpos( $string, 'bbnuke_edit_field_');
+      $pos1= strpos( $string, '_btn', $pos);
+      $id = (int)substr( $string, ($pos + 18), ($pos1 - ($pos + 18)) );
+      bbnuke_update_option('bbnuke_location_edit_id', $id);
       $edit_field = true;
       break;
     }
@@ -749,18 +766,21 @@ function  bbnuke_plugin_create_fields_page()
 
   //  check if one delete button is pressed
   $field_deleted = false;
-  foreach( $_POST as $key => $value )
+  if ( $_POST['bbnuke_delete_field_id'] == 'none' )
   {
-    if ( !(strpos( $key, 'bbnuke_delete_field_') === false) )
+    foreach( $_POST as $key => $value )
     {
-      $pos = strpos( $key, 'bbnuke_delete_field_');
-      $pos1= strpos( $key, '_btn');
-      $id = (int)substr( $key, ($pos + 20), ($pos1 - ($pos + 20)) );
+      if ( !(strpos( $key, 'bbnuke_delete_field_') === false) )
+      {
+        $pos = strpos( $key, 'bbnuke_delete_field_');
+        $pos1= strpos( $key, '_btn');
+        $id = (int)substr( $key, ($pos + 20), ($pos1 - ($pos + 20)) );
 
-      $fields = bbnuke_get_locations();
-      bbnuke_delete_location( $fields[$id]['fieldname'] );
-      $field_deleted = true;
-      break;
+        $fields = bbnuke_get_locations();
+        bbnuke_delete_location( $fields[$id]['fieldname'] );
+        $field_deleted = true;
+        break;
+      }
     }
   }
   if ($field_deleted)
@@ -772,7 +792,7 @@ function  bbnuke_plugin_create_fields_page()
   if ( $_POST['bbnuke_save_location_btn'] )
   {
     //  check if new field or edit field
-    if ( empty($_POST['bbnuke_delete_field_id']) )
+    if ( $_POST['bbnuke_delete_field_id'] == 'none' )
     {
       //  new player
       $fieldname  = $_POST['bbnuke_field_edit_fieldname'];
@@ -792,7 +812,7 @@ function  bbnuke_plugin_create_fields_page()
     else
     {
       //  location update
-      $player_id = $_POST['bbnuke_delete_field_id'];
+      $field_id = $_POST['bbnuke_delete_field_id'];
       $fieldname  = $_POST['bbnuke_field_edit_fieldname'];
       $directions = $_POST['bbnuke_field_edit_directions'];
       $ret        = bbnuke_update_location($fieldname, $directions);
@@ -859,17 +879,20 @@ function  bbnuke_plugin_create_schedules_page()
 
   //  check if one delete button is pressed
   $game_deleted = false;
-  foreach( $_POST as $key => $value )
+  if ( $_POST['bbnuke_game_delete_id'] != 'none' )
   {
-    if ( !(strpos( $key, 'bbnuke_delete_game_') === false) )
+    foreach( $_POST as $key => $value )
     {
-      $pos = strpos( $key, 'bbnuke_delete_game_');
-      $pos1= strpos( $key, '_btn');
-      $id = (int)substr( $key, ($pos + 19), ($pos1 - ($pos + 19)) );
+      if ( !(strpos( $key, 'bbnuke_delete_game_') === false) )
+      {
+        $pos = strpos( $key, 'bbnuke_delete_game_');
+        $pos1= strpos( $key, '_btn');
+        $id = (int)substr( $key, ($pos + 19), ($pos1 - ($pos + 19)) );
 
-      bbnuke_delete_game( $id );
-      $game_deleted = true;
-      break;
+        bbnuke_delete_game( $id );
+        $game_deleted = true;
+        break;
+      }
     }
   }
   if ($game_deleted)
@@ -878,11 +901,10 @@ function  bbnuke_plugin_create_schedules_page()
     echo '<strong>Game entry deleted !!!</strong></div>';
   }
 
-
   if ( $_POST['bbnuke_save_game_btn'] )
   {
     //  check if new player or edit player
-    if ( !$_POST['bbnuke_game_delete_id'] )
+    if ( $_POST['bbnuke_game_delete_id'] == 'none' )
     {
       //  new entry
       $ret       = bbnuke_add_schedule();
@@ -962,6 +984,17 @@ function  bbnuke_plugin_create_game_results_page()
 
   if ( $_POST['bbnuke_save_results_btn'] )
   {
+    $ret = bbnuke_update_game_results();
+    if (!$ret)
+    {
+      echo '<div id="message" class="error fade">';
+      echo '<strong>Error - game results not updated !!!</strong></div>';
+    }
+    else
+    {
+      echo '<div id="message" class="updated fade">';
+      echo '<strong>Game results updated!!!</strong></div>';
+    }
   }
 
   if ( $_POST['bbnuke_edit_game_btn'] )
