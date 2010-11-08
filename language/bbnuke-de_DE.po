@@ -1,0 +1,300 @@
+# Translation of the WordPress plugin   by .
+# Copyright (C) 2010
+# This file is distributed under the same license as the  package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: baseballNuke Version 1.0.1\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/baseballnuke\n"
+"POT-Creation-Date: 2010-11-07 11:59+0000\n"
+"PO-Revision-Date: 2010-11-07 13:21+0100\n"
+"Last-Translator: Christian Gnoth <support@it-gnoth.de>\n"
+"Language-Team: Christian Gnoth <support@it-gnoth.de>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: wir, sie\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+
+#: bbnuke-functions.php:3476
+msgid "Set Location"
+msgstr ""
+
+#: bbnuke-option-page.php:30
+msgid "baseballNuke is a wordpress plugin based on the module for the CMS phpnuke <a href=\"http://phpnuke.org\" target=\"_blank\">http://phpnuke.org</a> for the administration of a single baseball team. It is a complete team management tool and information source. baseballNuke provides team and individual information about the players including schedule, field directions, player stats, team stats, player profiles and game results."
+msgstr "baseballNuke ist ein Wordpress Plugin basierend auf dem Module für das CMS phpnuke <a href=\"http://phpnuke.org\" target=\"_blank\">http://phpnuke.org</a> für die Administration eines einzelnen Baseball-Team. Es ist ein komplettes Team Management Tool und Informationsquelle. baseballNuke bietet team und individuelle Infos über die Spieler einschließlich Spielpläne, Spielerstatistiken und Spielergebnisse."
+
+#: bbnuke-option-page.php:39
+#: bbnuke-option-page.php:102
+#: bbnuke-option-page.php:159
+#: bbnuke-option-page.php:211
+#: bbnuke-option-page.php:220
+#: bbnuke-option-page.php:281
+#: bbnuke-option-page.php:335
+#: bbnuke-option-page.php:389
+#: bbnuke-option-page.php:398
+#: bbnuke-option-page.php:488
+#: bbnuke-option-page.php:625
+#: bbnuke-option-page.php:652
+#: bbnuke-option-page.php:743
+#: bbnuke-option-page.php:831
+#: bbnuke-option-page.php:840
+#: bbnuke-option-page.php:911
+#: bbnuke-option-page.php:1023
+#: bbnuke-option-page.php:1050
+#: bbnuke-option-page.php:1128
+#: bbnuke-option-page.php:1137
+#: bbnuke-option-page.php:1210
+#: bbnuke-option-page.php:1303
+#: bbnuke-option-page.php:1330
+#: bbnuke-option-page.php:1408
+#: bbnuke-option-page.php:1417
+#: bbnuke-option-page.php:1491
+#: bbnuke-option-page.php:1576
+#: bbnuke-option-page.php:1603
+#: bbnuke-option-page.php:1682
+#: bbnuke-option-page.php:1691
+#: bbnuke-option-page.php:1782
+#: bbnuke-option-page.php:2094
+#: bbnuke-option-page.php:2168
+#: bbnuke-option-page.php:2177
+msgid "Zum umschalten klicken"
+msgstr ""
+
+#: bbnuke-option-page.php:40
+msgid "Settings"
+msgstr ""
+
+#: bbnuke-option-page.php:103
+msgid "Seasons Management"
+msgstr "Saison Management"
+
+#: bbnuke-option-page.php:106
+msgid "Select which teams you want add to which season."
+msgstr "Wählen Sie welche Teams Sie zu welcher Saison hinzufügen wollen."
+
+#: bbnuke-option-page.php:160
+msgid "Teams"
+msgstr ""
+
+#: bbnuke-option-page.php:163
+msgid "Add and delete teams."
+msgstr "Hinzufügen und Löschen von Teams."
+
+#: bbnuke-option-page.php:174
+msgid "Add"
+msgstr ""
+
+#: bbnuke-option-page.php:189
+msgid "Delete"
+msgstr ""
+
+#: bbnuke-option-page.php:282
+msgid "Field Edit"
+msgstr ""
+
+#: bbnuke-option-page.php:286
+msgid "Edit the location or add a new entry."
+msgstr "Editieren SIe die Lokation oder fügen Sie einen neuen Eintrag hinzu."
+
+#: bbnuke-option-page.php:336
+msgid "Locations List"
+msgstr ""
+
+#: bbnuke-option-page.php:339
+msgid "Edit or delete a location."
+msgstr ""
+
+#: bbnuke-option-page.php:489
+msgid "Players"
+msgstr ""
+
+#: bbnuke-option-page.php:493
+msgid "<b>Player</b>"
+msgstr ""
+
+#: bbnuke-option-page.php:626
+msgid "Upload Players"
+msgstr ""
+
+#: bbnuke-option-page.php:629
+#: bbnuke-option-page.php:1027
+#: bbnuke-option-page.php:1307
+#: bbnuke-option-page.php:1580
+msgid "Choose a file to upload in the form: "
+msgstr "Wählen SIe eine Datei in der Form: "
+
+#: bbnuke-option-page.php:653
+msgid "Current Players"
+msgstr "Derzeitige Spieler"
+
+#: bbnuke-option-page.php:656
+msgid "Select which player you want edit - first select team and season."
+msgstr "Wählen Sie zuerst das Team und die Saison, dann den Spieler zum editieren."
+
+#: bbnuke-option-page.php:744
+msgid "Players - Team/Season Management"
+msgstr ""
+
+#: bbnuke-option-page.php:747
+msgid "Select the season and assign players to the teams."
+msgstr "Wählen Sie die Saison und fügen Sie Spieler dem Team zu."
+
+#: bbnuke-option-page.php:912
+msgid "Schedule Edit"
+msgstr "Spielplan Edit"
+
+#: bbnuke-option-page.php:916
+msgid "Select a season  - edit the schedules or add a new entry."
+msgstr "Wählen Sie eine Saison - editieren Sie den Spielplan oder fügen Sie neue Einträge hinzu."
+
+#: bbnuke-option-page.php:1024
+msgid "Upload Schedules for season "
+msgstr "Upload Spielpläne für die Saison "
+
+#: bbnuke-option-page.php:1028
+msgid "visitingTeam,homeTeam,gameDate,gameTime,field."
+msgstr ""
+
+#: bbnuke-option-page.php:1051
+msgid "Schedules List"
+msgstr ""
+
+#: bbnuke-option-page.php:1054
+#: bbnuke-option-page.php:2098
+msgid "Select a game for edit."
+msgstr ""
+
+#: bbnuke-option-page.php:1211
+msgid "Tournament Edit"
+msgstr ""
+
+#: bbnuke-option-page.php:1215
+msgid "Select a season  - edit the tournament or add a new entry."
+msgstr "Wählen Sie eine Saison - editieren Sie ein Tournament oder fügen Sie neue Einträge hinzu."
+
+#: bbnuke-option-page.php:1304
+msgid "Upload Tournaments for season "
+msgstr ""
+
+#: bbnuke-option-page.php:1308
+#: bbnuke-option-page.php:1581
+msgid "gameDate,gameTime,field,note."
+msgstr ""
+
+#: bbnuke-option-page.php:1331
+msgid "Tournaments List"
+msgstr ""
+
+#: bbnuke-option-page.php:1334
+msgid "Select a tournament for edit."
+msgstr ""
+
+#: bbnuke-option-page.php:1492
+msgid "Practice Edit"
+msgstr ""
+
+#: bbnuke-option-page.php:1496
+msgid "Select a season  - edit the practice or add a new entry."
+msgstr "Wählen Sie eine Saison - editieren Sie eine Practise oder fügen SIe neue Einträge hinzu."
+
+#: bbnuke-option-page.php:1577
+msgid "Upload Practice for season "
+msgstr ""
+
+#: bbnuke-option-page.php:1604
+msgid "Practice List"
+msgstr ""
+
+#: bbnuke-option-page.php:1607
+msgid "Select a practice for edit."
+msgstr "Wählen Sie eine Practise um sie zu editieren."
+
+#: bbnuke-option-page.php:1783
+msgid "Game Results Edit"
+msgstr "Spielergibnis Edit"
+
+#: bbnuke-option-page.php:1792
+msgid "Select a season  - edit the game results and save them."
+msgstr "Wählen SIe eine Saison, editieren sie ein Spiel und speichern sie die Daten."
+
+#: bbnuke-option-page.php:2095
+msgid "Past Games List"
+msgstr "Vergangene Spiele Liste"
+
+#: bbnuke-widgets.php:27
+msgid "Displays various stats and results."
+msgstr "Anzeige von verschiedenen Ergenissen und Statistiken "
+
+#: bbnuke-widgets.php:33
+msgid "BaseballNuke Stats View"
+msgstr ""
+
+#: bbnuke-widgets.php:86
+msgid "Title"
+msgstr "Titel"
+
+#: bbnuke-widgets.php:88
+msgid "Custom Title - shown in sidebar."
+msgstr "Angepasster Titel - in der Sidebar angezeigt."
+
+#: bbnuke-widgets.php:91
+msgid "Display default title"
+msgstr "Deafault Titel anzeigen "
+
+#: bbnuke-widgets.php:93
+msgid "Display the default title or the custom title."
+msgstr "Deafault Titel oder eigener Titel anzeigen "
+
+#: bbnuke-widgets.php:96
+msgid "Display Type"
+msgstr ""
+
+#: bbnuke-widgets.php:112
+msgid "What type of statistic should be displayed"
+msgstr "Welcher type von Statistik soll gezeigt werden "
+
+#: bbnuke.php:1031
+msgid "No season - please fill the season input field!"
+msgstr "Keine Saison gewählt, bitte füllen Sie das Saison input Feld aus!"
+
+#: bbnuke.php:1040
+msgid "season already exists!"
+msgstr "Saison gibt es schon!"
+
+#: bbnuke.php:1045
+msgid "Season added!"
+msgstr "Saison hinzugefügt!"
+
+#: bbnuke.php:1055
+msgid "Season deleted!"
+msgstr "Saison gelöscht!"
+
+#: bbnuke.php:1065
+msgid "Default values changed!"
+msgstr "Deafault Werte gesetzt!"
+
+#: bbnuke.php:1073
+msgid "No team name - please fill out the team name input field!"
+msgstr "Kein Team Name - bitte füllen Sie das TeamName input Feld aus!"
+
+#: bbnuke.php:1080
+msgid "Team added!"
+msgstr "Team hinzugefügt!"
+
+#: bbnuke.php:1089
+msgid "Team deleted!"
+msgstr "Team gelöscht!"
+
+#: bbnuke.php:1099
+msgid "Please select teams and season!"
+msgstr "Bitte wählen Sie ein Team und eine Saison!"
+
+#: bbnuke.php:1105
+msgid "Teams added to season!"
+msgstr "Teams wurden der Saison hinzugefügt"
+

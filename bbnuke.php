@@ -17,7 +17,7 @@ define('BBNPURL', WP_PLUGIN_URL . '/' . str_replace(basename( __FILE__),"",plugi
 define('BBNPDIR', WP_PLUGIN_DIR . '/' . str_replace(basename( __FILE__),"",plugin_basename(__FILE__)) );
 
 // relative path to WP_PLUGIN_DIR where the translation files will sit:
-$plugin_path = dirname(plugin_basename(__FILE__)) . '/lang';
+$plugin_path = dirname(plugin_basename(__FILE__)) . '/language';
 load_plugin_textdomain( 'bbnuke', false, $plugin_path );
 
 
@@ -367,6 +367,9 @@ function bbnuke_set_option_defaults()
        'bbnuke_results_season'           => '2008',
        'bbnuke_team_leaders'             => 3,
        'bbnuke_post_user'                => 1,
+       'bbnuke_widget_playerstats_player_id'  => NULL,
+       'bbnuke_widget_game_results_player_id' => NULL,
+       'bbnuke_widget_game_results_game_id'   => NULL,
        'bbnuke_widget_bg_color'          => 'white',
        'bbnuke_widget_txt_color'         => 'black'
         );

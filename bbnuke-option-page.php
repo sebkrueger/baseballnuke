@@ -12,12 +12,17 @@ function bbnuke_plugin_print_option_page()
   $team_leaders = $options['bbnuke_team_leaders'];
   $bg_color     = $options['bbnuke_widget_bg_color'];
   $txt_color    = $options['bbnuke_widget_txt_color'];
+  $wdg_playerstats_player_id  = $options['bbnuke_widget_playerstats_player_id'];
+  $wdg_game_results_player_id = $options['bbnuke_widget_game_results_player_id'];
+  $wdg_game_results_game_id   = $options['bbnuke_widget_game_results_game_id'];
 
   //   get seasons
   $seasons_list    = bbnuke_get_seasons();
   $team_list       = bbnuke_get_teams();
-  $def_season_team = bbnuke_get_defaults();
+  $defs            = bbnuke_get_defaults();
 
+  $players         = bbnuke_get_players($defs['defaultSeason']);
+  $games           = bbnuke_get_past_games_with_results();
 
   echo
   '<div class="wrap">' . "\n" .
@@ -51,7 +56,7 @@ function bbnuke_plugin_print_option_page()
   
   for ( $i=0; $i < count($seasons_list); $i++ )
   {
-    if ( $seasons_list[$i] == $def_season_team['defaultSeason'] )
+    if ( $seasons_list[$i] == $defs['defaultSeason'] )
       echo '<option value="' . $i . '" selected="selected">' . $seasons_list[$i] . '</option>' . "\n";
     else 
       echo '<option value="' . $i . '">' . $seasons_list[$i] . '</option>' . "\n";
@@ -63,7 +68,7 @@ function bbnuke_plugin_print_option_page()
 
   for ( $i=0; $i < count($team_list); $i++ )
   {
-    if ( $team_list[$i] == $def_season_team['defaultTeam'] )
+    if ( $team_list[$i] == $defs['defaultTeam'] )
       echo '<option value="' . $i . '" selected="selected">' . $team_list[$i] . '</option>' . "\n";
     else 
       echo '<option value="' . $i . '">' . $team_list[$i] . '</option>' . "\n";
@@ -88,6 +93,51 @@ function bbnuke_plugin_print_option_page()
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_txt_color">Widget Text Color</label></th>' . "\n" .
   '                  <td><input type="text" name="bbnuke_plugin_option_txt_color" value="' . $txt_color . '" />' . "\n" .
+  '                  </td>' . "\n" .
+  '              </tr>' . "\n" .
+  '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_wdg_playerstats_playerid">Widget PlayerStats Player ID</label></th>' . "\n" .
+  '                  <td><select name="bbnuke_plugin_option_wdg_playerstats_players_select" class="select-season-single" size="1">' . "\n";
+  
+  for ( $i=0; $i < count($players); $i++ )
+  {
+    if ( $players[$i]['playerID'] == $wdg_playerstats_player_id )
+      echo '<option value="' . $players[$i]['playerID'] . '" selected="selected">' . $players[$i]['lastname'] . ', ' . $players[$i]['firstname'] . '</option>' . "\n";
+    else 
+      echo '<option value="' . $players[$i]['playerID'] . '">' . $players[$i]['lastname'] . ', ' . $players[$i]['firstname'] . '</option>' . "\n";
+  }
+
+  echo
+  '                    </select>' . "\n" .
+  '                  </td>' . "\n" .
+  '              </tr>' . "\n" .
+  '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_wdg_playerstats_playerid">Widget Game Results - Player ID</label></th>' . "\n" .
+  '                  <td><select name="bbnuke_plugin_option_wdg_game_results_players_select" class="select-season-single" size="1">' . "\n";
+  
+  for ( $i=0; $i < count($players); $i++ )
+  {
+    if ( $players[$i]['playerID'] == $wdg_game_results_player_id )
+      echo '<option value="' . $players[$i]['playerID'] . '" selected="selected">' . $players[$i]['lastname'] . ', ' . $players[$i]['firstname'] . '</option>' . "\n";
+    else 
+      echo '<option value="' . $players[$i]['playerID'] . '">' . $players[$i]['lastname'] . ', ' . $players[$i]['firstname'] . '</option>' . "\n";
+  }
+
+  echo
+  '                    </select>' . "\n" .
+  '                  </td>' . "\n" .
+  '              </tr>' . "\n" .
+  '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_wdg_playerstats_playerid">Widget Game Results - Game ID</label></th>' . "\n" .
+  '                  <td><select name="bbnuke_plugin_option_wdg_game_results_games_select" class="select-season-single" size="1">' . "\n";
+  
+  for ( $i=0; $i < count($games); $i++ )
+  {
+    if ( $games[$i]['gameID'] == $wdg_game_results_game_id )
+      echo '<option value="' . $games[$i]['gameID'] . '" selected="selected">' . $games[$i]['homeTeam'] . ' vs ' . $games[$i]['visitingTeam'] . ' on ' . $games[$i]['Gdate'] . ' at ' . $games[$i]['Gtime'] . '</option>' . "\n";
+    else 
+      echo '<option value="' . $games[$i]['gameID'] . '">' . $games[$i]['homeTeam'] . ' vs ' . $games[$i]['visitingTeam'] . ' on ' . $games[$i]['Gdate'] . ' at ' . $games[$i]['Gtime'] . '</option>' . "\n";
+  }
+
+  echo
+  '                    </select>' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              </table>' . "\n" .

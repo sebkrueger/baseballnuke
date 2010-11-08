@@ -154,11 +154,13 @@ function  bbnuke_db_delta()
             ) ENGINE=MyISAM " . $charset_collate . ";";
   dbDelta($query);
 
+  $wpdb->query = "DROP VIEW `" . $wpdb->prefix . "baseballNuke_batTotals` ";
   $query = "CREATE VIEW `" . $wpdb->prefix . "baseballNuke_batTotals` AS select `" . $wpdb->prefix . "baseballNuke_players`.`playerID` AS `playerID`,`" . $wpdb->prefix . "baseballNuke_players`.`lastname` AS `lastname`,`" . $wpdb->prefix . "baseballNuke_players`.`firstname` AS `firstname`,`" . $wpdb->prefix . "baseballNuke_players`.`middlename` AS `middlename`,`" . $wpdb->prefix . "baseballNuke_players`.`jerseyNum` AS `jerseyNum`,sum(`" . $wpdb->prefix . "baseballNuke_stats`.`baRuns`) AS `baTotRuns`,sum(`" . $wpdb->prefix . "baseballNuke_stats`.`baAB`) AS `baTotAB`,sum((((`" . $wpdb->prefix . "baseballNuke_stats`.`ba1b` + `" . $wpdb->prefix . "baseballNuke_stats`.`ba2b`) + `" . $wpdb->prefix . "baseballNuke_stats`.`ba3b`) + `" . $wpdb->prefix . "baseballNuke_stats`.`baHR`)) AS `baTotH`,sum(`" . $wpdb->prefix . "baseballNuke_stats`.`ba1b`) AS `baTot1b`,sum(`" . $wpdb->prefix . "baseballNuke_stats`.`ba2b`) AS `baTot2b`,sum(`" . $wpdb->prefix . "baseballNuke_stats`.`ba3b`) AS `baTot3b`,sum(`" . $wpdb->prefix . "baseballNuke_stats`.`baHR`) AS `baTotHR`,sum(`" . $wpdb->prefix . "baseballNuke_stats`.`baRE`) AS `baTotRE`,sum(`" . $wpdb->prefix . "baseballNuke_stats`.`baFC`) AS `baTotFC`,sum(`" . $wpdb->prefix . "baseballNuke_stats`.`baHP`) AS `baTotHP`,sum(`" . $wpdb->prefix . "baseballNuke_stats`.`baRBI`) AS `baTotRBI`,sum(`" . $wpdb->prefix . "baseballNuke_stats`.`baBB`) AS `baTotBB`,sum(`" . $wpdb->prefix . "baseballNuke_stats`.`baK`) AS `baTotK`,sum(`" . $wpdb->prefix . "baseballNuke_stats`.`baLOB`) AS `baTotLOB`,sum(`" . $wpdb->prefix . "baseballNuke_stats`.`baSB`) AS `baTotSB` from ((`" . $wpdb->prefix . "baseballNuke_players` join `" . $wpdb->prefix . "baseballNuke_stats`) join `" . $wpdb->prefix . "baseballNuke_schedule`) where ((`" . $wpdb->prefix . "baseballNuke_players`.`playerID` = `" . $wpdb->prefix . "baseballNuke_stats`.`playerID`) and (year(`" . $wpdb->prefix . "baseballNuke_schedule`.`gameDate`) = year(now())) and (`" . $wpdb->prefix . "baseballNuke_stats`.`gameID` = `" . $wpdb->prefix . "baseballNuke_schedule`.`gameID`) and (`" . $wpdb->prefix . "baseballNuke_players`.`season` = year(now()))) group by `" . $wpdb->prefix . "baseballNuke_players`.`playerID`;";
-  dbDelta($query);
+  mysql_query($query);
 
+  $wpdb->query = "DROP VIEW `" . $wpdb->prefix . "baseballNuke_pitchTotals` ";
   $query = "CREATE VIEW `" . $wpdb->prefix . "baseballNuke_pitchTotals` AS select `" . $wpdb->prefix . "baseballNuke_players`.`playerID` AS `playerID`,`" . $wpdb->prefix . "baseballNuke_players`.`lastname` AS `lastname`,`" . $wpdb->prefix . "baseballNuke_players`.`firstname` AS `firstname`,`" . $wpdb->prefix . "baseballNuke_players`.`middlename` AS `middlename`,`" . $wpdb->prefix . "baseballNuke_players`.`jerseyNum` AS `jerseyNum`,sum(`" . $wpdb->prefix . "baseballNuke_stats`.`piWin`) AS `piTotWin`,sum(`" . $wpdb->prefix . "baseballNuke_stats`.`piLose`) AS `piTotLose`,sum(`" . $wpdb->prefix . "baseballNuke_stats`.`piSave`) AS `piTotSave`,sum(`" . $wpdb->prefix . "baseballNuke_stats`.`piIP`) AS `piTotIP`,sum(`" . $wpdb->prefix . "baseballNuke_stats`.`piHits`) AS `piTotHits`,sum(`" . $wpdb->prefix . "baseballNuke_stats`.`piRuns`) AS `piTotRuns`,sum(`" . $wpdb->prefix . "baseballNuke_stats`.`piER`) AS `piTotER`,sum(`" . $wpdb->prefix . "baseballNuke_stats`.`piWalks`) AS `piTotWalks`,sum(`" . $wpdb->prefix . "baseballNuke_stats`.`piSO`) AS `piTotSO`,year(now()) AS `year` from ((`" . $wpdb->prefix . "baseballNuke_stats` join `" . $wpdb->prefix . "baseballNuke_players`) join `" . $wpdb->prefix . "baseballNuke_schedule`) where ((`" . $wpdb->prefix . "baseballNuke_schedule`.`gameID` = `" . $wpdb->prefix . "baseballNuke_stats`.`gameID`) and (`" . $wpdb->prefix . "baseballNuke_stats`.`playerID` = `" . $wpdb->prefix . "baseballNuke_players`.`playerID`) and (year(`" . $wpdb->prefix . "baseballNuke_schedule`.`gameDate`) = year(now())) and (`" . $wpdb->prefix . "baseballNuke_players`.`season` = year(now())) and (`" . $wpdb->prefix . "baseballNuke_stats`.`piIP` > 0)) group by `" . $wpdb->prefix . "baseballNuke_players`.`playerID`;";
-  dbDelta($query);
+  mysql_query($query);
 
   $wpdb->flush();
 
@@ -179,6 +181,7 @@ function  bbnuke_drop_tables()
                          {$wpdb->prefix}baseballNuke_boxscores, 
                          {$wpdb->prefix}baseballNuke_settings, 
                          {$wpdb->prefix}baseballNuke_schedule" );
+  $wpdb->query( "DROP VIEW IF EXISTS {$wpdb->prefix}baseballNuke_pitchTotals,{$wpdb->prefix}baseballNuke_batTotals" );
 
   return;
 }

@@ -3,26 +3,29 @@
 
 class bbnuke_Widget extends WP_Widget 
 {
-  public $display_types = array(
-        0 => 'Top Batters',
-        1 => 'Top Pitchers',
-        2 => 'Last Game',
-        3 => 'Next Game',
-        4 => 'Bat Stats',
-        5 => 'Team Stats',
-        6 => 'Pitch Stats',
-        7 => 'Field Stats',
-        8 => 'Player Stats',
-        9 => 'Top 5 Stats',
-       10 => 'Team Schedule',
-       11 => 'Team Practises',
-       12 => 'Team Tournaments',
-       13 => 'Locations Info',
-       14 => 'Game Results'
-      );
+
+  public $display_types = array();
 
   function bbnuke_Widget() 
   {
+    $this->display_types = array(
+        0  => __('Top Batters', 'bbnuke'),
+        1  => __('Top Pitchers', 'bbnuke'),
+        2  => __('Last Game', 'bbnuke'),
+        3  => __('Next Game', 'bbnuke'),
+        4  => __('Bat Stats', 'bbnuke'),
+        5  => __('Team Stats', 'bbnuke'),
+        6  => __('Pitch Stats', 'bbnuke'),
+        7  => __('Field Stats', 'bbnuke'),
+        8  => __('Player Stats', 'bbnuke'),
+        9  => __('Top 5 Stats', 'bbnuke'),
+       10  => __('Team Schedule', 'bbnuke'),
+       11  => __('Team Practises', 'bbnuke'),
+       12  => __('Team Tournaments', 'bbnuke'),
+       13  => __('Locations Info', 'bbnuke'),
+       14  => __('Game Results', 'bbnuke')
+      );
+
     /* Widget settings. */
     $widget_ops = array('classname' => 'bbnuke', 'description' => __('Displays various stats and results.','bbnuke') );
 
@@ -77,9 +80,28 @@ class bbnuke_Widget extends WP_Widget
 
     $instance = wp_parse_args((array) $instance, $defaults);
 
+    $display_types = array(
+        0  => __('Top Batters', 'bbnuke'),
+        1  => __('Top Pitchers', 'bbnuke'),
+        2  => __('Last Game', 'bbnuke'),
+        3  => __('Next Game', 'bbnuke'),
+        4  => __('Bat Stats', 'bbnuke'),
+        5  => __('Team Stats', 'bbnuke'),
+        6  => __('Pitch Stats', 'bbnuke'),
+        7  => __('Field Stats', 'bbnuke'),
+        8  => __('Player Stats', 'bbnuke'),
+        9  => __('Top 5 Stats', 'bbnuke'),
+       10  => __('Team Schedule', 'bbnuke'),
+       11  => __('Team Practises', 'bbnuke'),
+       12  => __('Team Tournaments', 'bbnuke'),
+       13  => __('Locations Info', 'bbnuke'),
+       14  => __('Game Results', 'bbnuke')
+      );
+
+
     echo 
     '  <div style="text-align:center">
-         <h3>Display Stats and Results</h3>
+         <h3>' . __('Display Stats and Results', 'bbnuke') . '</h3>
          <span style="line-height:15px"><br /><br /></span>
          <table>
          <tr>
@@ -113,126 +135,6 @@ class bbnuke_Widget extends WP_Widget
          </tr>
          </table>
        </div>' . "\n";
-
-
-/*
-			<tr>
-				<td><strong>' . __('Min. Number of Posts') . '</strong></td>
-				<td><input style="text-align:right" type="text" id="' . $this->get_field_id('minnum') . '" name="' . $this->get_field_name('minnum') . '" value="' . esc_attr($instance['minnum']) . '" /></td>
-				<td style="font-size:0.75em">' . __('Tags with less than this number of posts will not be displayed.') . '</td>
-			</tr>
-			<tr>
-				<td><strong><?php _e('Max. Number of Posts') ?></strong></td>
-				<td><input style="text-align:right" type="text" id="<?php echo $this->get_field_id('maxnum'); ?>" name="<?php echo $this->get_field_name('maxnum'); ?>" value="<?php echo esc_attr($instance['maxnum']); ?>" /></td>
-				<td style="font-size:0.75em"><?php _e('Tags with more than this number of posts will not be displayed.') ?></td>
-			</tr>
-			<tr>
-				<td><strong><?php _e('Font Display Unit') ?></strong></td>
-				<td style="text-align:right;">
-					<select id="<?php echo $this->get_field_id('unit'); ?>" name="<?php echo $this->get_field_name('unit'); ?>">
-						<option value="px" <?php if ('px' == $instance['unit']) echo 'selected="selected"'; ?>>Pixel</option>
-						<option value="pt" <?php if ('pt' == $instance['unit']) echo 'selected="selected"'; ?>>Point</option>
-						<option value="em" <?php if ('em' == $instance['unit']) echo 'selected="selected"'; ?>>Em</option>
-						<option value="%" <?php if ('%' == $instance['unit']) echo 'selected="selected"'; ?>>Percent</option>
-					</select>
-				</td>
-				<td style="font-size:0.75em"><?php _e('What unit to use for font sizes.') ?></td>
-			</tr>
-			<tr>
-				<td><strong><?php _e('Smallest Font Size') ?></strong></td>
-				<td><input style="text-align:right" type="text" id="<?php echo $this->get_field_id('smallest'); ?>" name="<?php echo $this->get_field_name('smallest'); ?>" value="<?php echo esc_attr($instance['smallest']); ?>" /></td>
-				<td style="font-size:0.75em"><?php _e('Tags will be displayed no smaller than this value.') ?></td>
-			</tr>
-			<tr>
-				<td><strong><?php _e('Largest Font Size') ?></strong></td>
-				<td><input style="text-align:right" type="text" id="<?php echo $this->get_field_id('largest'); ?>" name="<?php echo $this->get_field_name('largest'); ?>" value="<?php echo esc_attr($instance['largest'], true); ?>" /></td>
-				<td style="font-size:0.75em"><?php _e('Tags will be displayed no larger that this value.') ?></td>
-			</tr>
-			<tr>
-				<td><strong><?php _e('Min. Tag Color') ?></strong></td>
-				<td><input style="text-align:right" type="text" id="<?php echo $this->get_field_id('mincolor'); ?>" name="<?php echo $this->get_field_name('mincolor'); ?>" value="<?php echo esc_attr($instance['mincolor'], true); ?>" /></td>
-				<td style="font-size:0.75em"><?php _e('Beginning color for tag gradient.  Please include the #.') ?></td>
-			</tr>
-			<tr>
-				<td><strong><?php _e('Max. Tag Color') ?></strong></td>
-				<td><input style="text-align:right" type="text" id="<?php echo $this->get_field_id('maxcolor'); ?>" name="<?php echo $this->get_field_name('maxcolor'); ?>" value="<?php echo esc_attr($instance['maxcolor'], true); ?>" /></td>
-				<td style="font-size:0.75em"><?php _e('Ending color for tag gradient.  Please include the #.') ?></td>
-			</tr>
-			<tr>
-				<td><strong><?php _e('Cloud Format') ?></strong></td>
-				<td style="text-align:right;">
-					<select id="<?php echo $this->get_field_id('format'); ?>" name="<?php echo $this->get_field_name('format'); ?>" size="1" value="">
-						<option value="flat" <?php if ('flat' == $instance['format']) echo 'selected="selected"'; ?>>Flat</option>
-						<option value="list" <?php if ('list' == $instance['format']) echo 'selected="selected"'; ?>>List</option>
-						<option value="drop" <?php if ('drop' == $instance['format']) echo 'selected="selected"'; ?>>Dropdown</option>
-		   			</select>
-				</td>
-				<td style="font-size:0.75em"><?php _e('How to display the cloud.') ?></td>
-			</tr>
-			<tr>
-				<td><strong><?php _e('Show Tags') ?></strong></td>
-				<td style="text-align:right;">
-					<select id="<?php echo $this->get_field_id('showtags'); ?>" name="<?php echo $this->get_field_name('showtags'); ?>" size="1" value="">
-						<option value="yes" <?php if ('yes' == $instance['showtags']) echo 'selected="selected"'; ?>>Yes</option>
-						<option value="no" <?php if ('no' == $instance['showtags']) echo 'selected="selected"'; ?>>No</option>
-		   			</select>
-				</td>
-				<td style="font-size:0.75em"><?php _e('Display tags in cloud.') ?></td>
-			</tr>
-			<tr>
-				<td><strong><?php _e('Show Categories') ?></strong></td>
-				<td style="text-align:right;">
-					<select id="<?php echo $this->get_field_id('showcats'); ?>" name="<?php echo $this->get_field_name('showcats'); ?>" size="1" value="">
-						<option value="no" <?php if ('no' == $instance['showcats']) echo 'selected="selected"'; ?>>No</option>
-						<option value="yes" <?php if ('yes' == $instance['showcats']) echo 'selected="selected"'; ?>>Yes</option>
-		   			</select>
-				</td>
-				<td style="font-size:0.75em"><?php _e('Display categories in cloud.') ?></td>
-			</tr>
-			<tr>
-				<td><strong><?php _e('Show Empty') ?></strong></td>
-				<td style="text-align:right;">
-					<select id="<?php echo $this->get_field_id('empty'); ?>" name="<?php echo $this->get_field_name('empty'); ?>" size="1" value="">
-						<option value="no" <?php if ('no' == $instance['empty']) echo 'selected="selected"'; ?>>No</option>
-						<option value="yes" <?php if ('yes' == $instance['empty']) echo 'selected="selected"'; ?>>Yes</option>
-		   			</select>
-				</td>
-				<td style="font-size:0.75em"><?php _e('Display empty categories in cloud.') ?></td>
-			</tr>
-			<tr>
-				<td><strong><?php _e('Display Post Count?') ?></strong></td>
-				<td style="text-align:right;">
-					<select id="<?php echo $this->get_field_id('showcount'); ?>" name="<?php echo $this->get_field_name('showcount'); ?>" size="1" value="">
-						<option value="no" <?php if ('no' == $instance['showcount']) echo 'selected="selected"'; ?>>No</option>
-						<option value="yes" <?php if ('yes' == $instance['showcount']) echo 'selected="selected"'; ?>>Yes</option>
-		   			</select>
-				</td>
-				<td style="font-size:0.75em"><?php _e('Show number of posts for each tag.') ?></td>
-			</tr>
-			<tr>
-				<td><strong><?php _e('Sort By') ?></strong></td>
-				<td style="text-align:right;">
-					<select id="<?php echo $this->get_field_id('orderby'); ?>" name="<?php echo $this->get_field_name('orderby'); ?>" size="1" value="">
-						<option value="name" <?php if ('name' == $instance['orderby']) echo 'selected="selected"'; ?>>Name</option>
-						<option value="count" <?php if ('count' == $instance['orderby']) echo 'selected="selected"'; ?>>Count</option>
-						<option value="rand" <?php if ('rand' == $instance['orderby']) echo 'selected="selected"'; ?>>Random</option>
-		   			</select>
-				</td>
-				<td style="font-size:0.75em"><?php _e('What field to sort by.') ?></td>
-			</tr>
-			<tr>
-				<td><strong><?php _e('Sort Order') ?></strong></td>
-				<td style="text-align:right;">
-					<select id="<?php echo $this->get_field_id('order'); ?>" name="<?php echo $this->get_field_name('order'); ?>" size="1" value="">
-						<option value="ASC" <?php if ('ASC' == $instance['order']) echo 'selected="selected"'; ?>>Ascending</option>
-						<option value="DESC" <?php if ('DESC' == $instance['order']) echo 'selected="selected"'; ?>>Descending</option>
-		   			</select>
-				</td>
-				<td style="font-size:0.75em"><?php _e('Direction of sort.') ?></td>
-			</tr>
-		</table>
-	</div>' . "\n";
-*/
   }
 }
 

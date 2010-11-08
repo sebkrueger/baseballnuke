@@ -5,7 +5,7 @@ Plugin Uri: http://www.flyingdogsbaseball.com/wp-plugins/baseballNuke
 Tags: phpnuke, baseball, team management, baseballNuke
 Requires at least: 2.7
 Tested up to: WP 3.0.1
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 
 
 
@@ -136,5 +136,11 @@ Game Results - Select Game Results from the baseballNuke Menu.  Verify
 - error on schedule, practise, tournaments page: add has not set the season in the INSERT sql
 - screenshot added
 - game results admin page: update of game results added + add of game results added
+
+= 1.0.2 =
+- error fixed: CREATE VIEWS not working during plugin activation
+- widget type locations changed - no mysql error if no location is defined
+- widget playerstats and game results changed - option added for game id and player id
+- frontend language support added
 
 `<?php code(); // goes in backticks ?>`
