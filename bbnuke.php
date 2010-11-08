@@ -3,7 +3,7 @@
 Plugin Name: baseballNuke 
 Plugin URI: http://www.flyingdogsbaseball.com/wp-plugins/baseballnuke
 Description: baseballNuke is a wordpress plugin based on the module for the CMS phpnuke <a href="http://phpnuke.org" target="_blank">http://phpnuke.org</a> for the administration of a single baseball team.  baseballNuke is a complete team management tool and information source.  It provides team and individual information about the players including schedule, field directions, player stats, team stats, player profiles and game results.
-Version: 1.0.1
+Version: 1.0.2
 Author: Shawn Grimes, Christian Gnoth 
 Author URI: http://claimid.com/shawn
 License: GPL2
