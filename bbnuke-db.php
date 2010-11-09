@@ -194,10 +194,10 @@ function  bbnuke_check_tables()
   //  check if tables are empty
   $query  = "SELECT Count(*) FROM " . $wpdb->prefix . "baseballnuke_teams";
   $result = mysql_query($result);
-  if ($result)
-    $obj    = mysql_fetch_object($result);
+  if ( $result )
+    $count = mysql_num_rows($result);
 
-  if ( (((int)$obj->count) == 0) OR (!$result) )
+  if ( ($count == 0) OR (!$result) )
   {
     //  tables are empty
 //    $query = mysql_real_escape_string("INSERT INTO `" . $wpdb->prefix . "baseballNuke_players` (`playerID`, `teamName`, `firstname`, `middlename`, `lastname`, `positions`, `bats`, `throws`, `height`, `weight`, `address`, `city`, `state`, `zip`, `homePhone`, `workPhone`, `cellphone`, `jerseyNum`, `picLocation`, `season`, `profile`, `bdate`, `email`) VALUES

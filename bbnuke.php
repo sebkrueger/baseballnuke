@@ -3,7 +3,7 @@
 Plugin Name: baseballNuke 
 Plugin URI: http://www.flyingdogsbaseball.com/wp-plugins/baseballnuke
 Description: baseballNuke is a wordpress plugin based on the module for the CMS phpnuke <a href="http://phpnuke.org" target="_blank">http://phpnuke.org</a> for the administration of a single baseball team.  baseballNuke is a complete team management tool and information source.  It provides team and individual information about the players including schedule, field directions, player stats, team stats, player profiles and game results.
-Version: 1.0.2
+Version: 1.0.3
 Author: Shawn Grimes, Christian Gnoth 
 Author URI: http://claimid.com/shawn
 License: GPL2
@@ -73,6 +73,9 @@ function bbnuke_plugin_activation()
 
   //   check if tables exists and create
   bbnuke_db_delta();
+
+  //   check if tables are empty and fill with default values
+  bbnuke_check_tables();
 
   add_option( 'bbnuke_plugin_options', array(), '', 'no');
   bbnuke_set_option_defaults();
@@ -223,9 +226,6 @@ function bbnuke_admin_init_method()
   wp_enqueue_script('tiny_mce');
 
   register_widget('bbnuke_Widget');
-
-  //   check if tables are empty and fill with default values
-  bbnuke_check_tables();
 
 /*
   if ( function_exists('wp_tiny_mce') ) 
@@ -758,9 +758,9 @@ function  bbnuke_plugin_create_fields_page()
   {
     if ( !(strpos( $key, 'bbnuke_edit_field_') === false) )
     {
-      $pos = strpos( $string, 'bbnuke_edit_field_');
-      $pos1= strpos( $string, '_btn', $pos);
-      $id = (int)substr( $string, ($pos + 18), ($pos1 - ($pos + 18)) );
+      $pos = strpos( $key, 'bbnuke_edit_field_');
+      $pos1= strpos( $key, '_btn', $pos);
+      $id = (int)substr( $key, ($pos + 18), ($pos1 - ($pos + 18)) );
       bbnuke_update_option('bbnuke_location_edit_id', $id);
       $edit_field = true;
       break;
@@ -769,20 +769,23 @@ function  bbnuke_plugin_create_fields_page()
 
   //  check if one delete button is pressed
   $field_deleted = false;
-  if ( $_POST['bbnuke_delete_field_id'] == 'none' )
+  if ( !($_POST['bbnuke_delete_field_id'] == 'none') )
   {
     foreach( $_POST as $key => $value )
     {
       if ( !(strpos( $key, 'bbnuke_delete_field_') === false) )
       {
         $pos = strpos( $key, 'bbnuke_delete_field_');
-        $pos1= strpos( $key, '_btn');
-        $id = (int)substr( $key, ($pos + 20), ($pos1 - ($pos + 20)) );
+        if ( !(strpos( $key, '_btn') === false) )
+        {
+          $pos1= strpos( $key, '_btn');
+          $id = (int)substr( $key, ($pos + 20), ($pos1 - ($pos + 20)) );
 
-        $fields = bbnuke_get_locations();
-        bbnuke_delete_location( $fields[$id]['fieldname'] );
-        $field_deleted = true;
-        break;
+          $fields = bbnuke_get_locations();
+          bbnuke_delete_location( $fields[$id]['fieldname'] );
+          $field_deleted = true;
+          break;
+        }
       }
     }
   }
@@ -1053,9 +1056,23 @@ function bbnuke_plugin_create_option_page()
   if ( $_POST['bbnuke_del_season_btn'] )
   {
     $year = $seasons_list[$_POST['bbnuke_select_season']];
-    $ret = bbnuke_delete_season($year);
-    echo '<div id="message" class="updated fade">';
-    echo '<strong>' . __('Season deleted!', 'bbnuke') . '</strong></div>';
+    if ( !empty($year) )
+      $ret = bbnuke_delete_season($year);
+    switch ($ret)
+    {
+      case -10:
+        echo '<div id="message" class="error fade">';
+        echo '<strong>' . __('Season not deleted - this is the default season!', 'bbnuke') . '</strong></div>';
+        break;
+      case -20:
+        echo '<div id="message" class="error fade">';
+        echo '<strong>' . __('Season not deleted - at least one season must exists!', 'bbnuke') . '</strong></div>';
+        break;
+      case 10:
+        echo '<div id="message" class="updated fade">';
+        echo '<strong>' . __('Season deleted!', 'bbnuke') . '</strong></div>';
+        break;
+    }
   }
 
   if ( $_POST['bbnuke_set_defs_btn'] )

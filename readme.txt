@@ -5,7 +5,7 @@ Plugin Uri: http://www.flyingdogsbaseball.com/wp-plugins/baseballNuke
 Tags: phpnuke, baseball, team management, baseballNuke
 Requires at least: 2.7
 Tested up to: WP 3.0.1
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 
 
 
@@ -142,5 +142,13 @@ Game Results - Select Game Results from the baseballNuke Menu.  Verify
 - widget type locations changed - no mysql error if no location is defined
 - widget playerstats and game results changed - option added for game id and player id
 - frontend language support added
+
+= 1.0.3 =
+- error fixed: if empty tables game results show mysql error
+- error fixed: locations info did not dhow correct directions
+- error fixed: delete of location not working properly
+- error fixed: playerstats widget did not show hometeam correctly
+- error fixed: delete season not working; fill tbales with defaults only at plugin activation
+- design changes
 
 `<?php code(); // goes in backticks ?>`

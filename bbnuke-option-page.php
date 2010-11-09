@@ -96,7 +96,7 @@ function bbnuke_plugin_print_option_page()
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_wdg_playerstats_playerid">Widget PlayerStats Player ID</label></th>' . "\n" .
-  '                  <td><select name="bbnuke_plugin_option_wdg_playerstats_players_select" class="select-season-single" size="1">' . "\n";
+  '                  <td><select name="bbnuke_plugin_option_wdg_playerstats_players_select" class="select-team-single" size="1">' . "\n";
   
   for ( $i=0; $i < count($players); $i++ )
   {
@@ -111,7 +111,7 @@ function bbnuke_plugin_print_option_page()
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_wdg_playerstats_playerid">Widget Game Results - Player ID</label></th>' . "\n" .
-  '                  <td><select name="bbnuke_plugin_option_wdg_game_results_players_select" class="select-season-single" size="1">' . "\n";
+  '                  <td><select name="bbnuke_plugin_option_wdg_game_results_players_select" class="select-team-single" size="1">' . "\n";
   
   for ( $i=0; $i < count($players); $i++ )
   {
@@ -126,7 +126,7 @@ function bbnuke_plugin_print_option_page()
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_wdg_playerstats_playerid">Widget Game Results - Game ID</label></th>' . "\n" .
-  '                  <td><select name="bbnuke_plugin_option_wdg_game_results_games_select" class="select-season-single" size="1">' . "\n";
+  '                  <td><select name="bbnuke_plugin_option_wdg_game_results_games_select" class="select-team-single" size="1">' . "\n";
   
   for ( $i=0; $i < count($games); $i++ )
   {

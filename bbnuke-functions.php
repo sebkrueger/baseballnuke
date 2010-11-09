@@ -1268,10 +1268,20 @@ function  bbnuke_delete_season($year)
 {
   global $wpdb;
 
+  $defs = bbnuke_get_defaults();
+
+  if ( $defs['defaultSeason'] == $year )
+    return -10;
+  
+  $seasons_list = bbnuke_get_seasons();
+  if ( count($seasons_list) <= 1 )
+    return -20;
+
   $query = 'DELETE FROM ' . $wpdb->prefix . 'baseballNuke_teams WHERE season = "' . $year . '" ';
   $result = mysql_query($query);
+  $wpdb->flush();
 
-  return;
+  return 10;
 }
 
 
@@ -1313,7 +1323,7 @@ function  bbnuke_set_defaults($defs)
 					SET defaultSeason = '" . $defs['defaultSeason'] . "' " . 
 					", defaultTeam = '" . $defs['defaultTeam'] . "' " .
 					", displayMenu = '" . $defs['displayMenu'] . "' " .
-					", ID='1'";
+					" WHERE ID=1";
 
   $result = mysql_query($query);
 
@@ -2540,7 +2550,7 @@ function  bbnuke_widget_playerstats( $player_id = NULL, $bbnuke_echo = true )
     if($homeTeam==$dteam)
        $bbnuke_content .= $visitingTeam; 	 
     else
-       $bbnuke_content .= '@ $homeTeam'; 	 
+       $bbnuke_content .= ' @ ' . $homeTeam; 	 
          	 
     $bbnuke_content .= ' - ' . $modGameDate . '</a></td>
                         <td width="25">' . $baAB . '</td>
@@ -3500,7 +3510,10 @@ function  bbnuke_widget_locations_info( $bbnuke_echo = true )
   for ($i=0; $i < count($field_arr); $i++ )
   {
     if ( $field_arr[$i]['fieldname'] == $field )
+    {
       $bbnuke_content .= '<option selected="selected" value="' . $field_arr[$i]['fieldname'] . '">' . $field_arr[$i]['fieldname'] . '</option>' . "\n";
+      $field_key = $i;
+    }
     else
       $bbnuke_content .= '<option value="' . $field_arr[$i]['fieldname'] . '">' . $field_arr[$i]['fieldname'] . '</option>' . "\n";
   }
@@ -3523,10 +3536,8 @@ function  bbnuke_widget_locations_info( $bbnuke_echo = true )
         <tr>
           <td>';
 
-  $key = array_search ( $field , $field_arr );
-
-  if ( $field_arr[$key]['directions'] )
-    $bbnuke_content .= $field_arr[$key]['directions'];
+  if ( $field_arr[$field_key]['directions'] )
+    $bbnuke_content .= $field_arr[$field_key]['directions'];
   else
     $bbnuke_content .= __('No info for that field were found.', 'bbnuke') . "\n";
 
@@ -3568,12 +3579,14 @@ function  bbnuke_widget_game_results( $game_id = NULL, $player_id = NULL, $bbnuk
   $query = 'SELECT visitingTeam, homeTeam, DATE_FORMAT(gameDate,"%c-%d-%Y") Gdate, TIME_FORMAT(gameTime,"%h:%i") Gtime ' .
            '  FROM ' . $wpdb->prefix . 'baseballNuke_schedule where gameID=' . $game_id . ' ';
   $result = mysql_query($query);
-  $game   = mysql_fetch_array($result);
+  if ($result)
+    $game   = mysql_fetch_array($result);
   list($VISITTEAM, $HOMETEAM, $GAMEDATE, $GAMETIME) = $game;
 		
   $query  = 'SELECT * FROM ' . $wpdb->prefix . 'baseballNuke_boxscores WHERE gameID=' . $game_id . ' ';
   $result = mysql_query($query);
-  $score  = mysql_fetch_array($result);
+  if ($result)
+    $score  = mysql_fetch_array($result);
   list($gameID,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9,$h1,$h2,$h3,$h4,$h5,$h6,$h7,$h8,$h9,$vhits,$vruns,$verr,$hhits,$hruns,$herr,$notes) = $score;
 		
   $bbnuke_content .= '<table>
@@ -3669,10 +3682,11 @@ function  bbnuke_widget_game_results( $game_id = NULL, $player_id = NULL, $bbnuk
                    " WHERE battOrd > 0 AND teamName='$dteam' AND st.gameID=$game_id AND p.playerID=st.playerID " .
                    " AND p.season=left(gameDate,4) AND st.gameID=s.gameID ORDER BY battOrd ASC";
   $result = mysql_query($query);
-  while( $row = mysql_fetch_array($result) )
-  {
-    $gresults[] = $row;
-  }
+  if ($result)
+    while( $row = mysql_fetch_array($result) )
+    {
+      $gresults[] = $row;
+    }
   for ($m=0; $m < count($gresults); $m++) 
   {
     list($gameID,$PLAYERID,$battOrd,$pitchOrd,$baAB,$ba1b,$ba2b,$ba3b,$baHR, $baRE, $baFC, $baHP, $baRBI, $baBB,$baK, $baLOB, $baSB,$baRuns,
@@ -3722,10 +3736,11 @@ function  bbnuke_widget_game_results( $game_id = NULL, $player_id = NULL, $bbnuk
            " WHERE pitchOrd > 0 AND teamName='$dteam' AND st.gameID=$game_id AND p.playerID=st.playerID and " .
            "       p.season=left(gameDate,4) and st.gameID=s.gameID ORDER BY pitchOrd ASC";
   $result = mysql_query($query);
-  while ( $row = mysql_fetch_array($result) )
-  {
-    $presults[] = $row;
-  }
+  if ($result)
+    while ( $row = mysql_fetch_array($result) )
+    {
+      $presults[] = $row;
+    }
   for ($m=0; $m < count($presults); $m++) 
   {
     list($gameID,$PLAYERID,$battOrd,$pitchOrd,$baAB,$ba1b,$ba2b,$ba3b,$baHR,$baRBI,$baBB,$baK,$baSB,$piWin,$piLose,
