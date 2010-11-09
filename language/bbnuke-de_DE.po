@@ -1,0 +1,735 @@
+# Translation of the WordPress plugin   by .
+# Copyright (C) 2010
+# This file is distributed under the same license as the  package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: baseballNuke Version 1.0.1\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/baseballnuke\n"
+"POT-Creation-Date: 2010-11-08 15:39+0000\n"
+"PO-Revision-Date: 2010-11-08 16:43+0100\n"
+"Last-Translator: Christian Gnoth <support@it-gnoth.de>\n"
+"Language-Team: Christian Gnoth <support@it-gnoth.de>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: wir, sie\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e\n"
+
+#: bbnuke-functions.php:1634
+msgid "Batting Avg"
+msgstr ""
+
+#: bbnuke-functions.php:1635
+#: bbnuke-functions.php:2095
+#: bbnuke-functions.php:2248
+msgid "Hits"
+msgstr ""
+
+#: bbnuke-functions.php:1636
+#: bbnuke-functions.php:3310
+msgid "Home"
+msgstr ""
+
+#: bbnuke-functions.php:1637
+msgid "RBI"
+msgstr ""
+
+#: bbnuke-functions.php:1674
+#: bbnuke-functions.php:1686
+#: bbnuke-functions.php:1698
+#: bbnuke-functions.php:1709
+#: bbnuke-functions.php:1763
+#: bbnuke-functions.php:1775
+#: bbnuke-functions.php:1787
+#: bbnuke-functions.php:1799
+#: bbnuke-functions.php:1999
+#: bbnuke-functions.php:2192
+#: bbnuke-functions.php:2355
+#: bbnuke-functions.php:3037
+#: bbnuke-functions.php:3174
+#: bbnuke-functions.php:3268
+#: bbnuke-functions.php:3681
+#: bbnuke-functions.php:3734
+msgid "Show Players Info"
+msgstr ""
+
+#: bbnuke-functions.php:1735
+msgid "ERA"
+msgstr ""
+
+#: bbnuke-functions.php:1736
+#: bbnuke-functions.php:2108
+#: bbnuke-functions.php:2252
+msgid "Strikeouts"
+msgstr ""
+
+#: bbnuke-functions.php:1737
+msgid "Innings"
+msgstr ""
+
+#: bbnuke-functions.php:1738
+#: bbnuke-functions.php:2243
+msgid "Wins"
+msgstr ""
+
+#: bbnuke-functions.php:1834
+#: bbnuke-functions.php:1876
+#: bbnuke-functions.php:2539
+#: bbnuke-functions.php:2773
+#: bbnuke-functions.php:3336
+#, fuzzy
+msgid "Show Game Results"
+msgstr "Spielergibnis Edit"
+
+#: bbnuke-functions.php:1848
+msgid "There are no results."
+msgstr "Es gibt keine Ergebnisse."
+
+#: bbnuke-functions.php:1889
+msgid "There are no upcoming games."
+msgstr "Es gibt keine kommenden Spiele."
+
+#: bbnuke-functions.php:2091
+#: bbnuke-functions.php:2241
+#: bbnuke-functions.php:2376
+msgid "Key"
+msgstr ""
+
+#: bbnuke-functions.php:2091
+#: bbnuke-functions.php:2241
+#: bbnuke-functions.php:2376
+msgid "Meaning"
+msgstr ""
+
+#: bbnuke-functions.php:2093
+msgid "At Bat"
+msgstr ""
+
+#: bbnuke-functions.php:2094
+#: bbnuke-functions.php:2249
+msgid "Runs"
+msgstr ""
+
+#: bbnuke-functions.php:2096
+msgid "Doubles"
+msgstr ""
+
+#: bbnuke-functions.php:2097
+#, fuzzy
+msgid "Triples"
+msgstr "Titel"
+
+#: bbnuke-functions.php:2098
+msgid "Home Runs"
+msgstr ""
+
+#: bbnuke-functions.php:2099
+msgid "Reach on Error"
+msgstr ""
+
+#: bbnuke-functions.php:2100
+msgid "Fielders Choice"
+msgstr ""
+
+#: bbnuke-functions.php:2101
+msgid "Hit by Pitch"
+msgstr ""
+
+#: bbnuke-functions.php:2102
+msgid "Runs Batted In"
+msgstr ""
+
+#: bbnuke-functions.php:2103
+msgid "Batting Average"
+msgstr ""
+
+#: bbnuke-functions.php:2104
+msgid "On-Base Percentage"
+msgstr ""
+
+#: bbnuke-functions.php:2105
+msgid "Slugging Percentage"
+msgstr ""
+
+#: bbnuke-functions.php:2106
+msgid "On-Base Plus Slugging"
+msgstr ""
+
+#: bbnuke-functions.php:2107
+msgid "Bases on Balls (Walks)"
+msgstr ""
+
+#: bbnuke-functions.php:2109
+msgid "Left on Base"
+msgstr ""
+
+#: bbnuke-functions.php:2110
+msgid "Stolen Bases"
+msgstr ""
+
+#: bbnuke-functions.php:2244
+msgid "Losses"
+msgstr ""
+
+#: bbnuke-functions.php:2245
+msgid "Save"
+msgstr ""
+
+#: bbnuke-functions.php:2246
+msgid "Innings Pitched"
+msgstr ""
+
+#: bbnuke-functions.php:2247
+msgid "Pitch Count"
+msgstr ""
+
+#: bbnuke-functions.php:2250
+msgid "Earned Runs"
+msgstr ""
+
+#: bbnuke-functions.php:2251
+msgid "Walks (Bases on Balls)"
+msgstr ""
+
+#: bbnuke-functions.php:2253
+msgid "Earned Run Average"
+msgstr ""
+
+#: bbnuke-functions.php:2254
+msgid "Average Speed"
+msgstr ""
+
+#: bbnuke-functions.php:2378
+msgid "Putouts"
+msgstr ""
+
+#: bbnuke-functions.php:2379
+msgid "Assists"
+msgstr ""
+
+#: bbnuke-functions.php:2380
+msgid "Errors"
+msgstr ""
+
+#: bbnuke-functions.php:2381
+msgid "Fielding Percentage"
+msgstr ""
+
+#: bbnuke-functions.php:2434
+msgid "Positions:"
+msgstr ""
+
+#: bbnuke-functions.php:2435
+msgid "Bats:"
+msgstr ""
+
+#: bbnuke-functions.php:2435
+msgid "Throws:"
+msgstr ""
+
+#: bbnuke-functions.php:2438
+msgid "Player Profile:"
+msgstr "Spieler Profil: "
+
+#: bbnuke-functions.php:2447
+msgid "Batting Statistics"
+msgstr ""
+
+#: bbnuke-functions.php:2621
+#: bbnuke-functions.php:2817
+msgid "TOTAL FOR "
+msgstr ""
+
+#: bbnuke-functions.php:2621
+#: bbnuke-functions.php:2817
+#, fuzzy
+msgid " Season"
+msgstr "Saison hinzugefügt!"
+
+#: bbnuke-functions.php:2692
+#: bbnuke-functions.php:2853
+msgid "CAREER AS "
+msgstr ""
+
+#: bbnuke-functions.php:2761
+msgid "Pitching Statistics"
+msgstr ""
+
+#: bbnuke-functions.php:2900
+msgid "Team Leader In Hits"
+msgstr ""
+
+#: bbnuke-functions.php:2901
+msgid "Team Leader In Home Runs"
+msgstr ""
+
+#: bbnuke-functions.php:2902
+msgid "Team Leader In RBI`s"
+msgstr ""
+
+#: bbnuke-functions.php:2903
+msgid "Team Leader In Best Batting Average"
+msgstr ""
+
+#: bbnuke-functions.php:2904
+msgid "Team Leader In Slugging Percentage"
+msgstr ""
+
+#: bbnuke-functions.php:2905
+msgid "Team Leader In On Base Percentage"
+msgstr ""
+
+#: bbnuke-functions.php:2915
+msgid "Batting"
+msgstr ""
+
+#: bbnuke-functions.php:3105
+msgid "Team Leader In Fewest Errors"
+msgstr ""
+
+#: bbnuke-functions.php:3106
+msgid "Team Leader In Most Put Outs"
+msgstr ""
+
+#: bbnuke-functions.php:3107
+msgid "Team Leader In Best Fielding Percentage"
+msgstr ""
+
+#: bbnuke-functions.php:3117
+msgid "Fielding"
+msgstr ""
+
+#: bbnuke-functions.php:3215
+msgid "Team Leader In Least ERA"
+msgstr ""
+
+#: bbnuke-functions.php:3218
+msgid "Team Leader In Most Strikeouts"
+msgstr ""
+
+#: bbnuke-functions.php:3224
+msgid "Pitching"
+msgstr ""
+
+#: bbnuke-functions.php:3309
+msgid "Game Date"
+msgstr ""
+
+#: bbnuke-functions.php:3311
+msgid "Visitor"
+msgstr ""
+
+#: bbnuke-functions.php:3312
+#: bbnuke-functions.php:3389
+msgid "Field"
+msgstr ""
+
+#: bbnuke-functions.php:3358
+#: bbnuke-functions.php:3406
+#: bbnuke-functions.php:3459
+msgid "Show Locations Info"
+msgstr "Zeige Ortsinformationen "
+
+#: bbnuke-functions.php:3388
+msgid "Practice Date"
+msgstr ""
+
+#: bbnuke-functions.php:3390
+#: bbnuke-functions.php:3440
+msgid "Notes"
+msgstr ""
+
+#: bbnuke-functions.php:3437
+msgid "Tournament Date"
+msgstr ""
+
+#: bbnuke-functions.php:3438
+msgid "Type"
+msgstr ""
+
+#: bbnuke-functions.php:3439
+msgid "Location"
+msgstr ""
+
+#: bbnuke-functions.php:3509
+msgid "Set Location"
+msgstr ""
+
+#: bbnuke-functions.php:3531
+msgid "No info for that field were found."
+msgstr "Für diesen Ort konnten keine Infos gefunden werden."
+
+#: bbnuke-functions.php:3645
+msgid "Hitters"
+msgstr ""
+
+#: bbnuke-functions.php:3705
+msgid "Pitchers"
+msgstr ""
+
+#: bbnuke-option-page.php:35
+msgid "baseballNuke is a wordpress plugin based on the module for the CMS phpnuke <a href=\"http://phpnuke.org\" target=\"_blank\">http://phpnuke.org</a> for the administration of a single baseball team. It is a complete team management tool and information source. baseballNuke provides team and individual information about the players including schedule, field directions, player stats, team stats, player profiles and game results."
+msgstr "baseballNuke ist ein Wordpress Plugin basierend auf dem Module für das CMS phpnuke <a href=\"http://phpnuke.org\" target=\"_blank\">http://phpnuke.org</a> für die Administration eines einzelnen Baseball-Team. Es ist ein komplettes Team Management Tool und Informationsquelle. baseballNuke bietet team und individuelle Infos über die Spieler einschließlich Spielpläne, Spielerstatistiken und Spielergebnisse."
+
+#: bbnuke-option-page.php:44
+#: bbnuke-option-page.php:152
+#: bbnuke-option-page.php:209
+#: bbnuke-option-page.php:261
+#: bbnuke-option-page.php:270
+#: bbnuke-option-page.php:331
+#: bbnuke-option-page.php:385
+#: bbnuke-option-page.php:439
+#: bbnuke-option-page.php:448
+#: bbnuke-option-page.php:538
+#: bbnuke-option-page.php:675
+#: bbnuke-option-page.php:702
+#: bbnuke-option-page.php:793
+#: bbnuke-option-page.php:881
+#: bbnuke-option-page.php:890
+#: bbnuke-option-page.php:961
+#: bbnuke-option-page.php:1073
+#: bbnuke-option-page.php:1100
+#: bbnuke-option-page.php:1178
+#: bbnuke-option-page.php:1187
+#: bbnuke-option-page.php:1260
+#: bbnuke-option-page.php:1353
+#: bbnuke-option-page.php:1380
+#: bbnuke-option-page.php:1458
+#: bbnuke-option-page.php:1467
+#: bbnuke-option-page.php:1541
+#: bbnuke-option-page.php:1626
+#: bbnuke-option-page.php:1653
+#: bbnuke-option-page.php:1732
+#: bbnuke-option-page.php:1741
+#: bbnuke-option-page.php:1832
+#: bbnuke-option-page.php:2144
+#: bbnuke-option-page.php:2218
+#: bbnuke-option-page.php:2227
+msgid "Zum umschalten klicken"
+msgstr ""
+
+#: bbnuke-option-page.php:45
+msgid "Settings"
+msgstr ""
+
+#: bbnuke-option-page.php:153
+msgid "Seasons Management"
+msgstr "Saison Management"
+
+#: bbnuke-option-page.php:156
+msgid "Select which teams you want add to which season."
+msgstr "Wählen Sie welche Teams Sie zu welcher Saison hinzufügen wollen."
+
+#: bbnuke-option-page.php:210
+msgid "Teams"
+msgstr ""
+
+#: bbnuke-option-page.php:213
+msgid "Add and delete teams."
+msgstr "Hinzufügen und Löschen von Teams."
+
+#: bbnuke-option-page.php:224
+msgid "Add"
+msgstr ""
+
+#: bbnuke-option-page.php:239
+msgid "Delete"
+msgstr ""
+
+#: bbnuke-option-page.php:332
+msgid "Field Edit"
+msgstr ""
+
+#: bbnuke-option-page.php:336
+msgid "Edit the location or add a new entry."
+msgstr "Editieren SIe die Lokation oder fügen Sie einen neuen Eintrag hinzu."
+
+#: bbnuke-option-page.php:386
+msgid "Locations List"
+msgstr ""
+
+#: bbnuke-option-page.php:389
+msgid "Edit or delete a location."
+msgstr ""
+
+#: bbnuke-option-page.php:539
+msgid "Players"
+msgstr "Spieler"
+
+#: bbnuke-option-page.php:543
+msgid "<b>Player</b>"
+msgstr ""
+
+#: bbnuke-option-page.php:676
+msgid "Upload Players"
+msgstr ""
+
+#: bbnuke-option-page.php:679
+#: bbnuke-option-page.php:1077
+#: bbnuke-option-page.php:1357
+#: bbnuke-option-page.php:1630
+msgid "Choose a file to upload in the form: "
+msgstr "Wählen SIe eine Datei in der Form: "
+
+#: bbnuke-option-page.php:680
+msgid "teamName, firstname, middlename, lastname, positions, bats, throws, height, weight, address, city, state, zip, homePhone, workPhone, cellphone, jerseyNum, picLocation, season, profile, email, bdate."
+msgstr ""
+
+#: bbnuke-option-page.php:703
+msgid "Current Players"
+msgstr "Derzeitige Spieler"
+
+#: bbnuke-option-page.php:706
+msgid "Select which player you want edit - first select team and season."
+msgstr "Wählen Sie zuerst das Team und die Saison, dann den Spieler zum editieren."
+
+#: bbnuke-option-page.php:794
+msgid "Players - Team/Season Management"
+msgstr ""
+
+#: bbnuke-option-page.php:797
+msgid "Select the season and assign players to the teams."
+msgstr "Wählen Sie die Saison und fügen Sie Spieler dem Team zu."
+
+#: bbnuke-option-page.php:962
+msgid "Schedule Edit"
+msgstr "Spielplan Edit"
+
+#: bbnuke-option-page.php:966
+msgid "Select a season  - edit the schedules or add a new entry."
+msgstr "Wählen Sie eine Saison - editieren Sie den Spielplan oder fügen Sie neue Einträge hinzu."
+
+#: bbnuke-option-page.php:1074
+msgid "Upload Schedules for season "
+msgstr "Upload Spielpläne für die Saison "
+
+#: bbnuke-option-page.php:1078
+msgid "visitingTeam,homeTeam,gameDate,gameTime,field."
+msgstr ""
+
+#: bbnuke-option-page.php:1101
+msgid "Schedules List"
+msgstr ""
+
+#: bbnuke-option-page.php:1104
+#: bbnuke-option-page.php:2148
+msgid "Select a game for edit."
+msgstr ""
+
+#: bbnuke-option-page.php:1261
+msgid "Tournament Edit"
+msgstr ""
+
+#: bbnuke-option-page.php:1265
+msgid "Select a season  - edit the tournament or add a new entry."
+msgstr "Wählen Sie eine Saison - editieren Sie ein Tournament oder fügen Sie neue Einträge hinzu."
+
+#: bbnuke-option-page.php:1354
+msgid "Upload Tournaments for season "
+msgstr ""
+
+#: bbnuke-option-page.php:1358
+#: bbnuke-option-page.php:1631
+msgid "gameDate,gameTime,field,note."
+msgstr ""
+
+#: bbnuke-option-page.php:1381
+msgid "Tournaments List"
+msgstr ""
+
+#: bbnuke-option-page.php:1384
+msgid "Select a tournament for edit."
+msgstr ""
+
+#: bbnuke-option-page.php:1542
+msgid "Practice Edit"
+msgstr ""
+
+#: bbnuke-option-page.php:1546
+msgid "Select a season  - edit the practice or add a new entry."
+msgstr "Wählen Sie eine Saison - editieren Sie eine Practise oder fügen SIe neue Einträge hinzu."
+
+#: bbnuke-option-page.php:1627
+msgid "Upload Practice for season "
+msgstr ""
+
+#: bbnuke-option-page.php:1654
+msgid "Practice List"
+msgstr ""
+
+#: bbnuke-option-page.php:1657
+msgid "Select a practice for edit."
+msgstr "Wählen Sie eine Practise um sie zu editieren."
+
+#: bbnuke-option-page.php:1833
+msgid "Game Results Edit"
+msgstr "Spielergibnis Edit"
+
+#: bbnuke-option-page.php:1842
+msgid "Select a season  - edit the game results and save them."
+msgstr "Wählen SIe eine Saison, editieren sie ein Spiel und speichern sie die Daten."
+
+#: bbnuke-option-page.php:2145
+msgid "Past Games List"
+msgstr "Vergangene Spiele Liste"
+
+#: bbnuke-widgets.php:12
+#: bbnuke-widgets.php:84
+msgid "Top Batters"
+msgstr ""
+
+#: bbnuke-widgets.php:13
+#: bbnuke-widgets.php:85
+msgid "Top Pitchers"
+msgstr ""
+
+#: bbnuke-widgets.php:14
+#: bbnuke-widgets.php:86
+#, fuzzy
+msgid "Last Game"
+msgstr "Vergangene Spiele Liste"
+
+#: bbnuke-widgets.php:15
+#: bbnuke-widgets.php:87
+msgid "Next Game"
+msgstr ""
+
+#: bbnuke-widgets.php:16
+#: bbnuke-widgets.php:88
+msgid "Bat Stats"
+msgstr ""
+
+#: bbnuke-widgets.php:17
+#: bbnuke-widgets.php:89
+msgid "Team Stats"
+msgstr ""
+
+#: bbnuke-widgets.php:18
+#: bbnuke-widgets.php:90
+msgid "Pitch Stats"
+msgstr ""
+
+#: bbnuke-widgets.php:19
+#: bbnuke-widgets.php:91
+msgid "Field Stats"
+msgstr ""
+
+#: bbnuke-widgets.php:20
+#: bbnuke-widgets.php:92
+msgid "Player Stats"
+msgstr ""
+
+#: bbnuke-widgets.php:21
+#: bbnuke-widgets.php:93
+msgid "Top 5 Stats"
+msgstr ""
+
+#: bbnuke-widgets.php:22
+#: bbnuke-widgets.php:94
+#, fuzzy
+msgid "Team Schedule"
+msgstr "Spielplan Edit"
+
+#: bbnuke-widgets.php:23
+#: bbnuke-widgets.php:95
+msgid "Team Practises"
+msgstr ""
+
+#: bbnuke-widgets.php:24
+#: bbnuke-widgets.php:96
+msgid "Team Tournaments"
+msgstr ""
+
+#: bbnuke-widgets.php:25
+#: bbnuke-widgets.php:97
+msgid "Locations Info"
+msgstr ""
+
+#: bbnuke-widgets.php:26
+#: bbnuke-widgets.php:98
+#, fuzzy
+msgid "Game Results"
+msgstr "Spielergibnis Edit"
+
+#: bbnuke-widgets.php:30
+msgid "Displays various stats and results."
+msgstr "Anzeige von verschiedenen Ergenissen und Statistiken "
+
+#: bbnuke-widgets.php:36
+msgid "BaseballNuke Stats View"
+msgstr ""
+
+#: bbnuke-widgets.php:104
+#, fuzzy
+msgid "Display Stats and Results"
+msgstr "Anzeige von verschiedenen Ergenissen und Statistiken "
+
+#: bbnuke-widgets.php:108
+msgid "Title"
+msgstr "Titel"
+
+#: bbnuke-widgets.php:110
+msgid "Custom Title - shown in sidebar."
+msgstr "Angepasster Titel - in der Sidebar angezeigt."
+
+#: bbnuke-widgets.php:113
+msgid "Display default title"
+msgstr "Deafault Titel anzeigen "
+
+#: bbnuke-widgets.php:115
+msgid "Display the default title or the custom title."
+msgstr "Deafault Titel oder eigener Titel anzeigen "
+
+#: bbnuke-widgets.php:118
+msgid "Display Type"
+msgstr ""
+
+#: bbnuke-widgets.php:134
+msgid "What type of statistic should be displayed"
+msgstr "Welcher type von Statistik soll gezeigt werden "
+
+#: bbnuke.php:1034
+msgid "No season - please fill the season input field!"
+msgstr "Keine Saison gewählt, bitte füllen Sie das Saison input Feld aus!"
+
+#: bbnuke.php:1043
+msgid "season already exists!"
+msgstr "Saison gibt es schon!"
+
+#: bbnuke.php:1048
+msgid "Season added!"
+msgstr "Saison hinzugefügt!"
+
+#: bbnuke.php:1058
+msgid "Season deleted!"
+msgstr "Saison gelöscht!"
+
+#: bbnuke.php:1068
+msgid "Default values changed!"
+msgstr "Deafault Werte gesetzt!"
+
+#: bbnuke.php:1076
+msgid "No team name - please fill out the team name input field!"
+msgstr "Kein Team Name - bitte füllen Sie das TeamName input Feld aus!"
+
+#: bbnuke.php:1083
+msgid "Team added!"
+msgstr "Team hinzugefügt!"
+
+#: bbnuke.php:1092
+msgid "Team deleted!"
+msgstr "Team gelöscht!"
+
+#: bbnuke.php:1102
+msgid "Please select teams and season!"
+msgstr "Bitte wählen Sie ein Team und eine Saison!"
+
+#: bbnuke.php:1108
+msgid "Teams added to season!"
+msgstr "Teams wurden der Saison hinzugefügt"
+
