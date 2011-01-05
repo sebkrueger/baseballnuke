@@ -1,11 +1,10 @@
 <?php
 /*
 Plugin Name: baseballNuke 
-Plugin URI: http://www.flyingdogsbaseball.com/wp-plugins/baseballnuke
-Description: baseballNuke is a wordpress plugin based on the module for the CMS phpnuke <a href="http://phpnuke.org" target="_blank">http://phpnuke.org</a> for the administration of a single baseball team.  baseballNuke is a complete team management tool and information source.  It provides team and individual information about the players including schedule, field directions, player stats, team stats, player profiles and game results.
-Version: 1.0.3
-Author: Shawn Grimes, Christian Gnoth 
-Author URI: http://claimid.com/shawn
+Plugin URI: http://dev.flyingdogsbaseball.com/baseballnuke
+Description: baseballNuke is a wordpress plugin based on the original module for the CMS phpnuke for the administration of a single baseball team.  baseballNuke is a complete team management tool and information source.  It provides team and individual information about the players including schedule, field directions, player stats, team stats, player profiles and game results.
+Version: 1.0.4
+Author: Nick Collingham, Shawn Grimes, Christian Gnoth, Dawn Wallis 
 License: GPL2
 */
 
@@ -405,36 +404,33 @@ function bbnuke_plugin_create_players_page()
 
   //  check if one edit button is pressed
   $edit_player = false;
-  if ( $_POST['bbnuke_delete_player_id'] == 'none' )
-  {
     foreach( $_POST as $key => $value )
     {
       if ( !(strpos( $key, 'bbnuke_edit_player_') === false) )
       {
         $pos = strpos( $key, 'bbnuke_edit_player_');
         $pos1= strpos( $key, '_btn', $pos);
-        $id = (int)substr( $key, ($pos + 18), ($pos1 - ($pos + 18)) );
+        $id = (int)substr( $key, ($pos + 19), ($pos1 - ($pos + 19)) );
         bbnuke_update_option('bbnuke_players_edit_id', $id);
         $edit_player = true;
         break;
       }
-    }
-  }
-
-  if ( $_POST['bbnuke_delete_player_btn'] )
-  {
-    $player_id = $_POST['bbnuke_delete_player_id'];
-    $season    = $_POST['bbnuke_player_edit_season'];
-    bbnuke_delete_player($player_id, $season);
+   }
+   {
+     if ( !(strpos( $key, 'bbnuke_delete_player_') === false) )
+      {
+        $pos = strpos( $key, 'bbnuke_delete_player_');
+        $pos1= strpos( $key, '_btn', $pos);
+        $id = (int)substr( $key, ($pos + 21), ($pos1 - ($pos + 21)) );
+	$season  = bbnuke_get_option('bbnuke_players_season');
+    	bbnuke_delete_player($id, $season);
     echo '<div id="message" class="updated fade">';
     echo '<strong>Player deleted !!!</strong></div>';
-  }
-
+      }
+   }
+  { 
   if ( $_POST['bbnuke_save_player_btn'] )
   {
-    //  check if new player or edit player
-    if ( $_POST['bbnuke_delete_player_id'] == 'none' )
-    {
       //  new player
       $player_id = $_POST['bbnuke_delete_player_id'];
       $season    = $_POST['bbnuke_player_edit_season'];
@@ -449,14 +445,18 @@ function bbnuke_plugin_create_players_page()
         echo '<div id="message" class="error fade">';
         echo '<strong>Player not added !!!</strong></div>';
       }
-    }
-    else
-    {
+   }
+  }
+  {
       //  player update
-      $player_id = $_POST['bbnuke_delete_player_id'];
-      $season    = $_POST['bbnuke_player_edit_season'];
-      $ret = bbnuke_update_player($player_id, $season);
-      if ($ret)
+    if ( !(strpos( $key, 'bbnuke_update_player_') === false) )
+    {
+        $pos = strpos( $key, 'bbnuke_update_player_');
+        $pos1= strpos( $key, '_btn', $pos);
+        $player_id = (int)substr( $key, ($pos + 21), ($pos1 - ($pos + 21)) );
+        $season  = bbnuke_get_option('bbnuke_players_season');
+        $ret = bbnuke_update_player($player_id, $season);
+        if ($ret)
       {
         echo '<div id="message" class="updated fade">';
         echo '<strong>Player updated !!!</strong></div>';
@@ -464,7 +464,8 @@ function bbnuke_plugin_create_players_page()
       else
       {
         echo '<div id="message" class="error fade">';
-        echo '<strong>Player not updated !!!</strong></div>';
+        echo '<strong>Player not updated !!!' . $player_id . ',' . $season . '</strong></div>'; 
+echo mysql_error();
       }
     }
   }
@@ -500,6 +501,7 @@ function bbnuke_plugin_create_players_page()
 
       echo '<div id="message" class="updated fade">';
       echo '<strong>Players added to team !!!</strong></div>';
+echo mysql_error();
     }
   }
 

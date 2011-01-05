@@ -6,47 +6,117 @@ require_once('../../../../wp-load.php');
 
 header('Content-type: text/css');
 
+$options = get_option('bbnuke_plugin_options');
+$bg_color     = $options['bbnuke_widget_bg_color'];
+$hover_color     = $options['bbnuke_widget_hover_color'];
+$txt_color    = $options['bbnuke_widget_txt_color'];
+$header_bg_color    = $options['bbnuke_widget_header_bg_color'];
+$header_txt_color    = $options['bbnuke_widget_header_txt_color'];
 
 ?>
-
-
-
-
-.bbnuke-result-table
+table.bbnuke-result-table 
 {
-  rules:    rows;
+  border:0px;
+  border-spacing: 0px 0px;
+  border-collapse: collapse;
+  font-size:11px;
+}
+table.bbnuke-result-table tr.over
+{
+	background: <?php echo "$hover_color"; ?>;
 }
 
-.bbnuke-result-table td
+table.bbnuke-result-table tr
 {
-  padding:  0 2px;
+  background: <?php echo "$bg_color"; ?>;
 }
 
-
-
-.bbnuke_input_link
+table.bbnuke-result-table td 
 {
-  position:          relative;
-  border:            none;
-  padding:           none;
-  margin:            none;
+  padding:4px;
+  text-align:right;
+  line-height: 13px;
+  color: <?php echo "$txt_color"; ?>;
+}
+
+table.bbnuke-result-table th
+{
+  text-align:center;
+  background-color: <?php echo "$header_bg_color"; ?>;;
+  line-height: 15px;
+  color: <?php echo "$header_txt_color"; ?>;
+}
+
+table.bbnuke-schedule-table
+{
+  border:0px;
+  border-spacing: 0px 0px;
+  border-collapse: collapse;
+  font-size:11px;
+}
+
+table.bbnuke-schedule-table tr.over
+{
+        background: <?php echo "$hover_color"; ?>;;
+}
+
+table.bbnuke-schedule-table tr
+{
+  background: <?php echo "$bg_color"; ?>;
+}
+
+table.bbnuke-schedule-table td
+{
+  padding:4px;
+  text-align:left;
+  line-height: 13px;
+  color: <?php echo "$txt_color"; ?>;
+}
+
+table.bbnuke-schedule-table th
+{
+  background-color: <?php echo "$header_bg_color"; ?>;;
+  line-height: 15px;
+  text-align:left;
+  color: <?php echo "$header_txt_color"; ?>;
+}
+
+table.bbnuke-stat-key td
+{
+  border:0px;
+  border-spacing: 0px 0px;
+  border-collapse: collapse;
+  font-size:11px;
+  padding:4px;
+  text-align:left;
+  line-height: 10px;
+}
+
+input#bbnuke_input_link 
+{
+  font-weight:bold;
   background-color:  transparent;
-  font-weight:       bold;
-  cursor:            pointer;
+  position:          relative;
+  padding:           0px;
+  margin:            none;
+  border:            2px;
+  font-size: 11px;
+  line-height: 14px;
+  margin: 0px 0px 0px;
+  color: <?php echo "$header_txt_color"; ?>;
 }
 
-.bbnuke_tb_head_asc
+form#bbnuke_form
 {
-  background:        url(<?php echo $plugin_url . '/images/asc.gif'; ?>) no-repeat;
-  padding-left: 10px;
+  background-color:  transparent;
+  position:          relative;
+  padding:           0px;
+  margin:            none;
+  border:            0px;
+  font-weight:bold;
+  text-align:center;
+  line-height: 14px;
 }
-
-.bbnuke_tb_head_desc
-{
-  background:        url(<?php echo $plugin_url . '/images/desc.gif'; ?>) no-repeat;
-  padding-left: 10px;
-}
-
 
 
 .bbnuke_players_img
@@ -54,12 +124,3 @@ header('Content-type: text/css');
   vertical-align:    bottom;
 }
 
-
-
-
-<?php
-
-
-
-
-?>

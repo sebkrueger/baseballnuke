@@ -71,6 +71,7 @@ CREATE TABLE `nuke_baseballNuke_players` (
   `season` varchar(20) NOT NULL default '',
   `profile` text,
   `bdate` date default NULL,
+  `school` varchar(255) default NULL,
   `email` varchar(255) default NULL,
   PRIMARY KEY  (`playerID`,`season`)
 ) ENGINE=MyISAM AUTO_INCREMENT=141 DEFAULT CHARSET=latin1;

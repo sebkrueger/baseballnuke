@@ -11,7 +11,10 @@ function bbnuke_plugin_print_option_page()
 
   $team_leaders = $options['bbnuke_team_leaders'];
   $bg_color     = $options['bbnuke_widget_bg_color'];
+  $hover_color     = $options['bbnuke_widget_hover_color'];
   $txt_color    = $options['bbnuke_widget_txt_color'];
+  $header_bg_color    = $options['bbnuke_widget_header_bg_color'];
+  $header_txt_color    = $options['bbnuke_widget_header_txt_color'];
   $wdg_playerstats_player_id  = $options['bbnuke_widget_playerstats_player_id'];
   $wdg_game_results_player_id = $options['bbnuke_widget_game_results_player_id'];
   $wdg_game_results_game_id   = $options['bbnuke_widget_game_results_game_id'];
@@ -87,11 +90,23 @@ function bbnuke_plugin_print_option_page()
   '                  <td><input type="text" name="bbnuke_plugin_option_team_leaders" value="' . $team_leaders . '" />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
-  '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_bg_color">Widget BG Color</label></th>' . "\n" .
+  '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_header_bg_color">Table Header Background Color</label></th>' . "\n" .
+  '                  <td><input type="text" name="bbnuke_plugin_option_header_bg_color" value="' . $header_bg_color . '" />' . "\n" .
+  '                  </td>' . "\n" .
+  '              </tr>' . "\n" .
+  '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_header_txt_color">Table Header Text Color</label></th>' . "\n" .
+  '                  <td><input type="text" name="bbnuke_plugin_option_header_txt_color" value="' . $header_txt_color . '" />' . "\n" .
+  '                  </td>' . "\n" .
+  '              </tr>' . "\n" .
+  '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_bg_color">Table Body Background Color</label></th>' . "\n" .
   '                  <td><input type="text" name="bbnuke_plugin_option_bg_color" value="' . $bg_color . '" />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
-  '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_txt_color">Widget Text Color</label></th>' . "\n" .
+  '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_hover_color">Table Body Hover Color</label></th>' . "\n" .
+  '                  <td><input type="text" name="bbnuke_plugin_option_hover_color" value="' . $hover_color . '" />' . "\n" .
+  '                  </td>' . "\n" .
+  '              </tr>' . "\n" .
+  '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_txt_color">Table Body Text Color</label></th>' . "\n" .
   '                  <td><input type="text" name="bbnuke_plugin_option_txt_color" value="' . $txt_color . '" />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
@@ -496,7 +511,7 @@ function bbnuke_plugin_print_players_option_page( $edit_player = false )
     $team    = bbnuke_get_option('bbnuke_players_team');
     $players = bbnuke_get_players_season_team($season, $team);
     $player  = $players[$player_id];
-    $player_obj = bbnuke_get_player_info($player['playerID'], $season);
+    $player_obj = bbnuke_get_player_info($player_id, $season);
 
     //   set player variables
     $firstname  = $player_obj->firstname;
@@ -519,6 +534,7 @@ function bbnuke_plugin_print_players_option_page( $edit_player = false )
     $workphone  = $player_obj->workPhone;
     $jerseynum   = $player_obj->jerseyNum;
     $email       = $player_obj->email;
+    $school      = $player_obj->school;
     $piclocation = $player_obj->picLocation;
   }
 
@@ -635,38 +651,30 @@ function bbnuke_plugin_print_players_option_page( $edit_player = false )
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_player_edit_email">Email</label></th>' . "\n" .
   '                  <td><input type="text" name="bbnuke_player_edit_email" value="' . $email . '"></td>' . "\n" .
   '              </tr>' . "\n" .
+  '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_player_edit_school">School</label></th>' . "\n" .
+  '                  <td><input type="text" name="bbnuke_player_edit_school" value="' . $school . '"></td>' . "\n" .
+  '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_player_edit_pictureloc">Picture Location</label></th>' . "\n" .
   '                  <td><input type="text" name="bbnuke_player_edit_pictureloc" size="35" value="' . $piclocation . '"></td>' . "\n" .
-  '              </tr>' . "\n";
-
-  if ( $edit_player === true )
-  {
-    echo
-    '              <tr><th class="bbnuke_option_left_part"><label for=""></label></th>' . "\n" .
-    '                  <td>' . "\n" .
-    '                    <div class="div-wait" id="divwaitped0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-    '                    <input type="submit" class="button-primary" value="Delete Player" id="bbnuke_delete_player_btn_id" name="bbnuke_delete_player_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .    
-    '                  </td>' . "\n" .
-    '              </tr>' . "\n";
-  }
-
-  echo
-  '              <tr><th class="bbnuke_option_left_part"><label for=""></label></th>' . "\n" .
-  '                  <td>' . "\n";
-
-  if ( $edit_player === true )
-    echo '                    <input type="hidden" value="' . $player['playerID'] . '" name="bbnuke_delete_player_id" />' . "\n";
-  else
-    echo '                    <input type="hidden" value="none" name="bbnuke_delete_player_id" />' . "\n";
-
-  echo
+  '              </tr>' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              </table>' . "\n" .
-  '              <div class="submit">' . "\n" .
+  '              <div class="submit">' . "\n" ;
+
+  if ( $edit_player === true )
+  echo
   '                <div class="div-wait" id="divwaitped1"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-  '                <input type="submit" class="button-secondary" value="Save Players Data" id="bbnuke_save_player_btn_id" name="bbnuke_save_player_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />' . "\n" .
-  '                <div class="right-bottom"><a href="#Top">Back to Top</a></div>' . "\n" .
+  '                <input type="submit" class="button-secondary" value="Update Player" id="bbnuke_update_player_' . $player_id . '_btn_id" name="bbnuke_update_player_' . $player_id . '_btn"      onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />' . "\n" .
+  '                <div class="right-bottom"><a href="#Top">Back to Top</a></div>' . "\n" ;
+
+  else
+  echo
+  '                <div class="div-wait" id="divwaitped1"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
+  '                <input type="submit" class="button-secondary" value="Save Players Data" id="bbnuke_save_player_btn_id" name="bbnuke_save_player_btn"      onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />' . "\n" .
+  '                <div class="right-bottom"><a href="#Top">Back to Top</a></div>' . "\n" ;
+
+  echo
   '              </div>' . "\n" .
   '              </form>' . "\n" .
   '            </div>' . "\n" .
@@ -677,7 +685,7 @@ function bbnuke_plugin_print_players_option_page( $edit_player = false )
   '            <div class="inside">' . "\n" .
   '              <p>' . "\n" .
   '                ' . __('Choose a file to upload in the form: ', 'bbnuke') . "\n" .
-  '                ' . __('teamName, firstname, middlename, lastname, positions, bats, throws, height, weight, address, city, state, zip, homePhone, workPhone, cellphone, jerseyNum, picLocation, season, profile, email, bdate.', 'bbnuke') . "\n" .
+  '                ' . __('teamName, firstname, middlename, lastname, positions, bats, throws, height, weight, address, city, state, zip, homePhone, workPhone, cellphone, jerseyNum, picLocation, season, profile, email, school, bdate.', 'bbnuke') . "\n" .
   '              </p>' . "\n" .
   '              <table class="form-table">' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="">File</label></th>' . "\n" .
@@ -764,6 +772,7 @@ function bbnuke_plugin_print_players_option_page( $edit_player = false )
 
   for ( $i=0; $i < count($players); $i++ )
   {
+    $player_id   = $players[$i]['playerID'];
     $lastname   = $players[$i]['lastname'];
     $firstname  = $players[$i]['firstname'];
     $middlename = $players[$i]['middlename'];
@@ -772,7 +781,9 @@ function bbnuke_plugin_print_players_option_page( $edit_player = false )
     '                         <label for="bbnuke_player_' . $i . '" class="player-list-entry-label">' . $lastname . ', ' . $firstname . ' ' . $middlename . '</label> ' . "\n" .
     '                         -- ' . $team . '&nbsp;' . "\n" .
     '                         <div class="div-wait" id="divwaitcpl' . $i . '"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-    '                         <input type="submit" class="button-primary" value="Edit" id="bbnuke_edit_player_' . $i . '_btn_id" name="bbnuke_edit_player_' . $i . '_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .    
+    '                         <input type="submit" class="button-primary" value="Edit" id="bbnuke_edit_player_' . $player_id . '_btn_id" name="bbnuke_edit_player_' . $player_id . '_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />' . "\n" . 
+    '			      <div class="div-wait" id="divwaitped0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .  
+    '			      <input type="submit" class="button-primary" value="Delete" id="bbnuke_delete_player_' . $player_id . '_btn_id" name="bbnuke_delete_player_' . $player_id . '_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />' . "\n" .
     '                       </li>' . "\n";
   }
 
@@ -850,7 +861,7 @@ function bbnuke_plugin_print_players_option_page( $edit_player = false )
 
   for ( $i=0; $i < count($players); $i++ )
   {
-    $payer_id   = $players[$i]['playerID'];
+    $player_id   = $players[$i]['playerID'];
     $lastname   = $players[$i]['lastname'];
     $firstname  = $players[$i]['firstname'];
     $middlename = $players[$i]['middlename'];
@@ -2254,7 +2265,7 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
 
 
 
-	$latestVersion="2.0";
+	$latestVersion="1.0.4";
 	
 
 	function getbnukeVersion(){
@@ -2266,91 +2277,4 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
 	}
 
 	
-	
-
-
-/*
-
-	function updateResults(){
-		switch($ACTION)
-		{
-			case "Submit":
-			  foreach($_POST as $key=>$value){
-			    if(!(preg_match("/^(\d*)\_(.*)/",$key,$matches))){
-			      $boxValues=$boxValues . $key . "='".$value."',";
-			      //echo "$key=$value<BR>";
-			    }else{
-			      $playerID=$matches[1];
-			      $field=$matches[2];
-			      $players[$playerID]="$players[$playerID],$field='$value'";
-			    }
-			  }		
-			  foreach($players as $playerID=>$values){
-			    if(!preg_match("/chkbxDNP/",$values)){
-			      //echo "$playerID<BR>";
-			      $sqlString="INSERT INTO ".$prefix."_baseballNuke_stats SET playerID=$playerID, gameID=$GAMEID".$values;
-			      $resultScores=sql_query($sqlString, $dbi);
-			      //echo "SQL: $sql<BR>";
-			    }
-			  }
-			  $boxValues=substr("$boxValues",0,-1);
-			  $sqlString="INSERT INTO ".$prefix."_baseballNuke_boxscores SET ".$boxValues;
-			  $resultScores=sql_query($sqlString, $dbi);
-			  //		echo "BOX SQ: $boxSQL<BR>";
-			  echo "Results Updated<BR>";
-			  break;
-			  
-			case "Update":
-	//		echo "Records exist: Updating<BR>";
-			  foreach($_POST as $key=>$value){
-			    //			echo "$key=>$value<BR>";
-			    if(!(preg_match("/^(\d*)\_(.*)/",$key,$matches))){
-			      $boxValues=$boxValues . $key . "='".$value."',";
-			    }else{
-			      $playerID=$matches[1];
-			      $field=$matches[2];
-			      $players[$playerID]="$players[$playerID],$field='$value'";
-			    }
-			    
-			  }
-			  //		echo "Box scores updated<BR>";
-			  
-			  foreach($players as $playerID=>$values){
-			    if($playerID){
-			      $sqlString="SELECT playerID FROM ".$prefix."_baseballNuke_stats WHERE playerID=$playerID AND gameID=$GAMEID";
-			      //				echo "SQL: $sql<BR>";
-			      $resultScores=sql_query($sqlString, $dbi);
-			      $exist=sql_num_rows($resultScores, $dbi);
-				
-			      if(!preg_match("/chkbxDNP/",$values)){
-				//echo "$playerID<BR>";
-				if($exist>0){
-				  $values=substr("$values",1);
-				  $sqlString="UPDATE ".$prefix."_baseballNuke_stats SET $values WHERE playerID=$playerID and gameID=$GAMEID";
-				}else{
-				  $sqlString="INSERT INTO ".$prefix."_baseballNuke_stats SET playerID=$playerID, gameID=$GAMEID".$values;
-				}
-			      }else{
-				if($exist>0){
-				  $sqlString="DELETE FROM ".$prefix."_baseballNuke_stats WHERE playerID=$playerID AND gameID=$GAMEID";
-				}
-			      }
-			      $resultScores=sql_query($sqlString, $dbi);
-			      //	echo "SQL: $sqlString<BR>";
-			    }
-			  }
-			  
-			  $boxValues=substr("$boxValues",0,-1);
-			  $sqlString="UPDATE ".$prefix."_baseballNuke_boxscores SET ".$boxValues." WHERE gameID=$GAMEID";
-			  $resultScores=sql_query($sqlString, $dbi);
-			  echo "Results Updated<BR>";
-			  
-
-		  
-
-	}
-*/
-	
-
-
 ?>
