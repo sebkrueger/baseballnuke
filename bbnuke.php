@@ -1,10 +1,10 @@
 <?php
 /*
-Plugin Name: baseballNuke 
+Plugin Name: baseballNuke
 Plugin URI: http://dev.flyingdogsbaseball.com/baseballnuke
 Description: baseballNuke is a wordpress plugin based on the original module for the CMS phpnuke for the administration of a single baseball team.  baseballNuke is a complete team management tool and information source.  It provides team and individual information about the players including schedule, field directions, player stats, team stats, player profiles and game results.
-Version: 1.0.4
-Author: Nick Collingham, Shawn Grimes, Christian Gnoth, Dawn Wallis 
+Version: 1.0.4.1
+Author: Nick Collingham, Shawn Grimes, Christian Gnoth, Dawn Wallis
 License: GPL2
 */
 
@@ -20,13 +20,13 @@ $plugin_path = dirname(plugin_basename(__FILE__)) . '/language';
 load_plugin_textdomain( 'bbnuke', false, $plugin_path );
 
 
-if ( function_exists('load_plugin_textdomain') ) 
+if ( function_exists('load_plugin_textdomain') )
 {
-  if ( !defined('WP_PLUGIN_DIR') ) 
+  if ( !defined('WP_PLUGIN_DIR') )
   {
     load_plugin_textdomain( 'bbnuke', str_replace( ABSPATH, '', dirname(__FILE__)) . '/lang');
-  } 
-  else 
+  }
+  else
   {
     load_plugin_textdomain( 'bbnuke', false, dirname(plugin_basename(__FILE__)) . '/lang');
   }
@@ -41,8 +41,8 @@ require_once( dirname(__FILE__) . '/bbnuke-option-page.php');
 
 
 
-register_activation_hook(   __FILE__, 'bbnuke_plugin_activation'  );   
-register_deactivation_hook( __FILE__, 'bbnuke_plugin_deactivation'); 
+register_activation_hook(   __FILE__, 'bbnuke_plugin_activation'  );
+register_deactivation_hook( __FILE__, 'bbnuke_plugin_deactivation');
 
 //add_action( 'wp_head',      'bbnuke_wp_head');
 //add_action( 'init',         'bbnuke_init_method');
@@ -66,7 +66,7 @@ $plugin_url = BBNPURL;
 ////////////////////////////////////////////////////////////////////////////////
 // plugin activation hook
 ////////////////////////////////////////////////////////////////////////////////
-function bbnuke_plugin_activation() 
+function bbnuke_plugin_activation()
 {
   global $wpdb;
 
@@ -79,13 +79,13 @@ function bbnuke_plugin_activation()
   add_option( 'bbnuke_plugin_options', array(), '', 'no');
   bbnuke_set_option_defaults();
 
-  return; 
+  return;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 // plugin deactivation hook
 ////////////////////////////////////////////////////////////////////////////////
-function bbnuke_plugin_deactivation() 
+function bbnuke_plugin_deactivation()
 {
   delete_option('bbnuke_plugin_options');
 
@@ -93,7 +93,7 @@ function bbnuke_plugin_deactivation()
 }
 
 
-function bbnuke_plugin_uninstall() 
+function bbnuke_plugin_uninstall()
 {
   global $wpdb;
 
@@ -120,7 +120,7 @@ function bbnuke_plugin_uninstall()
 ////////////////////////////////////////////////////////////////////////////////
 function bbnuke_plugin_add_option_page()
 {
-//  $bbnuke_admin_page = 
+//  $bbnuke_admin_page =
   add_menu_page   (                       'baseballNuke Plugin Options', 'baseballNuke', 8, 'bbnuke-option-page',  'bbnuke_plugin_create_option_page', BBNPURL . 'images/baseballNuke_16x16.gif');
   add_submenu_page( 'bbnuke-option-page', 'Players',                     'Players',      8, 'bbnuke-players',      'bbnuke_plugin_create_players_page');
   add_submenu_page( 'bbnuke-option-page', 'Fields',                      'Fields',       5, 'bbnuke-fields',       'bbnuke_plugin_create_fields_page');
@@ -168,10 +168,10 @@ function  bbnuke_print_scripts()
   else
   {
     //  print scripts for the public and frontend
-    wp_enqueue_script( 'json2' ); 
+    wp_enqueue_script( 'json2' );
     wp_enqueue_script( 'bbnuke_script', plugin_dir_url( __FILE__ ) . 'includes/js/bbnuke_scripts.js', array('jquery', 'json2'), false, false);
 
-    echo 
+    echo
     '
       <script type="text/javascript" language="javascript">
       //<![CDATA[
@@ -207,7 +207,7 @@ function  bbnuke_print_styles()
 ////////////////////////////////////////////////////////////////////////////////
 function bbnuke_admin_init_method()
 {
-  if ( get_magic_quotes_gpc() ) 
+  if ( get_magic_quotes_gpc() )
   {
     $_POST      = array_map( 'stripslashes_deep', $_POST );
     $_GET       = array_map( 'stripslashes_deep', $_GET );
@@ -227,9 +227,9 @@ function bbnuke_admin_init_method()
   register_widget('bbnuke_Widget');
 
 /*
-  if ( function_exists('wp_tiny_mce') ) 
+  if ( function_exists('wp_tiny_mce') )
   {
-    wp_tiny_mce( 
+    wp_tiny_mce(
                   true , // true makes the editor "teeny"
                   array(
                           "editor_selector" => "bbnuke_textarea",
@@ -244,13 +244,13 @@ function bbnuke_admin_init_method()
   //  check if user admin_bbnuke exists
   $user_name = 'admin_bbnuke';
   $user_id = username_exists( $user_name );
-  if ( !$user_id ) 
+  if ( !$user_id )
   {
     //  create user if not exists
     $random_password = wp_generate_password( 12, false );
     $user_id = wp_create_user( $user_name, $random_password );
     update_user_meta( $user_id, 'user_level', 10 );
-  } 
+  }
   bbnuke_update_option('bbnuke_post_user', $user_id);
 
   return;
@@ -259,9 +259,9 @@ function bbnuke_admin_init_method()
 ////////////////////////////////////////////////////////////////////////////////
 // plugin options functions
 ////////////////////////////////////////////////////////////////////////////////
-function bbnuke_get_option($field) 
+function bbnuke_get_option($field)
 {
-  if (!$options = wp_cache_get('bbnuke_plugin_options')) 
+  if (!$options = wp_cache_get('bbnuke_plugin_options'))
   {
     $options = get_option('bbnuke_plugin_options');
     wp_cache_set('bbnuke_plugin_options',$options);
@@ -269,24 +269,24 @@ function bbnuke_get_option($field)
   return $options[$field];
 }
 
-function bbnuke_update_option($field, $value) 
+function bbnuke_update_option($field, $value)
 {
   bbnuke_update_options(array($field => $value));
 }
 
-function bbnuke_update_options($data) 
+function bbnuke_update_options($data)
 {
   $options = array_merge(get_option('bbnuke_plugin_options'),$data);
   update_option('bbnuke_plugin_options',$options);
   wp_cache_set('bbnuke_plugin_options',$options);
 }
 
-function bbnuke_migrate_old_options() 
+function bbnuke_migrate_old_options()
 {
   global $wpdb;
 
   //  check for a old Option
-  if ( (get_option('bbnuke_plugin_version') === false) ) 
+  if ( (get_option('bbnuke_plugin_version') === false) )
   {
     return;
   }
@@ -305,7 +305,13 @@ function bbnuke_migrate_old_options()
        '10'  => 'bbnuke_team_leaders',
        '11'  => 'bbnuke_post_user',
        '12'  => 'bbnuke_widget_bg_color',
-       '13'  => 'bbnuke_widget_txt_color'
+       '13'  => 'bbnuke_widget_txt_color',
+       '14'  => 'bbnuke_widget_hover_color',
+       '15'  => 'bbnuke_widget_header_txt_color',
+       '16'  => 'bbnuke_game_results_page',
+       '17'  => 'bbnuke_player_stats_page',
+       '18'  => 'bbnuke_locations_page',
+       '19'  => 'bbnuke_widget_header_bg_color'
        );
 
   $new_fields = array(
@@ -322,10 +328,16 @@ function bbnuke_migrate_old_options()
        '10'  => 'bbnuke_team_leaders',
        '11'  => 'bbnuke_post_user',
        '12'  => 'bbnuke_widget_bg_color',
-       '13'  => 'bbnuke_widget_txt_color'
+       '13'  => 'bbnuke_widget_txt_color',
+       '14'  => 'bbnuke_widget_hover_color',
+       '15'  => 'bbnuke_widget_header_txt_color',
+       '16'  => 'bbnuke_game_results_page',
+       '17'  => 'bbnuke_player_stats_page',
+       '18'  => 'bbnuke_locations_page',
+       '19'  => 'bbnuke_widget_header_bg_color'
        );
 
-  foreach($old_fields as $index=>$field) 
+  foreach($old_fields as $index=>$field)
   {
     if ( $index == 3 )
     {
@@ -347,10 +359,10 @@ function bbnuke_migrate_old_options()
 function bbnuke_set_option_defaults()
 {
   $current_user_id=1;
-  global $current_user;    
+  global $current_user;
   get_currentuserinfo();
 
-  if ( $current_user->ID != '' ) 
+  if ( $current_user->ID != '' )
     $current_user_id=$current_user->ID;
 
   $default_options = array(
@@ -370,7 +382,13 @@ function bbnuke_set_option_defaults()
        'bbnuke_widget_game_results_player_id' => NULL,
        'bbnuke_widget_game_results_game_id'   => NULL,
        'bbnuke_widget_bg_color'          => 'white',
-       'bbnuke_widget_txt_color'         => 'black'
+       'bbnuke_widget_txt_color'         => 'black',
+       'bbnuke_widget_hover_color'	 => 'white',
+       'bbnuke_widget_header_txt_color'  => 'black',
+       'bbnuke_game_results_page' => 'game-results',
+       'bbnuke_player_stats_page' => 'player-stats',
+       'bbnuke_locations_page'    => 'fields',
+       'bbnuke_widget_header_bg_color'   => 'white'
         );
 
   $bbnuke_options = get_option('bbnuke_plugin_options');
@@ -428,7 +446,7 @@ function bbnuke_plugin_create_players_page()
     echo '<strong>Player deleted !!!</strong></div>';
       }
    }
-  { 
+  {
   if ( $_POST['bbnuke_save_player_btn'] )
   {
       //  new player
@@ -464,7 +482,7 @@ function bbnuke_plugin_create_players_page()
       else
       {
         echo '<div id="message" class="error fade">';
-        echo '<strong>Player not updated !!!' . $player_id . ',' . $season . '</strong></div>'; 
+        echo '<strong>Player not updated !!!' . $player_id . ',' . $season . '</strong></div>';
 echo mysql_error();
       }
     }
@@ -1145,7 +1163,7 @@ function bbnuke_plugin_create_option_page()
 
 
 
-function bbnuke_is_min_wp($version) 
+function bbnuke_is_min_wp($version)
 {
   return version_compare( $GLOBALS['wp_version'], $version. 'alpha', '>=');
 }
@@ -1153,7 +1171,7 @@ function bbnuke_is_min_wp($version)
 
 
 
-function bbnuke_more_reccurences() 
+function bbnuke_more_reccurences()
 {
     return array(
         'weekly' => array('interval' => 604800, 'display' => 'Once Weekly'),

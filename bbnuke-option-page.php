@@ -18,6 +18,9 @@ function bbnuke_plugin_print_option_page()
   $wdg_playerstats_player_id  = $options['bbnuke_widget_playerstats_player_id'];
   $wdg_game_results_player_id = $options['bbnuke_widget_game_results_player_id'];
   $wdg_game_results_game_id   = $options['bbnuke_widget_game_results_game_id'];
+  $game_results_page   = $options['bbnuke_game_results_page'];
+  $player_stats_page   = $options['bbnuke_player_stats_page'];
+  $locations_page   = $options['bbnuke_locations_page'];
 
   //   get seasons
   $seasons_list    = bbnuke_get_seasons();
@@ -108,6 +111,18 @@ function bbnuke_plugin_print_option_page()
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_txt_color">Table Body Text Color</label></th>' . "\n" .
   '                  <td><input type="text" name="bbnuke_plugin_option_txt_color" value="' . $txt_color . '" />' . "\n" .
+  '                  </td>' . "\n" .
+  '              </tr>' . "\n" .
+  '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_game_results_page">Game Results Widget Page</label></th>' . "\n" .
+  '                  <td><input type="text" name="bbnuke_plugin_option_game_results_page" value="' . $game_results_page . '" />' . "\n" .
+  '                  </td>' . "\n" .
+  '              </tr>' . "\n" .
+  '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_player_stats_page">Player Stats Widget Page</label></th>' . "\n" .
+  '                  <td><input type="text" name="bbnuke_plugin_option_player_stats_page" value="' . $player_stats_page . '" />' . "\n" .
+  '                  </td>' . "\n" .
+  '              </tr>' . "\n" .
+  '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_locations_page">Locations Widget Page</label></th>' . "\n" .
+  '                  <td><input type="text" name="bbnuke_plugin_option_locations_page" value="' . $locations_page . '" />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_wdg_playerstats_playerid">Widget PlayerStats Player ID</label></th>' . "\n" .

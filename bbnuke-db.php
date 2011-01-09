@@ -173,14 +173,14 @@ function  bbnuke_drop_tables()
 {
   global $wpdb;
 
-  $wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}baseballNuke_pitchTotals, 
-                         {$wpdb->prefix}baseballNuke_batTotals, 
-                         {$wpdb->prefix}baseballNuke_teams, 
-                         {$wpdb->prefix}baseballNuke_stats, 
-                         {$wpdb->prefix}baseballNuke_players, 
-                         {$wpdb->prefix}baseballNuke_locations, 
-                         {$wpdb->prefix}baseballNuke_boxscores, 
-                         {$wpdb->prefix}baseballNuke_settings, 
+  $wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}baseballNuke_pitchTotals,
+                         {$wpdb->prefix}baseballNuke_batTotals,
+                         {$wpdb->prefix}baseballNuke_teams,
+                         {$wpdb->prefix}baseballNuke_stats,
+                         {$wpdb->prefix}baseballNuke_players,
+                         {$wpdb->prefix}baseballNuke_locations,
+                         {$wpdb->prefix}baseballNuke_boxscores,
+                         {$wpdb->prefix}baseballNuke_settings,
                          {$wpdb->prefix}baseballNuke_schedule" );
   $wpdb->query( "DROP VIEW IF EXISTS {$wpdb->prefix}baseballNuke_pitchTotals,{$wpdb->prefix}baseballNuke_batTotals" );
 
@@ -210,7 +210,7 @@ function  bbnuke_check_tables()
 
 //    $query = mysql_real_escape_string("INSERT INTO `" . $wpdb->prefix . "baseballNuke_settings` (`defaultTeam`, `defaultSeason`, `displayMenu`, `ID`, `version`) VALUES
     $query = "INSERT INTO `" . $wpdb->prefix . "baseballNuke_settings` (`defaultTeam`, `defaultSeason`, `displayMenu`, `ID`, `version`) VALUES
-			('Flying Dogs', '2008', '', 1, '1.0.4');";
+			('Flying Dogs', '2008', '', 1, '1.0.4.1');";
     mysql_query($query);
 
 

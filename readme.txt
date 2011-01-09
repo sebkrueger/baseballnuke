@@ -5,7 +5,7 @@ Plugin Uri: http://dev.flyingdogsbaseball.com/baseballNuke
 Tags: phpnuke, baseball, team management, baseballNuke, softball
 Requires at least: 2.7
 Tested up to: WP 3.0.4
-Stable tag: 1.0.4
+Stable tag: 1.0.4.1
 
 
 == Description ==
@@ -139,5 +139,6 @@ Programmer/Technical Genious - Dawn Wallis
 - ENHANCEMENT - widget output colors configurable through wp-admin
 - DB ADDITION - added "school" to the player profile table to support the new Roster widget
 
+= 1.0.4.1 =
+-BUG FIX - added admin option to specify page location for Game Results, Player Stats and Locations Info widgets.
 
-`<?php code(); // goes in backticks ?>`
