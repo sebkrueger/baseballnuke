@@ -1,0 +1,315 @@
+#bbnuke-plugin-main
+{
+  width:  74%;
+}
+
+#bbnuke-plugin-main .postbox,
+#bbnuke-plugin-news .postbox
+{
+  min-width:  150px;
+}
+
+#bbnuke-plugin-news
+{
+  width:  24%;
+}
+
+.submit-bottom-div
+{
+  position:   relative;
+  display:    block;
+  clear:      both;
+  min-height: 25px;
+}
+
+.label-hb
+{
+  position:  relative;
+  min-width: 5em;
+  display:   inline;
+  float:     left;
+}
+
+.select-season-single
+{
+  min-width: 5em;
+}
+
+.select-team-single
+{
+  min-width: 10em;
+}
+
+.select-teams-multiple
+{
+  min-width:  10em;
+  min-height: 10em;
+  height:     15em;
+}
+
+#bbnuke_season_new_id
+{
+}
+
+#bbnuke_add_season_btn_id
+{
+  margin-top: 8px;
+}
+
+
+.players-page-link
+{
+  
+}
+
+
+
+/*   players page    */
+
+.player-list-entry-label,
+.locations-list-entry-label
+{
+  position:   relative;
+  min-width:  12em;
+  float:      left;
+}
+
+#bbnuke_players_assign_select_id
+{
+  min-width:  13em;
+  min-height: 15em;
+}
+
+
+
+#bbnuke-schedules-list .bbnuke_option_left_part
+{
+  width:        20%;
+  vAlign:       top;
+  padding-top:  10px;
+  font-weight:  normal;
+  font-size:    12px;
+}
+
+.games-list-entry-label,
+.tournaments-list-entry-label
+{
+  font-size: 11px;
+  font-family: arial;
+}
+
+
+.game-results-table
+{
+  position:  relative;
+  display:   block;
+  clear:     both;
+  overflow:  auto;
+}
+
+.gresults-form-table
+{
+  position:  relative;
+  float:     left;
+  width:     auto;
+  max-width: 95%;
+  font-size: 11px;
+}
+
+.gresults-form-table td,
+.gresults-form-table input,
+.gresults-form-table p
+{
+  font-size: 11px;
+}
+
+
+.meta-box-sortables
+{
+  margin: 0px 5px;
+}
+
+.margintb
+{
+  margin: 5px 0 5px 0;
+}
+
+.right-bottom
+{
+  float:  right;
+}
+
+.right-bottom a
+{
+  text-decoration: none;
+  margin-top:      5px;
+}
+
+.postbox .inside
+{
+  position:  relative;
+  margin:    10px;
+}
+
+#bbnuke-plugin-main .postbox .inside .submit
+{
+  margin:  5px 0px 0px 0px;
+  padding: 0px;
+  float:   none;
+}
+
+.one-row
+{
+  position:  relative;
+  display:   inline;
+  float:     left;
+}
+
+.clear
+{
+  clear:     both;
+}
+
+.float-left
+{
+  position: relative;
+  float:  left;
+}
+
+.float-right
+{
+  position: relative;
+  float:  right;
+}
+
+.link-extern
+{
+  text-decoration: none;
+}
+
+.bbnuke-icon32
+{
+  margin: 14px 6px 0px 5px;
+  float:  left;
+  width:  36px;
+  height: 36px;
+  background: transparent url('http://wp-plugin-dev.it-gnoth.de/wp-content/plugins/baseballNuke/images/baseballNuke_32x32.gif') no-repeat top left;
+}
+
+#bbnuke-fields-edit .inside,
+#bbnuke-settings .inside,
+#bbnuke-schedules-edit .inside,
+#bbnuke-tournaments-edit .inside
+{
+  background: transparent url(http://wp-plugin-dev.it-gnoth.de/wp-content/plugins/baseballNuke/images/baseballNuke_48x48.gif) no-repeat right bottom;
+}
+
+.bbnuke_option_left_part
+{
+  width:        40%;
+  vAlign:       top;
+  padding-top:  10px;
+  font-weight:  bold;
+  font-size:    12px;
+}
+
+.div-wait
+{
+  display: none;
+  padding: 0px;
+  margin:  0px;
+}
+
+.div-wait img
+{
+  height: 25px; 
+  width: 25px;
+  margin-bottom:-8px;
+}
+
+.img-link-ico
+{
+  margin-right:  5px;
+}
+
+select#fitcash_import_cats_select_tag
+{
+  height: auto;
+}
+
+.ds_box 
+{
+	background-color: #FFF;
+	border: 2px solid #336699;    
+	position: absolute;
+	z-index: 32767;
+        width:300px;
+		/*height:180px;*/
+        padding-left:10px;
+        padding-right:10px;
+        padding-bottom:10px;
+        font-size:12px;
+        font-family: arial;
+}
+
+
+.settingsForm
+{
+  width:400px;
+  display:block;
+}
+
+.settingsForm hr
+{
+  color:#F1F1F1;
+}
+
+.settingsForm h2
+{
+  font-weight: normal;
+}
+
+.settingsForm table
+{
+  width:100%;
+  border:0;
+}
+
+/*.settingsForm table td{
+     padding: 6px;
+}*/
+
+.form_element_caption
+{
+  padding-top:12px;
+  font-weight:bold;
+  font-size:12px;
+  width:100%;
+}
+
+.settingsForm textarea
+{
+  width:100%;
+}
+
+.settingsForm .rb
+{
+  margin:0px 10px 0px 10px;
+}
+
+.settingsForm .frb
+{
+  margin:0px 10px 0px 0px;
+}
+
+
+
+#bbnuke_widget_locations_info_field_id
+{
+  font-size:  11px;
+  
+}
+    
+
+    
+
