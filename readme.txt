@@ -79,6 +79,9 @@ You must login to wordpress with an administrator user.
 
 == Screenshots ==
 1. WP Admin Backend - Plugin Option Page
+2. Content
+3. Content
+4. Content
 
 = License =
 
