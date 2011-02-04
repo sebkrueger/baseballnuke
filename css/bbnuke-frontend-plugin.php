@@ -14,38 +14,7 @@ $header_bg_color    = $options['bbnuke_widget_header_bg_color'];
 $header_txt_color    = $options['bbnuke_widget_header_txt_color'];
 
 ?>
-table.bbnuke-result-table 
-{
-  border:0px;
-  border-spacing: 0px 0px;
-  border-collapse: collapse;
-  font-size:11px;
-}
-table.bbnuke-result-table tr.over
-{
-	background: <?php echo "$hover_color"; ?>;
-}
-
-table.bbnuke-result-table tr
-{
-  background: <?php echo "$bg_color"; ?>;
-}
-
-table.bbnuke-result-table td 
-{
-  padding:4px;
-  text-align:right;
-  line-height: 13px;
-  color: <?php echo "$txt_color"; ?>;
-}
-
-table.bbnuke-result-table th
-{
-  text-align:center;
-  background-color: <?php echo "$header_bg_color"; ?>;;
-  line-height: 15px;
-  color: <?php echo "$header_txt_color"; ?>;
-}
+ignore{}
 
 table.bbnuke-schedule-table
 {
@@ -57,7 +26,7 @@ table.bbnuke-schedule-table
 
 table.bbnuke-schedule-table tr.over
 {
-        background: <?php echo "$hover_color"; ?>;;
+        background: <?php echo "$hover_color"; ?>;
 }
 
 table.bbnuke-schedule-table tr
@@ -75,9 +44,43 @@ table.bbnuke-schedule-table td
 
 table.bbnuke-schedule-table th
 {
-  background-color: <?php echo "$header_bg_color"; ?>;;
+  background-color: <?php echo "$header_bg_color"; ?>;
   line-height: 15px;
   text-align:left;
+  color: <?php echo "$header_txt_color"; ?>;
+}
+
+table.bbnuke-results-table
+{
+  border:0px;
+  border-spacing: 0px 0px;
+  border-collapse: collapse;
+  font-size:11px;
+}
+
+table.bbnuke-results-table tr.over
+{
+        background: <?php echo "$hover_color"; ?>;
+}
+
+table.bbnuke-results-table tr
+{
+  background: <?php echo "$bg_color"; ?>;
+}
+
+table.bbnuke-results-table td
+{
+  padding:4px;
+  text-align:right;
+  line-height: 13px;
+  color: <?php echo "$txt_color"; ?>;
+}
+
+table.bbnuke-results-table th
+{
+  text-align:center;
+  background-color: <?php echo "$header_bg_color"; ?>;
+  line-height: 15px;
   color: <?php echo "$header_txt_color"; ?>;
 }
 

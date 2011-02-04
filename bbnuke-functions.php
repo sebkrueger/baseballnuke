@@ -1537,23 +1537,39 @@ function  bbnuke_get_next_game()
   return $game;
 }
 
-function PageSelect($sel){
-        global $wpdb;
-        $pages = $wpdb->get_results("SELECT ID, post_status, post_title FROM $wpdb->posts WHERE post_type='page' ORDER BY post_status DESC, menu_order ASC, post_title ASC");
+/*function  bbnuke_get_playerID_iScore($name,$jersey,$season)
+{
+  global $wpdb;
 
-        foreach( $pages as $page ):
-if( $page->post_status == 'draft') $draft = '{draft} '; else $draft = '';
-$output .= '<option value="'.$page->ID.'"';
-if( $sel == $page->ID ) $output .= ' selected="selected"';
-$output .= '>'.$draft.$page->post_title.'</option>'."\n";
-        endforeach;
-        return $output;
+  $query = "SELECT playerID FROM ".$wpdb->prefix."baseballNuke_players " .
+		"WHERE season="2010" AND lastname=" . $lastname . " AND firstname=" . $firstname . " AND jerseyNum=" . $jersey . ";" .
+  $result = mysql_query($query);
+  if ($result)
+    $game = mysql_fetch_array($result);
+
+  return $game;
 }
-
+*/
 
 ////////////////////////////////////////////////////////////////////////////////
 // plugin widget functions for output generation
 ////////////////////////////////////////////////////////////////////////////////
+      add_shortcode(bbnuke_topbatters,bbnuke_widget_top_batters);
+      add_shortcode(bbnuke_toppitchers,bbnuke_widget_top_pitchers);
+      add_shortcode(bbnuke_lastgame,bbnuke_widget_lastgame);
+      add_shortcode(bbnuke_nextgame,bbnuke_widget_nextgame);
+      add_shortcode(bbnuke_batstats,bbnuke_widget_batstats);
+      add_shortcode(bbnuke_roster,bbnuke_widget_roster);
+      add_shortcode(bbnuke_pitchstats,bbnuke_widget_pitchstats);
+      add_shortcode(bbnuke_fieldstats,bbnuke_widget_fieldstats);
+      add_shortcode(bbnuke_playerstats,bbnuke_widget_playerstats);
+      add_shortcode(bbnuke_top5stats,bbnuke_widget_top5stats);
+      add_shortcode(bbnuke_schedule,bbnuke_widget_team_schedule);
+      add_shortcode(bbnuke_practice,bbnuke_widget_team_practices);
+      add_shortcode(bbnuke_tournament,bbnuke_widget_team_tournament);
+      add_shortcode(bbnuke_fields,bbnuke_widget_locations_info);
+      add_shortcode(bbnuke_gameresults,bbnuke_widget_game_results);
+
 function  bbnuke_display_widget( $bbnuke_w_args )
 {
   global $wpdb;
@@ -1615,7 +1631,7 @@ function  bbnuke_display_widget( $bbnuke_w_args )
 function  bbnuke_widget_top_batters( $bbnuke_echo = true )
 {
   global $wpdb;
-  $player_stats_page = bbnuke_get_option('bbnuke_player_stats_page');
+  $player_stats_page = get_permalink(bbnuke_get_option('bbnuke_player_stats_page'));
 
   $heading_arr = array(
              __('Batting Avg', 'bbnuke'),
@@ -1629,7 +1645,7 @@ function  bbnuke_widget_top_batters( $bbnuke_echo = true )
   for ( $i=0; $i < 4; $i++ )
   {
     $bbnuke_content .= 
-    '   <table width="140px" class="bbnuke-result-table">
+    '   <table width="140px" class="bbnuke-results-table">
         <tr>
           <th style="text-align:left;">' . $heading_arr[$i] . '</th>
           <th>&nbsp;</th></tr>' . "\n";
@@ -1713,8 +1729,7 @@ function  bbnuke_widget_top_batters( $bbnuke_echo = true )
 function  bbnuke_widget_top_pitchers( $bbnuke_echo = true)
 {
   global $wpdb;
-  $player_stats_page = bbnuke_get_option('bbnuke_player_stats_page');
-
+  $player_stats_page = get_permalink(bbnuke_get_option('bbnuke_player_stats_page'));
     $heading_arr = array(
             __('ERA', 'bbnuke'),
        	    __('Strikeouts', 'bbnuke'),
@@ -1727,7 +1742,7 @@ function  bbnuke_widget_top_pitchers( $bbnuke_echo = true)
   for ( $i=0; $i < 4; $i++ )
   {
     $bbnuke_content .= 
-    '   <table width="140px" class="bbnuke-result-table">
+    '   <table width="140px" class="bbnuke-results-table">
         <tr>
           <th style="text-align:left;">' . $heading_arr[$i] . '</th>
           <th>&nbsp;</th</tr>' . "\n";
@@ -1805,7 +1820,7 @@ function  bbnuke_widget_lastgame( $bbnuke_echo = true )
   $dteam = $defs['defaultTeam'];
 
   $game  = bbnuke_get_last_game_results();
-  $game_results_page = bbnuke_get_option('bbnuke_game_results_page');
+  $game_results_page = get_permalink(bbnuke_get_option('bbnuke_game_results_page'));
 
   $bbnuke_content = NULL;
 
@@ -1846,7 +1861,7 @@ function  bbnuke_widget_nextgame( $bbnuke_echo = true )
 
   $defs  = bbnuke_get_defaults();
   $dteam = $defs['defaultTeam'];
-  $locations_page = bbnuke_get_option('bbnuke_locations_page');
+  $locations_page = get_permalink(bbnuke_get_option('bbnuke_locations_page'));
 
   $game  = bbnuke_get_next_game();
 
@@ -1889,8 +1904,7 @@ function  bbnuke_widget_batstats( $bbnuke_echo = true )
   $defs    = bbnuke_get_defaults();
   $dteam   = $defs['defaultTeam'];
   $dseason = $defs['defaultSeason'];
-  $player_stats_page = bbnuke_get_option('bbnuke_player_stats_page');
-
+  $player_stats_page = get_permalink(bbnuke_get_option('bbnuke_player_stats_page'));
   $SORTBY    = $_POST['bbnuke_widget_tb_head_batstats_sortby'];
   $SORTORDER = $_POST['bbnuke_widget_tb_head_batstats_sortorder'];
 
@@ -1902,7 +1916,7 @@ function  bbnuke_widget_batstats( $bbnuke_echo = true )
 		'RE'=>'baRE','FC'=>'baFC','HP'=>'baHP','RBI'=>'baRBI','BA'=>'',
 		'OBP'=>'','SLG'=>'','OPS'=>'','BB'=>'baBB','K'=>'baK','LOB'=>'baLOB','SB'=>'baSB');
 
-  $bbnuke_content .= '<table class="bbnuke-result-table"><tr> ';
+  $bbnuke_content .= '<table class="bbnuke-results-table"><tr> ';
   $bbnuke_content .= bbnuke_build_heading($SORTBY,$SORTORDER,$titLen,$titLink,'batstats',false);
   $bbnuke_content .= '</tr>';
 
@@ -2122,11 +2136,10 @@ function  bbnuke_widget_roster( $bbnuke_echo = true )
   $defs    = bbnuke_get_defaults();
   $dteam   = $defs['defaultTeam'];
   $dseason = $defs['defaultSeason'];
-  $player_stats_page = bbnuke_get_option('bbnuke_player_stats_page');
-
+  $player_stats_page = get_permalink(bbnuke_get_option('bbnuke_player_stats_page'));
   $bbnuke_content = NULL;
 
-  $bbnuke_content .= '<table class="bbnuke-result-table">
+  $bbnuke_content .= '<table class="bbnuke-schedule-table"">
         <tr>
           <th>' . __('#', 'bbnuke') . '</th>
           <th style="text-align:left;">' . __('Player', 'bbnuke') . '</th>
@@ -2154,7 +2167,7 @@ function  bbnuke_widget_roster( $bbnuke_echo = true )
     if ($age>100)
       $age="&nbsp;";
 
-    $bbnuke_content .= '<tr id=\"id_tablerow_$m\" onmouseover=\"TableRow.onmouseover(this,$m);\" onmouseout=\"TableRow.onmouseout(this,$m);\" onclick=\"TableRow.onclick(this,$m);\">
+    $bbnuke_content .= '<tr>
     			    <td>'.$jerseyNum.'</td>
                             <td style="text-align:left;"><a class="players-page-link" href="' . $player_stats_page . '?playerID=' . $playerID . '" title="' . __('Show Players Info', 'bbnuke') . '">'.$lastname.', '.$firstname.'</a></td>
                             <td>'.$age.'</td>
@@ -2185,14 +2198,13 @@ function  bbnuke_widget_pitchstats( $bbnuke_echo = true )
   $defs    = bbnuke_get_defaults();
   $dteam   = $defs['defaultTeam'];
   $dseason = $defs['defaultSeason'];
-  $player_stats_page = bbnuke_get_option('bbnuke_player_stats_page');
-
+  $player_stats_page = get_permalink(bbnuke_get_option('bbnuke_player_stats_page'));
   $SORTBY    = $_POST['bbnuke_widget_tb_head_pitchstats_sortby'];
   $SORTORDER = $_POST['bbnuke_widget_tb_head_pitchstats_sortorder'];
 
   $bbnuke_content = NULL;
 		
-  $bbnuke_content .= '<table class="bbnuke-result-table"><tr> ';	
+  $bbnuke_content .= '<table class="bbnuke-results-table"><tr> ';	
 
   $titLen=array('#'=>'','Pitching'=>'','W'=>'','L'=>'','S'=>'','IP'=>'','H'=>'','R'=>'','ER'=>'','BB'=>'','K'=>'','ERA'=>'');
   $titLink=array('#'=>'piJersey','Pitching'=>'piName','W'=>'piWin','L'=>'piLose','S'=>'piSave','IP'=>'piIP','H'=>'piHits','R'=>'piRuns','ER'=>'piER','K'=>'piSO');
@@ -2240,7 +2252,7 @@ function  bbnuke_widget_pitchstats( $bbnuke_echo = true )
     if ($piIP)
       $ERA=($piER/$piIP)*9;
     $ERA=round($ERA,2);
-    $bbnuke_content .= "<tr id='id_tablerow_$m' onmouseover=\"TableRow.onmouseover(this,$m);\" onmouseout=\"TableRow.onmouseout(this,$m);\" onclick=\"TableRow.onclick(this,$m);\">"; 
+    $bbnuke_content .= "<tr>"; 
     $bbnuke_content .= '<td>'.$jerseyNum.'</td>
 			    <td style="text-align:left;"><a class="players-page-link" href="' . $player_stats_page . '?playerID=' . $playerID . '" title="' . __('Show Players Info', 'bbnuke') . '">'.$lastname.', '.$firstname.'</a></td>
 		  	    <td>'.$piWin.'</td>
@@ -2330,7 +2342,7 @@ function  bbnuke_widget_fieldstats( $bbnuke_echo = true )
 
   $bbnuke_content = NULL;
 
-  $bbnuke_content .= '<table class="bbnuke-result-table"><tr>';
+  $bbnuke_content .= '<table class="bbnuke-results-table"><tr>';
 
   $titLen=array('#'=>25,'Fielding'=>245,'PO'=>25,'A'=>25,'E'=>25,'FP'=>35);
   $titLink=array('#'=>'fiJersey','Fielding'=>'fiName','PO'=>'fiPO','A'=>'fiA','E'=>'fiE','FP'=>'');
@@ -2422,7 +2434,7 @@ function  bbnuke_widget_fieldstats( $bbnuke_echo = true )
 
   $bbnuke_content .= '</table>';
 
-  $bbnuke_content .= '<br /><table><tr><td><hr /></td></tr><tr><td><table class="bbnuke-result-table">
+  $bbnuke_content .= '<br /><table><tr><td><hr /></td></tr><tr><td><table class="bbnuke-results-table">
 	<tr><td><u>' . __('Key', 'bbnuke') . '</u></td><td><u>' . __('Meaning', 'bbnuke') . '</u></td></tr>
 	<tr><td colspan="2"><hr /></td></tr>
 	<tr><td>PO</td><td>' . __('Putouts', 'bbnuke') . '</td></tr>
@@ -2457,7 +2469,7 @@ function  bbnuke_widget_playerstats( $player_id = NULL, $bbnuke_echo = true )
   $SORTBY    = $_POST['bbnuke_widget_tb_head_playerstats_sortby'];
   $SORTORDER = $_POST['bbnuke_widget_tb_head_playerstats_sortorder'];
   $player_id = $_COOKIE["playerID"];
-  $game_results_page = bbnuke_get_option('bbnuke_game_results_page');
+  $game_results_page = get_permalink(bbnuke_get_option('bbnuke_game_results_page'));
   $bbnuke_content = NULL;
 	
   if(!$player_id)
@@ -2495,7 +2507,7 @@ function  bbnuke_widget_playerstats( $player_id = NULL, $bbnuke_echo = true )
                  'RE'=>'','FC'=>'','HP'=>'','RBI'=>'','BA'=>'',
                  'OBP'=>'','SLG'=>'','OPS'=>'','BB'=>'','K'=>'','LOB'=>'','SB'=>'');
 
-  $bbnuke_content .= '<br /><b>' . __('Batting Statistics', 'bbnuke') . '</b><br /><table class="bbnuke-result-table"><tr> ';
+  $bbnuke_content .= '<br /><b>' . __('Batting Statistics', 'bbnuke') . '</b><br /><table class="bbnuke-results-table"><tr> ';
   $bbnuke_content .= bbnuke_build_heading($SORTBY,$SORTORDER,$titLen,$titLink, 'playerstats', false);
   $bbnuke_content .= '</tr>';
 
@@ -2809,7 +2821,7 @@ function  bbnuke_widget_playerstats( $player_id = NULL, $bbnuke_echo = true )
   $titLink=array('Game'=>'pigameDate','W'=>'piWin','L'=>'piLose','S'=>'piSave','IP'=>'piIP','H'=>'piHits','R'=>'piRuns',
                  'ER'=>'piER','BB'=>'piWalks','K'=>'piSO','ERA'=>'');
 	
-  $bbnuke_content .= '<b>' . __('Pitching Statistics', 'bbnuke') . '</b><br /><table class="bbnuke-result-table"><tr> ';
+  $bbnuke_content .= '<b>' . __('Pitching Statistics', 'bbnuke') . '</b><br /><table class="bbnuke-results-table"><tr> ';
   $bbnuke_content .= bbnuke_build_heading($SORTBY,$SORTORDER,$titLen,$titLink, 'playerstats',false);
   $bbnuke_content .= '</tr>';
 
@@ -2956,7 +2968,7 @@ function  bbnuke_widget_top5stats( $bbnuke_echo = true )
 
   for ( $i=0; $i < 6; $i++)
   {
-    $bbnuke_content .= '<table class="bbnuke-result-table">';
+    $bbnuke_content .= '<table class="bbnuke-results-table">';
     $bbnuke_content .= '<tr><th colspan="20">'.$heading_arr[$i].'</th></tr>';
  
     $bbnuke_content .= '     <tr>
@@ -3158,7 +3170,7 @@ function  bbnuke_widget_top5stats( $bbnuke_echo = true )
 
   for ( $i=0; $i <= 2; $i++)
   {
-    $bbnuke_content .= '<table class="bbnuke-result-table">';
+    $bbnuke_content .= '<table class="bbnuke-results-table">';
     $bbnuke_content .= '<tr><th colspan="6">' . $heading_arr[$i] . '</th></tr>';
 
     $bbnuke_content .= '   <tr>
@@ -3257,7 +3269,7 @@ function  bbnuke_widget_top5stats( $bbnuke_echo = true )
 
   for ($i=0; $i<=1; $i++)
   {
-    $bbnuke_content .= '<table class="bbnuke-result-table">';
+    $bbnuke_content .= '<table class="bbnuke-results-table">';
     switch ($i)
     {
       case 0:
@@ -3347,9 +3359,8 @@ function  bbnuke_widget_team_schedule( $bbnuke_echo = true )
   $defs    = bbnuke_get_defaults();
   $dteam   = $defs['defaultTeam'];
   $dseason = $defs['defaultSeason'];
-  $game_results_page = bbnuke_get_option('bbnuke_game_results_page');
-  $locations_page = bbnuke_get_option('bbnuke_locations_page');
-
+  $game_results_page = get_permalink(bbnuke_get_option('bbnuke_game_results_page'));
+  $locations_page = get_permalink(bbnuke_get_option('bbnuke_locations_page'));
   $bbnuke_content = NULL;
 
   $bbnuke_content .= '<table class="bbnuke-schedule-table">
@@ -3378,7 +3389,7 @@ function  bbnuke_widget_team_schedule( $bbnuke_echo = true )
     list($year, $month, $day) = split("-", $gameDate);
     $modGameDate = date('M d', mktime(0, 0, 0, $month, $day, $year));
  
-    $bbnuke_content .= "<tr id='id_tablerow_$m' onmouseover=\"TableRow.onmouseover(this,$m);\" onmouseout=\"TableRow.onmouseout(this,$m);\" onclick=\"TableRow.onclick(this,$m);\">";
+    $bbnuke_content .= "<tr>";
     if(!is_null($hruns))
     {
       $bbnuke_content .= '<td><a href="'.$game_results_page.'?gameID='.$gameID.'" title="' . __('Show Game Results', 'bbnuke') . '">'.$modGameDate.' @ '.$Gtime.'</a></td>';
@@ -3425,8 +3436,7 @@ function  bbnuke_widget_team_practices( $bbnuke_echo = true )
   $defs    = bbnuke_get_defaults();
   $dteam   = $defs['defaultTeam'];
   $dseason = $defs['defaultSeason'];
-  $locations_page = bbnuke_get_option('bbnuke_locations_page');
-
+  $locations_page = get_permalink(bbnuke_get_option('bbnuke_locations_page'));
   $bbnuke_content = NULL;
 
   $bbnuke_content .= '<table class="bbnuke-schedule-table">
@@ -3472,8 +3482,7 @@ function  bbnuke_widget_team_tournament( $bbnuke_echo = true )
   $defs    = bbnuke_get_defaults();
   $dteam   = $defs['defaultTeam'];
   $dseason = $defs['defaultSeason'];
-  $locations_page = bbnuke_get_option('bbnuke_locations_page');
-
+  $locations_page = get_permalink(bbnuke_get_option('bbnuke_locations_page'));
   $bbnuke_content = NULL;
 
   $bbnuke_content .= '<table class="bbnuke-schedule-table">
@@ -3598,8 +3607,7 @@ function  bbnuke_widget_game_results( $game_id = NULL, $player_id = NULL, $bbnuk
   $defs    = bbnuke_get_defaults();
   $dteam   = $defs['defaultTeam'];
   $dseason = $defs['defaultSeason'];
-  $player_stats_page = bbnuke_get_option('bbnuke_player_stats_page');
-
+  $player_stats_page = get_permalink(bbnuke_get_option('bbnuke_player_stats_page'));
   $bbnuke_content = NULL;
   $game_id = $_COOKIE["gameID"];
 
