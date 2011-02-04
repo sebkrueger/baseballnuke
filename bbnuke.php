@@ -3,7 +3,7 @@
 Plugin Name: baseballNuke
 Plugin URI: http://dev.flyingdogsbaseball.com/baseballnuke
 Description: baseballNuke is a wordpress plugin based on the original module for the CMS phpnuke for the administration of a single baseball team.  baseballNuke is a complete team management tool and information source.  It provides team and individual information about the players including schedule, field directions, player stats, team stats, player profiles and game results.
-Version: 1.0.5
+Version: 1.0.5.1
 Author: Nick Collingham, Shawn Grimes, Christian Gnoth, Dawn Wallis
 License: GPL2
 */
@@ -164,13 +164,14 @@ function  bbnuke_print_scripts()
 {
   if ( is_admin() )
   {
+ wp_enqueue_script( 'jPicker_script', plugin_dir_url( __FILE__ ) . 'includes/js/jpicker-1.1.5.js', array('jquery', 'json2'), false, false);
+ wp_enqueue_script( 'bbnuke_admin_script', plugin_dir_url( __FILE__ ) . 'includes/js/bbnuke_admin_scripts.js', array('jquery', 'json2'), false, false);
   }
   else
   {
     //  print scripts for the public and frontend
     wp_enqueue_script( 'json2' );
     wp_enqueue_script( 'bbnuke_script', plugin_dir_url( __FILE__ ) . 'includes/js/bbnuke_scripts.js', array('jquery', 'json2'), false, false);
-
     echo
     '
       <script type="text/javascript" language="javascript">
@@ -189,6 +190,7 @@ function  bbnuke_print_styles()
 {
   if ( is_admin() )
   {
+    wp_enqueue_style( 'jPicker_styles', BBNPURL . 'css/jPicker-1.1.5.min.css');
 //  wp_register_style('bbnuke_admin_styles', BBNPURL . 'css/bbnuke-admin-plugin.css');
     wp_enqueue_style( 'bbnuke_admin_styles', BBNPURL . 'css/bbnuke-admin-plugin.css');
   }
@@ -216,6 +218,7 @@ function bbnuke_admin_init_method()
   }
 
   wp_enqueue_style( 'bbnuke_admin_styles', BBNPURL . 'css/bbnuke-admin-plugin.css');
+  wp_enqueue_style( 'jPicker_styles', BBNPURL . 'css/jPicker-1.1.5.min.css');
 
   wp_enqueue_script('dashboard');
   wp_enqueue_script('postbox');
@@ -1034,6 +1037,20 @@ function  bbnuke_plugin_create_game_results_page()
   {
     $season = $_POST['bbnuke_results_list_select_season'];
     bbnuke_delete_all_schedules($season);
+  }
+  if ( $_POST['bbnuke_iScore_bat_file_upload_btn'] )
+  {
+    $ret = bbnuke_upload_iScore_bat();
+    if ($ret)
+    {
+      echo '<div id="message" class="error fade">';
+      echo '<strong>Error during file uploaded - iScore batting stats not added !!!</strong></div>';
+    }
+    else
+    {
+      echo '<div id="message" class="updated fade">';
+      echo '<strong>iScore batting stats added !!!</strong></div>';
+    }
   }
 
   bbnuke_plugin_print_game_results_page($edit_results);

@@ -5,7 +5,7 @@ Plugin Uri: http://dev.flyingdogsbaseball.com/baseballNuke
 Tags: phpnuke, baseball, team management, baseballNuke, softball
 Requires at least: 2.7
 Tested up to: WP 3.0.4
-Stable tag: 1.0.5
+Stable tag: 1.0.5.1
 
 
 == Description ==
@@ -79,9 +79,6 @@ You must login to wordpress with an administrator user.
 
 == Screenshots ==
 1. WP Admin Backend - Plugin Option Page
-2. Content
-3. Content
-4. Content
 
 = License =
 
@@ -165,3 +162,5 @@ Programmer/Technical Genious - Dawn Wallis
 - ENHANCEMENT - added color palette in admin settings
 - ENHANCEMENT - created dropdown page selector for the Game Results, Player Stats and Locations in admin settings.
 
+= 1.0.5.1 =
+-BUG Fix - corrected missing references for color palette
