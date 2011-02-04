@@ -5,7 +5,7 @@ Plugin Uri: http://dev.flyingdogsbaseball.com/baseballNuke
 Tags: phpnuke, baseball, team management, baseballNuke, softball
 Requires at least: 2.7
 Tested up to: WP 3.0.4
-Stable tag: 1.0.4.1
+Stable tag: 1.0.5
 
 
 == Description ==
@@ -49,6 +49,26 @@ cellphone,jerseyNum,picLocation,season,profile)
 
 for additional tips, visit http://dev.flyingdogsbaseball.com/baseballNuke
 
+== Usage ==
+From admin console, drag baseballNuke widget to desired sidebar.  Then, select which baseballNuke widget you would like to display from the dropdown in the sidbar.
+
+To use in a page, use the following shortcodes in the content of your page:
+     [bbnuke_topbatters] - Top Batters
+     [bbnuke_toppitchers] - Top Pitchers
+     [bbnuke_lastgame] - Last Game
+     [bbnuke_nextgame] - Next Game
+     [bbnuke_batstats] - Batting Stats
+     [bbnuke_roster] - Roster
+     [bbnuke_pitchstats] - Pitching Stats
+     [bbnuke_fieldstats] - Fielding Stats
+     [bbnuke_playerstats] - Player Stats
+     [bbnuke_top5stats] - Top 5 Stats
+     [bbnuke_schedule] - Schedule
+     [bbnuke_practice] - Practice Schedule
+     [bbnuke_tournament] - Tournament Schedule
+     [bbnuke_fields] - Field Locations
+     [bbnuke_gameresults] - Game Results
+
 
 == Frequently Asked Questions ==
 
@@ -58,12 +78,7 @@ You must login to wordpress with an administrator user.
 
 
 == Screenshots ==
-
 1. WP Admin Backend - Plugin Option Page
-2. Next Game, Last Game, Pitching and Batting Leaders widgets (sidebar)
-3. Batting Stats widget (full page)
-4. Schedule widget (full page)
-
 
 = License =
 
@@ -141,4 +156,9 @@ Programmer/Technical Genious - Dawn Wallis
 
 = 1.0.4.1 =
 -BUG FIX - added admin option to specify page location for Game Results, Player Stats and Locations Info widgets.
+
+= 1.0.5 =
+- ENHANCEMENT - added shortcodes for Widgets
+- ENHANCEMENT - added color palette in admin settings
+- ENHANCEMENT - created dropdown page selector for the Game Results, Player Stats and Locations in admin settings.
 

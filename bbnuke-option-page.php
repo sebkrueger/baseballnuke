@@ -29,7 +29,7 @@ function bbnuke_plugin_print_option_page()
 
   $players         = bbnuke_get_players($defs['defaultSeason']);
   $games           = bbnuke_get_past_games_with_results();
-
+  
   echo
   '<div class="wrap">' . "\n" .
   '  <a name="Top"></a>' . "\n" .
@@ -57,72 +57,72 @@ function bbnuke_plugin_print_option_page()
 
   echo
   '              <table class="form-table">' . "\n" .
-  '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_season_select">Set default season and team</label></th>' . "\n" .
-  '                  <td>Default season:&nbsp;<select name="bbnuke_def_season_select" class="select-season-single" size="1">' . "\n";
+  '               <tr><th class="bbnuke_option_left_part"><label for="bbnuke_season_select">Set default season and team</label></th>' . "\n" .
+  '                <td>Default season:&nbsp;<select name="bbnuke_def_season_select" class="select-season-single" size="1">' . "\n";
   
   for ( $i=0; $i < count($seasons_list); $i++ )
   {
     if ( $seasons_list[$i] == $defs['defaultSeason'] )
-      echo '<option value="' . $i . '" selected="selected">' . $seasons_list[$i] . '</option>' . "\n";
+      echo '<option value="' . $i . '" selected="yes">' . $seasons_list[$i] . '</option>' . "\n";
     else 
       echo '<option value="' . $i . '">' . $seasons_list[$i] . '</option>' . "\n";
   }
 
   echo
-  '                    </select><br /><br />' . "\n" .
-  '                    Default team:&nbsp;<select name="bbnuke_def_team_select" class="select-team-single" size="1">' . "\n";
+  '                 </select><br /><br />' . "\n" .
+  '                 Default team:&nbsp;<select name="bbnuke_def_team_select" class="select-team-single" size="1">' . "\n";
 
   for ( $i=0; $i < count($team_list); $i++ )
   {
     if ( $team_list[$i] == $defs['defaultTeam'] )
-      echo '<option value="' . $i . '" selected="selected">' . $team_list[$i] . '</option>' . "\n";
+      echo '<option value="' . $i . '" selected="yes">' . $team_list[$i] . '</option>' . "\n";
     else 
       echo '<option value="' . $i . '">' . $team_list[$i] . '</option>' . "\n";
   }
 
   echo
-  '                    </select><br /><br />' . "\n" .
-  '                   <div class="div-wait" id="divwaitdts0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-  '                   <input type="submit" class="button-primary" value="Set Defaults" id="bbnuke_set_defs_btn_id" name="bbnuke_set_defs_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .    
-  '                  </td>' . "\n" .
+  '                 </select><br /><br />' . "\n" .
+  '                 <div class="div-wait" id="divwaitdts0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
+  '                 <input type="submit" class="button-primary" value="Set Defaults" id="bbnuke_set_defs_btn_id" name="bbnuke_set_defs_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .    
+  '                 </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for=""></label></th>' . "\n" .
   '                  <td><hr /></td>' . "\n" .
+  '              </tr>' . "\n" .
+  '              <tr><th class="bbnuke_option_left_part"><label>Game Results Widget Page</label></th>' . "\n" .
+  '                  <td>' .wp_dropdown_pages(array('name'=>'bbnuke_plugin_option_game_results_page','selected'=>"$game_results_page",'echo'=>'0')) . "\n" .
+  '                  </td>' . "\n" .
+  '              </tr>' . "\n" .
+  '              <tr><th class="bbnuke_option_left_part"><label>Player Stats Widget Page</label></th>' . "\n" .
+  '                  <td>' .wp_dropdown_pages(array('name'=>'bbnuke_plugin_option_player_stats_page','selected'=>"$player_stats_page",'echo'=>'0')) . "\n" .
+  '                  </td>' . "\n" .
+  '              </tr>' . "\n" .
+  '              <tr><th class="bbnuke_option_left_part"><label>Locations Widget Page</label></th>' . "\n" .
+  '                  <td>' .wp_dropdown_pages(array('name'=>'bbnuke_plugin_option_locations_page','selected'=>"$locations_page",'echo'=>'0')) . "\n" .
+  '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_team_leaders">Team Leaders</label></th>' . "\n" .
   '                  <td><input type="text" name="bbnuke_plugin_option_team_leaders" value="' . $team_leaders . '" />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_header_bg_color">Table Header Background Color</label></th>' . "\n" .
-  '                  <td><input type="text" name="bbnuke_plugin_option_header_bg_color" value="' . $header_bg_color . '" />' . "\n" .
+  '                  <td><input type="text" name="bbnuke_plugin_option_header_bg_color" id="bbnuke_plugin_option_header_bg_color" value="' . $header_bg_color . '" />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_header_txt_color">Table Header Text Color</label></th>' . "\n" .
-  '                  <td><input type="text" name="bbnuke_plugin_option_header_txt_color" value="' . $header_txt_color . '" />' . "\n" .
+  '                  <td><input type="text" name="bbnuke_plugin_option_header_txt_color" id="bbnuke_plugin_option_header_txt_color" value="' . $header_txt_color . '" />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_bg_color">Table Body Background Color</label></th>' . "\n" .
-  '                  <td><input type="text" name="bbnuke_plugin_option_bg_color" value="' . $bg_color . '" />' . "\n" .
+  '                  <td><input type="text" name="bbnuke_plugin_option_bg_color" id="bbnuke_plugin_option_bg_color" value="' . $bg_color . '" />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_hover_color">Table Body Hover Color</label></th>' . "\n" .
-  '                  <td><input type="text" name="bbnuke_plugin_option_hover_color" value="' . $hover_color . '" />' . "\n" .
+  '                  <td><input type="text" name="bbnuke_plugin_option_hover_color" id="bbnuke_plugin_option_hover_color" value="' . $hover_color . '" />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_txt_color">Table Body Text Color</label></th>' . "\n" .
-  '                  <td><input type="text" name="bbnuke_plugin_option_txt_color" value="' . $txt_color . '" />' . "\n" .
-  '                  </td>' . "\n" .
-  '              </tr>' . "\n" .
-  '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_game_results_page">Game Results Widget Page</label></th>' . "\n" .
-  '                  <td><input type="text" name="bbnuke_plugin_option_game_results_page" value="' . $game_results_page . '" />' . "\n" .
-  '                  </td>' . "\n" .
-  '              </tr>' . "\n" .
-  '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_player_stats_page">Player Stats Widget Page</label></th>' . "\n" .
-  '                  <td><input type="text" name="bbnuke_plugin_option_player_stats_page" value="' . $player_stats_page . '" />' . "\n" .
-  '                  </td>' . "\n" .
-  '              </tr>' . "\n" .
-  '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_locations_page">Locations Widget Page</label></th>' . "\n" .
-  '                  <td><input type="text" name="bbnuke_plugin_option_locations_page" value="' . $locations_page . '" />' . "\n" .
+  '                  <td><input type="text" name="bbnuke_plugin_option_txt_color" id="bbnuke_plugin_option_txt_color" value="' . $txt_color . '" />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_wdg_playerstats_playerid">Widget PlayerStats Player ID</label></th>' . "\n" .
@@ -131,7 +131,7 @@ function bbnuke_plugin_print_option_page()
   for ( $i=0; $i < count($players); $i++ )
   {
     if ( $players[$i]['playerID'] == $wdg_playerstats_player_id )
-      echo '<option value="' . $players[$i]['playerID'] . '" selected="selected">' . $players[$i]['lastname'] . ', ' . $players[$i]['firstname'] . '</option>' . "\n";
+      echo '<option value="' . $players[$i]['playerID'] . '" selected="yes">' . $players[$i]['lastname'] . ', ' . $players[$i]['firstname'] . '</option>' . "\n";
     else 
       echo '<option value="' . $players[$i]['playerID'] . '">' . $players[$i]['lastname'] . ', ' . $players[$i]['firstname'] . '</option>' . "\n";
   }
@@ -2153,8 +2153,17 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
     '                  <td>' . "\n" .
     '                <div class="div-wait" id="divwaitedgr0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
     '                <input type="submit" class="button-secondary" value="Update" id="bbnuke_save_results_btn_id" name="bbnuke_save_results_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />&nbsp;' . "\n" .
-    '                  </td>' . "\n" .
+    '                  </td><br><br>' . "\n" .
     '              </tr>' . "\n" .
+  '              <tr><th class="bbnuke_option_left_part"><label for="">iScore Batting Stats file' .$game_id. '</label></th>' . "\n" .
+  '                  <td>' . "\n" .
+  '                    <form enctype="multipart/form-data" method="POST" action="">' . "\n" .
+  '                      <input type="hidden" name="MAX_FILE_SIZE" value="100000" />' . "\n" .
+  '                      <input name="bbnuke_schedules_uploadedfile" type="file" /><br />' . "\n" .
+  '                      <input type="submit" name="bbnuke_iScore_bat_file_upload_btn" value="Upload" />' . "\n" .
+  '                    </form>' . "\n" .
+  '                  </td>' . "\n" .
+  '              </tr>' . "\n" .
     '              </table>' . "\n";
 
   }
@@ -2277,9 +2286,6 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
   return $ret_flag;
 }
 
-
-
-
 	$latestVersion="1.0.4";
 	
 
@@ -2291,5 +2297,4 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
 		return $version;
 	}
 
-	
 ?>
