@@ -3,7 +3,7 @@
 Plugin Name: baseballNuke
 Plugin URI: http://dev.flyingdogsbaseball.com/baseballnuke
 Description: baseballNuke is a wordpress plugin based on the original module for the CMS phpnuke for the administration of a single baseball team.  baseballNuke is a complete team management tool and information source.  It provides team and individual information about the players including schedule, field directions, player stats, team stats, player profiles and game results.
-Version: 1.0.5.1
+Version: 1.0.5.2
 Author: Nick Collingham, Shawn Grimes, Christian Gnoth, Dawn Wallis
 License: GPL2
 */
@@ -44,15 +44,11 @@ require_once( dirname(__FILE__) . '/bbnuke-option-page.php');
 register_activation_hook(   __FILE__, 'bbnuke_plugin_activation'  );
 register_deactivation_hook( __FILE__, 'bbnuke_plugin_deactivation');
 
-//add_action( 'wp_head',      'bbnuke_wp_head');
-//add_action( 'init',         'bbnuke_init_method');
 add_action( 'wp_print_scripts', 'bbnuke_print_scripts');
 add_action( 'wp_print_styles',  'bbnuke_print_styles');
 add_action( 'admin_init',   'bbnuke_admin_init_method');
 add_action( 'admin_menu',   'bbnuke_plugin_add_option_page');
-//add_action( 'admin_head',   'bbnuke_plugin_load_header_tags');
 add_action( 'widgets_init', create_function('', 'return register_widget("bbnuke_Widget");'));
-add_action( 'wp_footer', 'bbnuke_wp_footer');
 
 add_filter( 'cron_schedules', 'bbnuke_more_reccurences');
 
@@ -129,8 +125,6 @@ function bbnuke_plugin_add_option_page()
   add_submenu_page( 'bbnuke-option-page', 'Practices',                   'Practices',    5, 'bbnuke-practice',     'bbnuke_plugin_create_practice_page');
   add_submenu_page( 'bbnuke-option-page', 'Game Results',                'Game Results', 5, 'bbnuke-game-results', 'bbnuke_plugin_create_game_results_page');
   add_submenu_page( 'bbnuke-option-page', 'Uninstsll',                   'Uninstall',    5, 'bbnuke-uninstall',    'bbnuke_plugin_uninstall');
-
-//  add_action( 'admin_print_scripts-' . $bbnuke_admin_page, 'bbnuke_admin_head' );
 
   return;
 }
