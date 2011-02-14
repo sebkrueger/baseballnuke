@@ -4,8 +4,8 @@ Author Uri: http://claimid.com/shawn
 Plugin Uri: http://dev.flyingdogsbaseball.com/baseballNuke
 Tags: phpnuke, baseball, team management, baseballNuke, softball
 Requires at least: 2.7
-Tested up to: WP 3.0.4
-Stable tag: 1.0.5.2
+Tested up to: WP 3.0.5
+Stable tag: 1.0.6
 
 
 == Description ==
@@ -76,6 +76,9 @@ To use in a page, use the following shortcodes in the content of your page:
 
 You must login to wordpress with an administrator user.
 
+= When I click on the player link to see the profile, nothing happens=
+
+You must create a player profile page (shortcode [bbnuke_playerstats]) and specify it on the settings page of the baseballNuke admin console.  Also, be sure that you have installed and configured the "Cookie Monster" plugin and configured it properly.
 
 == Screenshots ==
 1. WP Admin Backend - Plugin Option Page
@@ -168,3 +171,9 @@ Programmer/Technical Genious - Dawn Wallis
 = 1.0.5.2 = 
 -BUG Fix - corrected error in footer
 
+= 1.0.6 =
+-BUG Fix - corrected bug for table color selections
+-Bug Fix - Corrected height/weight problem when entering player info in admin console
+-UPDATE - Added height/weight to player profile page if values exist
+-UPDATE -Update player profile page to show pitching stats only if IP > 0
+-UPDATE -change player image path on player profile page to accept any url/relative link

@@ -22,16 +22,18 @@ table.bbnuke-schedule-table
   border-spacing: 0px 0px;
   border-collapse: collapse;
   font-size:11px;
+  margin: 0;
+  padding:4px;
 }
 
 table.bbnuke-schedule-table tr.over
 {
-        background: <?php echo "$hover_color"; ?>;
+  background: <?php echo "#$hover_color"; ?>;
 }
 
 table.bbnuke-schedule-table tr
 {
-  background: <?php echo "$bg_color"; ?>;
+  background: <?php echo "#$bg_color"; ?>;
 }
 
 table.bbnuke-schedule-table td
@@ -39,15 +41,15 @@ table.bbnuke-schedule-table td
   padding:4px;
   text-align:left;
   line-height: 13px;
-  color: <?php echo "$txt_color"; ?>;
+  color: <?php echo "#$txt_color"; ?>;
 }
 
 table.bbnuke-schedule-table th
 {
-  background-color: <?php echo "$header_bg_color"; ?>;
+  background-color: <?php echo "#$header_bg_color"; ?>;
   line-height: 15px;
   text-align:left;
-  color: <?php echo "$header_txt_color"; ?>;
+  color: <?php echo "#$header_txt_color"; ?>;
 }
 
 table.bbnuke-results-table
@@ -60,12 +62,12 @@ table.bbnuke-results-table
 
 table.bbnuke-results-table tr.over
 {
-        background: <?php echo "$hover_color"; ?>;
+        background: <?php echo "#$hover_color"; ?>;
 }
 
 table.bbnuke-results-table tr
 {
-  background: <?php echo "$bg_color"; ?>;
+  background: <?php echo "#$bg_color"; ?>;
 }
 
 table.bbnuke-results-table td
@@ -73,15 +75,15 @@ table.bbnuke-results-table td
   padding:4px;
   text-align:right;
   line-height: 13px;
-  color: <?php echo "$txt_color"; ?>;
+  color: <?php echo "#$txt_color"; ?>;
 }
 
 table.bbnuke-results-table th
 {
   text-align:center;
-  background-color: <?php echo "$header_bg_color"; ?>;
+  background-color: <?php echo "#$header_bg_color"; ?>;
   line-height: 15px;
-  color: <?php echo "$header_txt_color"; ?>;
+  color: <?php echo "#$header_txt_color"; ?>;
 }
 
 table.bbnuke-stat-key td
@@ -106,7 +108,7 @@ input#bbnuke_input_link
   font-size: 11px;
   line-height: 14px;
   margin: 0px 0px 0px;
-  color: <?php echo "$header_txt_color"; ?>;
+  color: <?php echo "#$header_txt_color"; ?>;
 }
 
 form#bbnuke_form

@@ -537,7 +537,6 @@ function bbnuke_plugin_print_players_option_page( $edit_player = false )
     $bats       = $player_obj->bats;
     $throws     = $player_obj->throws;
     $height     = $player_obj->height;
-    $height     = bbnuke_get_height($height);
     $weight     = $player_obj->weight;
     $bdate      = $player_obj->bdate;
     $address    = $player_obj->address;
@@ -633,7 +632,7 @@ function bbnuke_plugin_print_players_option_page( $edit_player = false )
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_player_edit_throws">Throws</label></th>' . "\n" .
   '                  <td><input type="text" name="bbnuke_player_edit_throws" value="' . $throws . '"></td>' . "\n" .
   '              </tr>' . "\n" .
-  '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_player_edit_height">Height</label></th>' . "\n" .
+  '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_player_edit_height">Height</label><i> (value in inches) </i></th>' . "\n" .
   '                  <td><input type="text" name="bbnuke_player_edit_height" value="' . $height . '"></td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_player_edit_weight">Weight</label></th>' . "\n" .
@@ -1360,7 +1359,7 @@ function bbnuke_plugin_print_tournaments_page( $edit_tournament = false )
   '              </tr>' . "\n" .
   '              </table>' . "\n" .
   '              <div class="submit-bottom-div">' . "\n" .
-  '                <div class="div-wait" id="divwaitedt0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
+  '                <div class="div-wait" id="divwaitedt0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
   '                <input type="submit" class="button-secondary" value="Save Changes" id="bbnuke_save_tournament_btn_id" name="bbnuke_save_tournament_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />&nbsp;' . "\n";
 
   if ( $edit_tournament === true )
@@ -2155,7 +2154,7 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
     '                <input type="submit" class="button-secondary" value="Update" id="bbnuke_save_results_btn_id" name="bbnuke_save_results_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />&nbsp;' . "\n" .
     '                  </td><br><br>' . "\n" .
     '              </tr>' . "\n" .
-  '              <tr><th class="bbnuke_option_left_part"><label for="">iScore Batting Stats file' .$game_id. '</label></th>' . "\n" .
+ /* '              <tr><th class="bbnuke_option_left_part"><label for="">iScore Batting Stats file' .$game_id. '</label></th>' . "\n" .
   '                  <td>' . "\n" .
   '                    <form enctype="multipart/form-data" method="POST" action="">' . "\n" .
   '                      <input type="hidden" name="MAX_FILE_SIZE" value="100000" />' . "\n" .
@@ -2164,7 +2163,7 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
   '                    </form>' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
-    '              </table>' . "\n";
+  */  '              </table>' . "\n";
 
   }
 

@@ -6,11 +6,11 @@ jQuery(document).ready(function(){
                 jQuery(this).removeClass("over");
         });
         jQuery(".bbnuke-schedule-table tr").mouseover(function(){
-                jQuery(this).addClass("over");
-        });
+        	jQuery(this).addClass("over");
+	});
         jQuery(".bbnuke-schedule-table tr").mouseout(function(){
-                jQuery(this).removeClass("over");
-        });
+        	jQuery(this).removeClass("over");
+	});
 
 });
 

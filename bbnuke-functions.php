@@ -704,9 +704,6 @@ function  bbnuke_upload_file()
 	 $city,$state,$zip,$homePhone,$workPhone,
 	 $cellphone,$jerseyNum,$picLocation,$season,$profile,$email,$school,$bdate)=explode(",",$line);
 
-    preg_match('/(\d*)\'(\d*)\"/',$height,$matches);
-    $height=$matches[1]*12+$matches[2];
-
     $sqlString = "INSERT INTO " . $wpdb->prefix . "baseballNuke_players SET playerID='$playerID',teamName='$teamName',
         											firstname='$firstname',middlename='$middlename',
         											lastname='$lastname',positions='$positions',
@@ -979,8 +976,6 @@ function  bbnuke_add_player()
   $bats        = $_POST['bbnuke_player_edit_bats'];
   $throws      = $_POST['bbnuke_player_edit_throws'];
   $height      = $_POST['bbnuke_player_edit_height'];
-  preg_match('/(\d*)\'(\d*)\"/',$height,$matches);
-  $height      = $matches[1]*12+$matches[2];
   $teamname    = $_POST['bbnuke_player_edit_team'];
   $season      = $_POST['bbnuke_player_edit_season'];
   $weight      = $_POST['bbnuke_player_edit_weight'];
@@ -1030,8 +1025,6 @@ function  bbnuke_update_player($player_id, $season)
   $bats        = $_POST['bbnuke_player_edit_bats'];
   $throws      = $_POST['bbnuke_player_edit_throws'];
   $height      = $_POST['bbnuke_player_edit_height'];
-  preg_match('/(\d*)\'(\d*)\"/',$height,$matches);
-  $height      = $matches[1]*12+$matches[2];
   $teamname    = $_POST['bbnuke_player_edit_team'];
   $weight      = $_POST['bbnuke_player_edit_weight'];
   $bdate       = $_POST['bbnuke_player_edit_bdate'];
@@ -2476,7 +2469,7 @@ function  bbnuke_widget_playerstats( $player_id = NULL, $bbnuke_echo = true )
     $player_id = bbnuke_get_option('bbnuke_widget_playerstats_player_id');
 
   $query = 'SELECT playerID,teamname,firstname, middlename,lastname,positions,bats,throws,height,weight,jerseyNum,picLocation,profile ' .
-           '  FROM ' . $wpdb->prefix . 'baseballNuke_players WHERE playerID = ' . $player_id . ' ORDER BY season DESC LIMIT 1';
+           '  FROM ' . $wpdb->prefix . 'baseballNuke_players WHERE playerID = ' . $player_id . ' AND season=' . $dseason . '';
   $result = mysql_query($query);
   if ($result)
   {
@@ -2489,13 +2482,18 @@ function  bbnuke_widget_playerstats( $player_id = NULL, $bbnuke_echo = true )
   for ($m=0; $m < count($presults); $m++) 
   {
     list($playerID,$teamname,$firstname, $middlename,$lastname,$positions,$bats,$throws,$height,$weight,$jerseyNum,$picLocation,$profile) = $presults[$m];
+    $usheight= bbnuke_get_height($height);
     if($picLocation)
-      $bbnuke_content .= '<img src="' . BBNPURL . $picLocation . '" align="left" alt="Player Image" class="bbnuke_players_img" /><br />';
+      $bbnuke_content .= '<img src="' . $picLocation . '" align="left" alt="Player Image" class="bbnuke_players_img" /><br />';
     $bbnuke_content .= '<b>#' . $jerseyNum . '</b><br />';
     $bbnuke_content .= '<br /><b>' . $lastname . ', ' . $firstname . '</b><br />';
     $bbnuke_content .= '<br /><b>' . __('Positions:', 'bbnuke') . '</b> ' . $positions . '<br />';
     $bbnuke_content .= '<b>' . __('Bats:', 'bbnuke') . '</b> ' . $bats . '    <b>' . __('Throws:', 'bbnuke') . '</b>' . $throws . '<br />';
-    $bbnuke_content .= '<div class="clear"></div>';
+    if($height)
+      $bbnuke_content .= '<b>' . __('Height:', 'bbnuke') . '</b> ' . $usheight . '';
+    if($weight)
+      $bbnuke_content .= ' <b>' . __('Weight:', 'bbnuke') . '</b>' . $weight . '';
+    $bbnuke_content .= '<br /><div class="clear"></div>';
     if($profile)
       $bbnuke_content .= '<p><b>' . __('Player Profile:', 'bbnuke') . '</b> ' . $profile . '</p>';
   }
@@ -2814,9 +2812,11 @@ function  bbnuke_widget_playerstats( $player_id = NULL, $bbnuke_echo = true )
     while ( $row = mysql_fetch_array($result) )
     {
       $pitchresults[] = $row;
+      $showPitchingStats+=$row['piIP'];
     }
   }
-
+if ($showPitchingStats>0)
+{
   $titLen=array('Game'=>'','W'=>'','L'=>'','S'=>'','IP'=>'','H'=>'','R'=>'','ER'=>'','BB'=>'','K'=>'','ERA'=>'');
   $titLink=array('Game'=>'pigameDate','W'=>'piWin','L'=>'piLose','S'=>'piSave','IP'=>'piIP','H'=>'piHits','R'=>'piRuns',
                  'ER'=>'piER','BB'=>'piWalks','K'=>'piSO','ERA'=>'');
@@ -2926,7 +2926,7 @@ function  bbnuke_widget_playerstats( $player_id = NULL, $bbnuke_echo = true )
 	             <td><b>' . $ERA . '</b></td> </tr>';
   }
   $bbnuke_content .= '</table>';
-
+}
   if ( $bbnuke_echo )
     echo $bbnuke_content;
   else

@@ -3,7 +3,7 @@
 Plugin Name: baseballNuke
 Plugin URI: http://dev.flyingdogsbaseball.com/baseballnuke
 Description: baseballNuke is a wordpress plugin based on the original module for the CMS phpnuke for the administration of a single baseball team.  baseballNuke is a complete team management tool and information source.  It provides team and individual information about the players including schedule, field directions, player stats, team stats, player profiles and game results.
-Version: 1.0.5.2
+Version: 1.0.6
 Author: Nick Collingham, Shawn Grimes, Christian Gnoth, Dawn Wallis
 License: GPL2
 */
@@ -378,14 +378,14 @@ function bbnuke_set_option_defaults()
        'bbnuke_widget_playerstats_player_id'  => NULL,
        'bbnuke_widget_game_results_player_id' => NULL,
        'bbnuke_widget_game_results_game_id'   => NULL,
-       'bbnuke_widget_bg_color'          => 'white',
-       'bbnuke_widget_txt_color'         => 'black',
-       'bbnuke_widget_hover_color'	 => 'white',
-       'bbnuke_widget_header_txt_color'  => 'black',
+       'bbnuke_widget_bg_color'          => 'ffffff',
+       'bbnuke_widget_txt_color'         => '000000',
+       'bbnuke_widget_hover_color'	 => 'e5e5e5',
+       'bbnuke_widget_header_txt_color'  => '000000',
        'bbnuke_game_results_page' => 'game-results',
        'bbnuke_player_stats_page' => 'player-stats',
        'bbnuke_locations_page'    => 'fields',
-       'bbnuke_widget_header_bg_color'   => 'white'
+       'bbnuke_widget_header_bg_color'   => 'b2b2b2'
         );
 
   $bbnuke_options = get_option('bbnuke_plugin_options');
@@ -474,7 +474,7 @@ function bbnuke_plugin_create_players_page()
         if ($ret)
       {
         echo '<div id="message" class="updated fade">';
-        echo '<strong>Player updated !!!</strong></div>';
+	echo '<strong>' . $season . 'Player updated !!!</strong></div>';
       }
       else
       {
