@@ -1359,7 +1359,7 @@ function bbnuke_plugin_print_tournaments_page( $edit_tournament = false )
   '              </tr>' . "\n" .
   '              </table>' . "\n" .
   '              <div class="submit-bottom-div">' . "\n" .
-  '                <div class="div-wait" id="divwaitedt0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
+  '                <div class="div-wait" id="divwaitedt0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
   '                <input type="submit" class="button-secondary" value="Save Changes" id="bbnuke_save_tournament_btn_id" name="bbnuke_save_tournament_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />&nbsp;' . "\n";
 
   if ( $edit_tournament === true )
@@ -2154,16 +2154,16 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
     '                <input type="submit" class="button-secondary" value="Update" id="bbnuke_save_results_btn_id" name="bbnuke_save_results_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />&nbsp;' . "\n" .
     '                  </td><br><br>' . "\n" .
     '              </tr>' . "\n" .
- /* '              <tr><th class="bbnuke_option_left_part"><label for="">iScore Batting Stats file' .$game_id. '</label></th>' . "\n" .
+/*  '              <tr><th class="bbnuke_option_left_part"><label for="">Game Results CSV ' .$game_id. '</label></th>' . "\n" .
   '                  <td>' . "\n" .
   '                    <form enctype="multipart/form-data" method="POST" action="">' . "\n" .
   '                      <input type="hidden" name="MAX_FILE_SIZE" value="100000" />' . "\n" .
-  '                      <input name="bbnuke_schedules_uploadedfile" type="file" /><br />' . "\n" .
-  '                      <input type="submit" name="bbnuke_iScore_bat_file_upload_btn" value="Upload" />' . "\n" .
+  '                      <input name="bbnuke_gameResults_bat_uploadedfile" type="file" /><br />' . "\n" .
+  '                      <input type="submit" name="bbnuke_gameResults_bat_upload_btn" value="Upload" />' . "\n" .
   '                    </form>' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
-  */  '              </table>' . "\n";
+ */ '              </table>' . "\n";
 
   }
 
@@ -2285,7 +2285,7 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
   return $ret_flag;
 }
 
-	$latestVersion="1.0.4";
+	$latestVersion="1.0.7";
 	
 
 	function getbnukeVersion(){

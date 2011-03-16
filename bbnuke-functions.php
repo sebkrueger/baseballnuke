@@ -110,7 +110,7 @@ function  bbnuke_get_past_games($season)
 {
   global $wpdb;
 
-  $query = 'SELECT gameID, visitingTeam, homeTeam, gameDate, gameTime FROM ' . $wpdb->prefix . 'baseballNuke_schedule WHERE DATE_FORMAT(gameDate,"%Y") = "' . $season . '" AND gameDate <= "' . date("Y-m-d") . '" ORDER BY gameDate desc';
+  $query = 'SELECT gameID, visitingTeam, homeTeam, gameDate, gameTime FROM ' . $wpdb->prefix . 'baseballNuke_schedule WHERE season = "' . $season . '" AND gameDate <= "' . date("Y-m-d") . '" ORDER BY gameDate desc';
   $result = mysql_query($query);
   if ($result)
     while ( $row = mysql_fetch_array($result) )
@@ -404,7 +404,7 @@ function  bbnuke_get_schedules($season)
 {
   global $wpdb;
 
-  $query  = "SELECT gameID, visitingTeam, homeTeam, gameDate, gameTime, field, homeScore, visitScore FROM " . $wpdb->prefix . "baseballNuke_schedule WHERE DATE_FORMAT(gameDate,'%Y')= '" . $season . "' ORDER BY gameDate desc ";
+  $query  = "SELECT gameID, visitingTeam, homeTeam, gameDate, gameTime, field, homeScore, visitScore FROM " . $wpdb->prefix . "baseballNuke_schedule WHERE season= '" . $season . "' ORDER BY gameDate desc ";
   $result = mysql_query($query);
   if ($result)
     while ( $row = mysql_fetch_array($result) )
@@ -448,7 +448,7 @@ function  bbnuke_update_schedule($game_id)
   $gtime = $_POST['bbnuke_schedules_edit_gtime'];
   $field = $_POST['bbnuke_schedules_edit_field_select'];
 
-  $query  = "UPDATE " . $wpdb->prefix . "baseballNuke_schedule SET visitingTeam='$vteam', homeTeam='$hteam', gameDate='$gdate', gameTime='$gtime', field='$field', homeScore='$hscore', visitScore='$vscore' WHERE gameID=$game_id ";
+  $query  = "UPDATE " . $wpdb->prefix . "baseballNuke_schedule SET visitingTeam='$vteam', homeTeam='$hteam', gameDate='$gdate', gameTime='$gtime', field='$field' WHERE gameID=$game_id ";
   $result = mysql_query($query);
 
   if (mysql_error())
@@ -459,7 +459,7 @@ function  bbnuke_update_schedule($game_id)
 
 
 
-function  bbnuke_upload_schedules()
+function  bbnuke_upload_schedules($season)
 {
   global $wpdb;
 
@@ -468,7 +468,7 @@ function  bbnuke_upload_schedules()
   foreach ($lines as $line_num => $line) 
   {
     list($visitingTeam, $homeTeam, $gameDate, $gameTime, $field)=explode(",",$line);
-    $query = "INSERT INTO " . $wpdb->prefix . "baseballNuke_schedule SET visitingTeam='$visitingTeam', homeTeam='$homeTeam', gameDate='$gameDate', gameTime='$gameTime',field='$field'";
+    $query = "INSERT INTO " . $wpdb->prefix . "baseballNuke_schedule SET visitingTeam='$visitingTeam', homeTeam='$homeTeam', gameDate='$gameDate', gameTime='$gameTime',field='$field',season='$season'";
     $result = mysql_query($query);
     if(!$result)
     {
@@ -1530,19 +1530,30 @@ function  bbnuke_get_next_game()
   return $game;
 }
 
-/*function  bbnuke_get_playerID_iScore($name,$jersey,$season)
+function  bbnuke_upload_gameResults_bat($gameID,$season)
+{
+  global  $wpdb;
+  $o = new PaperPear_CSVParser('bbnuke_gameResults_bat_uploadedfile');
+ while ($o->getNext())
+    {
+$playerID=bbnuke_get_playerID($o->getNum(),$season); 
+print "baAB=" . $o->getAB() .",baRuns=" . $o->getR() .",ba1b=" . $o->get1B() .",ba2b=" . $o->get2B() .",ba3b=" . $o->get3B() .",baHR=" . $o->getHR() .",baRBI=" . $o->getRBI() .",baBB=" . $o->getBB() .",baK=" . $o->getSO() .",baHP=" . $o->getHBP() .",baSB=" . $o->getSB() .",baRE=" . $o->getROE() .",baFC=" . $o->getFC() ."" . $playerID . "";
+    }
+}
+
+
+function  bbnuke_get_playerID($jersey,$season)
 {
   global $wpdb;
 
   $query = "SELECT playerID FROM ".$wpdb->prefix."baseballNuke_players " .
-		"WHERE season="2010" AND lastname=" . $lastname . " AND firstname=" . $firstname . " AND jerseyNum=" . $jersey . ";" .
+		"WHERE season=". $season . " AND jerseyNum=" . $jersey . ";" .
   $result = mysql_query($query);
   if ($result)
     $game = mysql_fetch_array($result);
 
   return $game;
 }
-*/
 
 ////////////////////////////////////////////////////////////////////////////////
 // plugin widget functions for output generation
@@ -3361,12 +3372,14 @@ function  bbnuke_widget_team_schedule( $bbnuke_echo = true )
   $dseason = $defs['defaultSeason'];
   $game_results_page = get_permalink(bbnuke_get_option('bbnuke_game_results_page'));
   $locations_page = get_permalink(bbnuke_get_option('bbnuke_locations_page'));
+  $timeformat = get_option('time_format');
   $bbnuke_content = NULL;
 
-  $bbnuke_content .= '<table class="bbnuke-schedule-table">
+  $bbnuke_content = 
+	'<table class="bbnuke-schedule-table">
 	<tr>  
-	  <th>' . __('Game Date', 'bbnuke') . '</th>
-	  <th>' . __('Home', 'bbnuke') . '</th>
+	  <th>' . $timeformat . '</th>
+ 	<th>' . __('Home', 'bbnuke') . '</th>
 	  <th>' . __('Visitor', 'bbnuke') . '</th>
 	  <th>' . __('Field', 'bbnuke') . '</th>
 	</tr>';

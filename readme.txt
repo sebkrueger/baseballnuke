@@ -4,13 +4,13 @@ Author Uri: http://claimid.com/shawn
 Plugin Uri: http://dev.flyingdogsbaseball.com/baseballNuke
 Tags: phpnuke, baseball, team management, baseballNuke, softball
 Requires at least: 2.7
-Tested up to: WP 3.0.5
-Stable tag: 1.0.6
+Tested up to: WP 3.1
+Stable tag: 1.0.7
 
 
 == Description ==
 
-Tested with **Wordpress 3.0.4**
+Tested with **Wordpress 3.1**
 
 baseballNuke is a wordpress plugin for the administration of a single baseball team.  baseballNuke is a complete team management tool and information source.  It provides team and individual information about the players including schedule, field directions, player stats, team stats, player profiles and game results.
 
@@ -117,7 +117,8 @@ Programmer/Technical Genious - Dawn Wallis
 
 
 == Translations ==
-* German (de_DE) (next release)
+* German (de_DE)
+* Frentch (fr_FR)
 * English (default)
 * other must be translated
 
@@ -177,3 +178,11 @@ Programmer/Technical Genious - Dawn Wallis
 -UPDATE - Added height/weight to player profile page if values exist
 -UPDATE -Update player profile page to show pitching stats only if IP > 0
 -UPDATE -change player image path on player profile page to accept any url/relative link
+
+= 1.0.7 =
+-BUG FIX - Cannot Edit Existing Games
+-BUG FIX - Import does not set season in schedule table
+-BUG FIX - Cannot enter game results (because season not set in schedule table)
+-ENHANCEMENT - Added French language support (thanks Roland Reinhart)
+-UPDATE - Updated German language support (thanks Roland Reinhart)
+

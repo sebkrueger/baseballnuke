@@ -3,7 +3,7 @@
 Plugin Name: baseballNuke
 Plugin URI: http://dev.flyingdogsbaseball.com/baseballnuke
 Description: baseballNuke is a wordpress plugin based on the original module for the CMS phpnuke for the administration of a single baseball team.  baseballNuke is a complete team management tool and information source.  It provides team and individual information about the players including schedule, field directions, player stats, team stats, player profiles and game results.
-Version: 1.0.6
+Version: 1.0.7
 Author: Nick Collingham, Shawn Grimes, Christian Gnoth, Dawn Wallis
 License: GPL2
 */
@@ -38,6 +38,7 @@ require_once( dirname(__FILE__) . '/bbnuke-db.php');
 require_once( dirname(__FILE__) . '/bbnuke-functions.php');
 require_once( dirname(__FILE__) . '/bbnuke-widgets.php');
 require_once( dirname(__FILE__) . '/bbnuke-option-page.php');
+require_once( dirname(__FILE__) . '/includes/classes.php');
 
 
 
@@ -945,7 +946,8 @@ function  bbnuke_plugin_create_schedules_page()
     else
     {
       //  schedule update
-      $ret = bbnuke_update_schedule($_POST['bbnuke_delete_game_id']);
+      $game_id = bbnuke_get_option('bbnuke_game_edit_id');
+      $ret = bbnuke_update_schedule($game_id);
       if ($ret)
       {
         echo '<div id="message" class="updated fade">';
@@ -954,23 +956,24 @@ function  bbnuke_plugin_create_schedules_page()
       else
       {
         echo '<div id="message" class="error fade">';
-        echo '<strong>Game entry not updated !!!</strong></div>';
+        echo '<strong>Game entry ' .  $game_id . 'not updated !!!</strong></div>';
       }
     }
   }
 
   if ( $_POST['bbnuke_schedules_file_upload_btn'] )
   {
-    $ret = bbnuke_upload_schedules();
+    $season = bbnuke_get_option('bbnuke_schedules_season');
+    $ret = bbnuke_upload_schedules($season);
     if ($ret)
     {
       echo '<div id="message" class="error fade">';
-      echo '<strong>Error during file uploaded - players not added !!!</strong></div>';
+      echo '<strong>Error during file uploaded - schedule not uploaded!!!</strong></div>';
     }
     else
     {
       echo '<div id="message" class="updated fade">';
-      echo '<strong>File uploaded and players added !!!</strong></div>';
+      echo '<strong>File uploaded and games added ' . $season . '!!!</strong></div>';
     }
   }
 
@@ -1032,18 +1035,20 @@ function  bbnuke_plugin_create_game_results_page()
     $season = $_POST['bbnuke_results_list_select_season'];
     bbnuke_delete_all_schedules($season);
   }
-  if ( $_POST['bbnuke_iScore_bat_file_upload_btn'] )
+  if ( $_POST['bbnuke_gameResults_bat_upload_btn'] )
   {
-    $ret = bbnuke_upload_iScore_bat();
+    $game_id = bbnuke_get_option('bbnuke_game_edit_id'); 
+    $season = bbnuke_get_option('bbnuke_schedules_season');
+    $ret = bbnuke_upload_gameResults_bat($game_id,$season);
     if ($ret)
     {
       echo '<div id="message" class="error fade">';
-      echo '<strong>Error during file uploaded - iScore batting stats not added !!!</strong></div>';
+      echo '<strong>Error during file uploaded ' . $game_id . '- ' . $season . ' Game results not added !!!</strong></div>';
     }
     else
     {
       echo '<div id="message" class="updated fade">';
-      echo '<strong>iScore batting stats added !!!</strong></div>';
+      echo '<strong>Game results added !' . $game_id . '' . $season . ' !!</strong></div>';
     }
   }
 
