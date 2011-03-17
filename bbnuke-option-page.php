@@ -29,7 +29,7 @@ function bbnuke_plugin_print_option_page()
 
   $players         = bbnuke_get_players($defs['defaultSeason']);
   $games           = bbnuke_get_past_games_with_results();
-  
+
   echo
   '<div class="wrap">' . "\n" .
   '  <a name="Top"></a>' . "\n" .
@@ -59,12 +59,12 @@ function bbnuke_plugin_print_option_page()
   '              <table class="form-table">' . "\n" .
   '               <tr><th class="bbnuke_option_left_part"><label for="bbnuke_season_select">Set default season and team</label></th>' . "\n" .
   '                <td>Default season:&nbsp;<select name="bbnuke_def_season_select" class="select-season-single" size="1">' . "\n";
-  
+
   for ( $i=0; $i < count($seasons_list); $i++ )
   {
     if ( $seasons_list[$i] == $defs['defaultSeason'] )
       echo '<option value="' . $i . '" selected="yes">' . $seasons_list[$i] . '</option>' . "\n";
-    else 
+    else
       echo '<option value="' . $i . '">' . $seasons_list[$i] . '</option>' . "\n";
   }
 
@@ -76,14 +76,14 @@ function bbnuke_plugin_print_option_page()
   {
     if ( $team_list[$i] == $defs['defaultTeam'] )
       echo '<option value="' . $i . '" selected="yes">' . $team_list[$i] . '</option>' . "\n";
-    else 
+    else
       echo '<option value="' . $i . '">' . $team_list[$i] . '</option>' . "\n";
   }
 
   echo
   '                 </select><br /><br />' . "\n" .
   '                 <div class="div-wait" id="divwaitdts0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-  '                 <input type="submit" class="button-primary" value="Set Defaults" id="bbnuke_set_defs_btn_id" name="bbnuke_set_defs_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .    
+  '                 <input type="submit" class="button-primary" value="Set Defaults" id="bbnuke_set_defs_btn_id" name="bbnuke_set_defs_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .
   '                 </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for=""></label></th>' . "\n" .
@@ -127,12 +127,12 @@ function bbnuke_plugin_print_option_page()
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_wdg_playerstats_playerid">Widget PlayerStats Player ID</label></th>' . "\n" .
   '                  <td><select name="bbnuke_plugin_option_wdg_playerstats_players_select" class="select-team-single" size="1">' . "\n";
-  
+
   for ( $i=0; $i < count($players); $i++ )
   {
     if ( $players[$i]['playerID'] == $wdg_playerstats_player_id )
       echo '<option value="' . $players[$i]['playerID'] . '" selected="yes">' . $players[$i]['lastname'] . ', ' . $players[$i]['firstname'] . '</option>' . "\n";
-    else 
+    else
       echo '<option value="' . $players[$i]['playerID'] . '">' . $players[$i]['lastname'] . ', ' . $players[$i]['firstname'] . '</option>' . "\n";
   }
 
@@ -142,12 +142,12 @@ function bbnuke_plugin_print_option_page()
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_wdg_playerstats_playerid">Widget Game Results - Player ID</label></th>' . "\n" .
   '                  <td><select name="bbnuke_plugin_option_wdg_game_results_players_select" class="select-team-single" size="1">' . "\n";
-  
+
   for ( $i=0; $i < count($players); $i++ )
   {
     if ( $players[$i]['playerID'] == $wdg_game_results_player_id )
       echo '<option value="' . $players[$i]['playerID'] . '" selected="selected">' . $players[$i]['lastname'] . ', ' . $players[$i]['firstname'] . '</option>' . "\n";
-    else 
+    else
       echo '<option value="' . $players[$i]['playerID'] . '">' . $players[$i]['lastname'] . ', ' . $players[$i]['firstname'] . '</option>' . "\n";
   }
 
@@ -157,12 +157,12 @@ function bbnuke_plugin_print_option_page()
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_wdg_playerstats_playerid">Widget Game Results - Game ID</label></th>' . "\n" .
   '                  <td><select name="bbnuke_plugin_option_wdg_game_results_games_select" class="select-team-single" size="1">' . "\n";
-  
+
   for ( $i=0; $i < count($games); $i++ )
   {
     if ( $games[$i]['gameID'] == $wdg_game_results_game_id )
       echo '<option value="' . $games[$i]['gameID'] . '" selected="selected">' . $games[$i]['homeTeam'] . ' vs ' . $games[$i]['visitingTeam'] . ' on ' . $games[$i]['Gdate'] . ' at ' . $games[$i]['Gtime'] . '</option>' . "\n";
-    else 
+    else
       echo '<option value="' . $games[$i]['gameID'] . '">' . $games[$i]['homeTeam'] . ' vs ' . $games[$i]['visitingTeam'] . ' on ' . $games[$i]['Gdate'] . ' at ' . $games[$i]['Gtime'] . '</option>' . "\n";
   }
 
@@ -194,7 +194,7 @@ function bbnuke_plugin_print_option_page()
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_season_new">New Season:</label></th>' . "\n" .
   '                  <td><input type="text" size="6" id="bbnuke_season_new_id" name="bbnuke_season_new" value="" />  (Year)<br />' . "\n" .
   '                    <div class="div-wait" id="divwaitsn0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-  '                    <input type="submit" class="button-primary" value="Add new season" id="bbnuke_add_season_btn_id" name="bbnuke_add_season_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .    
+  '                    <input type="submit" class="button-primary" value="Add new season" id="bbnuke_add_season_btn_id" name="bbnuke_add_season_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_select_season">Select season:</label></th>' . "\n" .
@@ -209,7 +209,7 @@ function bbnuke_plugin_print_option_page()
   echo
   '                    </select>&nbsp;' . "\n" .
   '                    <div class="div-wait" id="divwaitsn1"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-  '                    <input type="submit" class="button-primary" value="Delete season" id="bbnuke_del_season_btn_id" name="bbnuke_del_season_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .    
+  '                    <input type="submit" class="button-primary" value="Delete season" id="bbnuke_del_season_btn_id" name="bbnuke_del_season_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .
   '                    <br /><br />' . "\n" .
   '                    Select teams you want add to that season<br />' . "\n" .
   '                    <select size="6" class="select-teams-multiple" multiple="multiple" id="bbnuke_select_season_teams_id" name="bbnuke_select_season_teams[]">' . "\n";
@@ -251,7 +251,7 @@ function bbnuke_plugin_print_option_page()
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_add_new_team">Add new team: </label></th>' . "\n" .
   '                  <td><input type="text" name="bbnuke_add_new_team" size="25" value="" />' . "\n" .
   '                    <div class="div-wait" id="divwaitt0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-  '                    <input type="submit" class="button-primary" value="' . __('Add', 'bbnuke') . '" id="bbnuke_add_new_team_btn_id" name="bbnuke_add_new_team_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .    
+  '                    <input type="submit" class="button-primary" value="' . __('Add', 'bbnuke') . '" id="bbnuke_add_new_team_btn_id" name="bbnuke_add_new_team_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_select_season">Delete a team:</label></th>' . "\n" .
@@ -266,7 +266,7 @@ function bbnuke_plugin_print_option_page()
   echo
   '                    </select>' . "\n" .
   '                    <div class="div-wait" id="divwaitt1"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-  '                    <input type="submit" class="button-primary" value="' . __('Delete', 'bbnuke') . '" id="bbnuke_select_team_delete_btn_id" name="bbnuke_select_team_delete_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .    
+  '                    <input type="submit" class="button-primary" value="' . __('Delete', 'bbnuke') . '" id="bbnuke_select_team_delete_btn_id" name="bbnuke_select_team_delete_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for=""></label></th>' . "\n" .
@@ -320,7 +320,7 @@ function bbnuke_plugin_print_option_page()
   '    </div>' . "\n" .
   '  </div>' . "\n" .
   '</div' . "\n";
- 
+
 }
 
 
@@ -352,7 +352,7 @@ function bbnuke_plugin_print_fields_page( $edit_field = false )
   '  <div class="bbnuke-icon32"></div>' . "\n" .
   '  <h2>baseballNuke Plugin  -  Locations Settings</h2>' . "\n" .
   '  <hr />' . "\n" .
-  '  <div class="clear"></div>' . "\n" . 
+  '  <div class="clear"></div>' . "\n" .
   '  <div class="metabox-holder has-right-sidebar" id="plugin-panel-widgets">' . "\n" .
   '    <div class="postbox-container" id="bbnuke-plugin-main">' . "\n" .
   '      <div class="has-sidebar-content">' . "\n" .
@@ -427,7 +427,7 @@ function bbnuke_plugin_print_fields_page( $edit_field = false )
   '              <tr><th class="bbnuke_option_left_part"><label for="">Total Locations:</label></th>' . "\n" .
   '                  <td>' . count($fields_list) . '&nbsp;&nbsp;' . "\n" .
   '                    <div class="div-wait" id="divwaitlloc0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-  '                    <input type="submit" class="button-primary" value="Delete all locations" id="bbnuke_del_all_fields_btn_id" name="bbnuke_del_all_fields_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .    
+  '                    <input type="submit" class="button-primary" value="Delete all locations" id="bbnuke_del_all_fields_btn_id" name="bbnuke_del_all_fields_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_list_fields">Current Locations:</label></th>' . "\n" .
@@ -441,9 +441,9 @@ function bbnuke_plugin_print_fields_page( $edit_field = false )
     '                       <li class="locations-list-entry">' . "\n" .
     '                         <label for="bbnuke_field_' . $i . '" class="locations-list-entry-label">' . $fieldname . '</label> -- &nbsp;' . "\n" .
     '                         <div class="div-wait" id="divwaitlloc1"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-    '                         <input type="submit" class="button-primary" value="Edit" id="bbnuke_edit_field_' . $i . '_btn_id" name="bbnuke_edit_field_' . $i . '_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />&nbsp;&nbsp;' . "\n" .    
+    '                         <input type="submit" class="button-primary" value="Edit" id="bbnuke_edit_field_' . $i . '_btn_id" name="bbnuke_edit_field_' . $i . '_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />&nbsp;&nbsp;' . "\n" .
     '                         <div class="div-wait" id="divwaitlloc2"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-    '                         <input type="submit" class="button-primary" value="Delete" id="bbnuke_delete_field_' . $i . '_btn_id" name="bbnuke_delete_field_' . $i . '_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />&nbsp;&nbsp;' . "\n" .    
+    '                         <input type="submit" class="button-primary" value="Delete" id="bbnuke_delete_field_' . $i . '_btn_id" name="bbnuke_delete_field_' . $i . '_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />&nbsp;&nbsp;' . "\n" .
     '                       </li>' . "\n";
   }
 
@@ -764,7 +764,7 @@ function bbnuke_plugin_print_players_option_page( $edit_player = false )
   echo
   '                    </select><br /><br />' . "\n" .
   '                    <div class="div-wait" id="divwaitsts0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-  '                    <input type="submit" class="button-primary" value="Set season and team" id="bbnuke_set_season_team_id" name="bbnuke_set_season_team_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .    
+  '                    <input type="submit" class="button-primary" value="Set season and team" id="bbnuke_set_season_team_id" name="bbnuke_set_season_team_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for=""></label></th>' . "\n" .
@@ -778,7 +778,7 @@ function bbnuke_plugin_print_players_option_page( $edit_player = false )
   '              <tr><th class="bbnuke_option_left_part"><label for="">Total Players:</label></th>' . "\n" .
   '                  <td>' . count($players) . '&nbsp;&nbsp;' . "\n" .
   '                    <div class="div-wait" id="divwaitsts1"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-  '                    <input type="submit" class="button-primary" value="Delete all players" id="bbnuke_del_players_season_team_id" name="bbnuke_del_players_season_team_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .    
+  '                    <input type="submit" class="button-primary" value="Delete all players" id="bbnuke_del_players_season_team_id" name="bbnuke_del_players_season_team_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_list_players">Current Players:</label></th>' . "\n" .
@@ -795,8 +795,8 @@ function bbnuke_plugin_print_players_option_page( $edit_player = false )
     '                         <label for="bbnuke_player_' . $i . '" class="player-list-entry-label">' . $lastname . ', ' . $firstname . ' ' . $middlename . '</label> ' . "\n" .
     '                         -- ' . $team . '&nbsp;' . "\n" .
     '                         <div class="div-wait" id="divwaitcpl' . $i . '"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-    '                         <input type="submit" class="button-primary" value="Edit" id="bbnuke_edit_player_' . $player_id . '_btn_id" name="bbnuke_edit_player_' . $player_id . '_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />' . "\n" . 
-    '			      <div class="div-wait" id="divwaitped0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .  
+    '                         <input type="submit" class="button-primary" value="Edit" id="bbnuke_edit_player_' . $player_id . '_btn_id" name="bbnuke_edit_player_' . $player_id . '_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />' . "\n" .
+    '			      <div class="div-wait" id="divwaitped0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
     '			      <input type="submit" class="button-primary" value="Delete" id="bbnuke_delete_player_' . $player_id . '_btn_id" name="bbnuke_delete_player_' . $player_id . '_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />' . "\n" .
     '                       </li>' . "\n";
   }
@@ -891,7 +891,7 @@ function bbnuke_plugin_print_players_option_page( $edit_player = false )
   '              </table>' . "\n" .
   '              <div class="submit-bottom-div">' . "\n" .
   '                <div class="div-wait" id="divwaitapl0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-  '                <input type="submit" class="button-primary" value="Assign players to team" id="bbnuke_assign_players_team_btn_id" name="bbnuke_assign_players_team_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />' . "\n" .    
+  '                <input type="submit" class="button-primary" value="Assign players to team" id="bbnuke_assign_players_team_btn_id" name="bbnuke_assign_players_team_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />' . "\n" .
   '                <div class="right-bottom"><a href="#Top">Back to Top</a></div>' . "\n" .
   '              </div>' . "\n" .
   '              </form>' . "\n" .
@@ -935,7 +935,7 @@ function bbnuke_plugin_print_players_option_page( $edit_player = false )
   '    </div>' . "\n" .
   '  </div>' . "\n" .
   '</div' . "\n";
- 
+
 }
 
 
@@ -977,7 +977,7 @@ function bbnuke_plugin_print_schedules_page( $edit_game = false )
   '  <div class="bbnuke-icon32"></div>' . "\n" .
   '  <h2>baseballNuke Plugin  -  Schedules Settings</h2>' . "\n" .
   '  <hr />' . "\n" .
-  '  <div class="clear"></div>' . "\n" . 
+  '  <div class="clear"></div>' . "\n" .
   '  <div class="metabox-holder has-right-sidebar" id="plugin-panel-widgets">' . "\n" .
   '    <div class="postbox-container" id="bbnuke-plugin-main">' . "\n" .
   '      <div class="has-sidebar-content">' . "\n" .
@@ -1148,7 +1148,7 @@ function bbnuke_plugin_print_schedules_page( $edit_game = false )
   echo
   '                    </select><br /><br />' . "\n" .
   '                    <div class="div-wait" id="divwaitschl0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-  '                    <input type="submit" class="button-primary" value="Set season" id="bbnuke_schedules_set_season_btn_id" name="bbnuke_schedules_set_season_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .    
+  '                    <input type="submit" class="button-primary" value="Set season" id="bbnuke_schedules_set_season_btn_id" name="bbnuke_schedules_set_season_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for=""></label></th>' . "\n" .
@@ -1157,7 +1157,7 @@ function bbnuke_plugin_print_schedules_page( $edit_game = false )
   '              <tr><th class="bbnuke_option_left_part"><label for="">Total Schedules:</label></th>' . "\n" .
   '                  <td>' . count($games) . '&nbsp;&nbsp;' . "\n" .
   '                    <div class="div-wait" id="divwaitsch0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-  '                    <input type="submit" class="button-primary" value="Delete all schedules" id="bbnuke_del_all_schedules_btn_id" name="bbnuke_del_all_schedules_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .    
+  '                    <input type="submit" class="button-primary" value="Delete all schedules" id="bbnuke_del_all_schedules_btn_id" name="bbnuke_del_all_schedules_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_list_games">Existing Games:</label></th>' . "\n" .
@@ -1177,7 +1177,7 @@ function bbnuke_plugin_print_schedules_page( $edit_game = false )
     '                       <li class="games-list-entry">' . "\n" .
     '                         <label for="bbnuke_game_' . $i . '" class="games-list-entry-label"><b>' . $hteam . '</b> VS <b>' . $vteam . '</b> on <b>' . $gdate . '</b> at ' . $gtime . ' @ ' . $field . '&nbsp;&nbsp;</label>' . "\n" .
     '                         <div class="div-wait" id="divwaitsch1"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-    '                         <input type="submit" class="button-primary" value="Edit" id="bbnuke_edit_game_' . $game_id . '_btn_id" name="bbnuke_edit_game_' . $game_id . '_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />&nbsp;&nbsp;' . "\n" .    
+    '                         <input type="submit" class="button-primary" value="Edit" id="bbnuke_edit_game_' . $game_id . '_btn_id" name="bbnuke_edit_game_' . $game_id . '_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />&nbsp;&nbsp;' . "\n" .
     '                       </li>' . "\n";
   }
 
@@ -1276,7 +1276,7 @@ function bbnuke_plugin_print_tournaments_page( $edit_tournament = false )
   '  <div class="bbnuke-icon32"></div>' . "\n" .
   '  <h2>baseballNuke Plugin  -  Tournaments Settings</h2>' . "\n" .
   '  <hr />' . "\n" .
-  '  <div class="clear"></div>' . "\n" . 
+  '  <div class="clear"></div>' . "\n" .
   '  <div class="metabox-holder has-right-sidebar" id="plugin-panel-widgets">' . "\n" .
   '    <div class="postbox-container" id="bbnuke-plugin-main">' . "\n" .
   '      <div class="has-sidebar-content">' . "\n" .
@@ -1428,7 +1428,7 @@ function bbnuke_plugin_print_tournaments_page( $edit_tournament = false )
   echo
   '                    </select><br /><br />' . "\n" .
   '                    <div class="div-wait" id="divwaittl0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-  '                    <input type="submit" class="button-primary" value="Set season" id="bbnuke_tournaments_list_set_season_btn_id" name="bbnuke_tournaments_list_set_season_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .    
+  '                    <input type="submit" class="button-primary" value="Set season" id="bbnuke_tournaments_list_set_season_btn_id" name="bbnuke_tournaments_list_set_season_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for=""></label></th>' . "\n" .
@@ -1437,7 +1437,7 @@ function bbnuke_plugin_print_tournaments_page( $edit_tournament = false )
   '              <tr><th class="bbnuke_option_left_part"><label for="">Total Tournaments:</label></th>' . "\n" .
   '                  <td>' . count($tournaments_list) . '&nbsp;&nbsp;' . "\n" .
   '                    <div class="div-wait" id="divwaittl1"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-  '                    <input type="submit" class="button-primary" value="Delete all tournaments" id="bbnuke_del_all_tournaments_btn_id" name="bbnuke_del_all_tournaments_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .    
+  '                    <input type="submit" class="button-primary" value="Delete all tournaments" id="bbnuke_del_all_tournaments_btn_id" name="bbnuke_del_all_tournaments_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_list_tournaments">Existing Tournaments:</label></th>' . "\n" .
@@ -1457,7 +1457,7 @@ function bbnuke_plugin_print_tournaments_page( $edit_tournament = false )
     '                       <li class="tournaments-list-entry">' . "\n" .
     '                         <label for="bbnuke_tournament_' . $i . '" class="tournaments-list-entry-label">' . $hteam . ' ' . $vteam . ' on ' . $gdate . ' at ' . $gtime . ' @ ' . $field . '&nbsp;$Notes&nbsp;</label>' . "\n" .
     '                         <div class="div-wait" id="divwaittl1"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-    '                         <input type="submit" class="button-primary" value="Edit" id="bbnuke_edit_tournament_' . $game_id . '_btn_id" name="bbnuke_edit_tournament_' . $game_id . '_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />&nbsp;&nbsp;' . "\n" .    
+    '                         <input type="submit" class="button-primary" value="Edit" id="bbnuke_edit_tournament_' . $game_id . '_btn_id" name="bbnuke_edit_tournament_' . $game_id . '_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />&nbsp;&nbsp;' . "\n" .
     '                       </li>' . "\n";
   }
 
@@ -1557,7 +1557,7 @@ function bbnuke_plugin_print_practice_page( $edit_practice = false )
   '  <div class="bbnuke-icon32"></div>' . "\n" .
   '  <h2>baseballNuke Plugin  -  Practice Settings</h2>' . "\n" .
   '  <hr />' . "\n" .
-  '  <div class="clear"></div>' . "\n" . 
+  '  <div class="clear"></div>' . "\n" .
   '  <div class="metabox-holder has-right-sidebar" id="plugin-panel-widgets">' . "\n" .
   '    <div class="postbox-container" id="bbnuke-plugin-main">' . "\n" .
   '      <div class="has-sidebar-content">' . "\n" .
@@ -1701,7 +1701,7 @@ function bbnuke_plugin_print_practice_page( $edit_practice = false )
   echo
   '                    </select><br /><br />' . "\n" .
   '                    <div class="div-wait" id="divwaitpl0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-  '                    <input type="submit" class="button-primary" value="Set season" id="bbnuke_practices_list_set_season_btn_id" name="bbnuke_practices_list_set_season_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .    
+  '                    <input type="submit" class="button-primary" value="Set season" id="bbnuke_practices_list_set_season_btn_id" name="bbnuke_practices_list_set_season_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for=""></label></th>' . "\n" .
@@ -1710,7 +1710,7 @@ function bbnuke_plugin_print_practice_page( $edit_practice = false )
   '              <tr><th class="bbnuke_option_left_part"><label for="">Total Practices:</label></th>' . "\n" .
   '                  <td>' . count($practise_list) . '&nbsp;&nbsp;' . "\n" .
   '                    <div class="div-wait" id="divwaitpl0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-  '                    <input type="submit" class="button-primary" value="Delete all practices" id="bbnuke_del_all_practice_btn_id" name="bbnuke_del_all_practice_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .    
+  '                    <input type="submit" class="button-primary" value="Delete all practices" id="bbnuke_del_all_practice_btn_id" name="bbnuke_del_all_practice_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_list_practice">Existing Practices:</label></th>' . "\n" .
@@ -1731,7 +1731,7 @@ function bbnuke_plugin_print_practice_page( $edit_practice = false )
     '                       <li class="practice-list-entry">' . "\n" .
     '                         <label for="bbnuke_practice_' . $i . '" class="practice-list-entry-label">' . $hteam . ' ' . $vteam . ' on ' . $gdate . ' at ' . $gtime . ' @ ' . $field . '&nbsp;' . $notes . '&nbsp;</label>' . "\n" .
     '                         <div class="div-wait" id="divwaitpl1"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-    '                         <input type="submit" class="button-primary" value="Edit" id="bbnuke_edit_practice_' . $game_id . '_btn_id" name="bbnuke_edit_practice_' . $game_id . '_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />&nbsp;&nbsp;' . "\n" .    
+    '                         <input type="submit" class="button-primary" value="Edit" id="bbnuke_edit_practice_' . $game_id . '_btn_id" name="bbnuke_edit_practice_' . $game_id . '_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />&nbsp;&nbsp;' . "\n" .
     '                       </li>' . "\n";
   }
 
@@ -1824,7 +1824,7 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
 
     $presults    = bbnuke_get_game_player_results($game_id, $season);
     if (!$presults)
-    { 
+    {
       $players = bbnuke_get_players_from_team( $hometeam, $season);
       if (!$players)
         $ret_flag = -1;
@@ -1848,7 +1848,7 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
   '  <div class="bbnuke-icon32"></div>' . "\n" .
   '  <h2>baseballNuke Plugin  -  Game Results Page</h2>' . "\n" .
   '  <hr />' . "\n" .
-  '  <div class="clear"></div>' . "\n" . 
+  '  <div class="clear"></div>' . "\n" .
   '  <div class="metabox-holder has-right-sidebar" id="plugin-panel-widgets">' . "\n" .
   '    <div class="postbox-container" id="bbnuke-plugin-main">' . "\n" .
   '      <div class="has-sidebar-content">' . "\n" .
@@ -1886,21 +1886,21 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
     list($gameID,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9,$h1,$h2,$h3,$h4,$h5,$h6,$h7,$h8,$h9,$vhits,$vruns,$verr,$hhits,$hruns,$herr,$notes) = $gresults[0];
     echo
     '           <table width="75%" border="1" class="gresults-form-table">
-            <tr> 
+            <tr>
             <td width="13%"></td>';
     for ($i=1; $i <= 9; $i++)
-      echo 
+      echo
       '		              <td width="5%" align="center">' . $i . '</td>' . "\n";
-    
+
     echo
     '		              <td width="5%" align="center">H</td>
 		              <td width="5%" align="center">R</td>
 		              <td width="5%" align="center">E</td>
 		          </tr>
-		          <tr> 
+		          <tr>
 		            <td width="13%">' . $vteam . '</td>' . "\n";
 
-    echo 
+    echo
     "	            <td width=5%>
 	                <input type=text name=v1 size=2 value=".$v1.">
 		              </font></td>
@@ -1916,10 +1916,10 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
 		            <td width=5%>
 		                <input type=text name=v5 size=2 value=".$v5.">
 		              </font></td>
-		            <td width=5%> 
+		            <td width=5%>
 		                <input type=text name=v6 size=2 value=".$v6.">
 		              </font></td>
-		            <td width=5%> 
+		            <td width=5%>
 		                <input type=text name=v7 size=2 value=".$v7.">
 		              </font></td>
 		            <td width=5%>
@@ -1938,7 +1938,7 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
 		                <input type=text name=verr size=2 value=".$verr.">
 		              </font></td>
 		          </tr>
-		          <tr> 
+		          <tr>
 		            <td width=13%>$hteam</font></td>
 		            <td width=5%>
 		                <input type=text name=h1 size=2 value=".$h1.">
@@ -1961,13 +1961,13 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
 		            <td width=5%>
 		                <input type=text name=h7 size=2 value=".$h7.">
 		              </font></td>
-		            <td width=5%> 
+		            <td width=5%>
 		                <input type=text name=h8 size=2 value=".$h8.">
 		              </font></td>
 		            <td width=5%>
 		                <input type=text name=h9 size=2 value=".$h9.">
 		              </font></td>
-		            <td width=5%> 
+		            <td width=5%>
 		                <input type=text name=hhits size=2 value=".$hhits.">
 		              </font></td>
 		            <td width=5%>
@@ -1985,14 +1985,14 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
 		      </table>" . "\n" .
   '          <div class="game-results-table">' . "\n" .
   '                   <table class=gresults-form-table>
-		        <tr> 
+		        <tr>
 		            <td>&nbsp;</td>
-		            <td width=1% align=center> 
+		            <td width=1% align=center>
 		              <p><font size=-1 >Did Not Play</font></p>
 		            </td>
-		            <td width=4% align=center><font size=-1 >Batt. 
+		            <td width=4% align=center><font size=-1 >Batt.
 		              Ord</font></td>
-		            <td width=4% align=center><font size=-1 >Pi. 
+		            <td width=4% align=center><font size=-1 >Pi.
 		              Ord</font></td>
 		            <td width=4% align=center><font size=-1 >AB</font></td>
 		            <td width=4% align=center><font size=-1 >R</font></td>
@@ -2030,7 +2030,7 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
     else
       $count_p = count($players);
 
-    for ($m=0; $m < $count_p; $m++) 
+    for ($m=0; $m < $count_p; $m++)
     {
       if ( $presults )
         list($PLAYERID,$firstname,$middlename,$lastname,$battOrd,$pitchOrd,$baAB,$ba1b,$ba2b,$ba3b,$baHR,$baRBI,$baBB,$baK,$baSB,$piWin,$piLose,$piSave,$piIP,$piHits,$piRuns,$piER,$piWalks,$piSO,$baRuns,$baRE,$baFC,$baHP,$baLOB,$fiPO,$fiA,$fiE) = $presults[$m];
@@ -2039,34 +2039,34 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
 
       echo
       '                         <td>' . $lastname . ', ' . $firstname . ' ' . $middlename . '</td>
-		            <td width="1%">  
+		            <td width="1%">
 		              <input type="checkbox" name="' . $PLAYERID . '_chkbxDNP" value="DNP" />
 		              </td>
-		            <td width="4%">  
+		            <td width="4%">
 		              <input type="text" name="' . $PLAYERID . '_battOrd" size="1" value="'.$battOrd.'">
 		              </td>
-		            <td width="4%">  
+		            <td width="4%">
 		              <input type="text" name="' . $PLAYERID . '_pitchOrd" size="1" value="' . $pitchOrd . '">
 		              </td>
-		            <td width="4%">  
+		            <td width="4%">
 		              <input type="text" name="' . $PLAYERID . '_baAB" size="1" value="' . $baAB . '">
 		              </td>
-		            <td width="4%">  
+		            <td width="4%">
 		              <input type="text" name="' . $PLAYERID . '_baRuns" size="1" value="' . $baRuns . '">
 		              </td>
-		            <td width="4%">  
+		            <td width="4%">
 		              <input type="text" name="' . $PLAYERID . '_ba1b" size="1" value="' . $ba1b . '">
 		              </td>
-		            <td width="4%">  
+		            <td width="4%">
 		              <input type="text" name="' . $PLAYERID . '_ba2b" size="1" value="' . $ba2b . '">
 		              </td>
-		            <td width="4%">  
+		            <td width="4%">
 		              <input type="text" name="' . $PLAYERID . '_ba3b" size="1" value="' . $ba3b . '">
 		              </td>
-		            <td width="4%">  
+		            <td width="4%">
 		              <input type="text" name="' . $PLAYERID . '_baHR" size="1" value="' . $baHR . '">
 		              </td>
-		            <td width="4%">  
+		            <td width="4%">
 		              <input type="text" name="' . $PLAYERID . '_baRE" size="1" value="' . $baRE . '">
 		              </td>
 		            <td width="4%">
@@ -2078,13 +2078,13 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
 		            <td width="4%">
 		              <input type="text" name="' . $PLAYERID . '_baRBI" size="1" value="' . $baRBI . '">
 		              </td>
-		            <td width="4%">  
+		            <td width="4%">
 		              <input type="text" name="' . $PLAYERID . '_baBB" size="1" value="' . $baBB . '">
 		              </td>
-		            <td width="4%">  
+		            <td width="4%">
 		              <input type="text" name="' . $PLAYERID . '_baK" size="1" value="' . $baK . '">
 		              </td>
-		            <td width="4%">  
+		            <td width="4%">
 		              <input type="text" name="' . $PLAYERID . '_baLOB" size="1" value="' . $baLOB . '">
 		              </td>
 		            <td width="4%">
@@ -2099,9 +2099,9 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
 		            <td width="4%">
 		              <input type="text" name="' . $PLAYERID . '_fiE" size="1" value="' . $fiE . '">
 		              </td>
-		            <td width="1%">  <b> 
+		            <td width="1%">  <b>
 		              <input type="checkbox" name="' . $PLAYERID . '_piWin" value="1" ';
-  
+
       if($piWin){
 			echo ' checked="checked" ';
       }
@@ -2109,7 +2109,7 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
       echo
       ' />
 		              </b> </td>
-		            <td width="1%">  
+		            <td width="1%">
 		              <input type="checkbox" name="' . $PLAYERID . '_piLose" value="1" ';
 
       if($piLose){
@@ -2117,29 +2117,29 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
       }
       echo ' />
 		              </td>
-		            <td width="1%">  
+		            <td width="1%">
 		              <input type="checkbox" name="' . $PLAYERID . '_piSave" value="1" ';
       if($piSave){
 			echo ' checked="checked" ';
       }
       echo ' />
 		              </td>
-		            <td width="4%">  
+		            <td width="4%">
 		              <input type="text" name="' . $PLAYERID . '_piIP" size="1" value="'.$piIP.'" />
 		              </td>
-		            <td width="4%">  
+		            <td width="4%">
 		              <input type="text" name="' . $PLAYERID . '_piHits" size="1" value="'.$piHits.'" />
 		              </td>
-		            <td width="4%">  
+		            <td width="4%">
 		              <input type="text" name="' . $PLAYERID . '_piRuns" size="1" value="' . $piRuns . '" />
 		              </td>
-		            <td width="4%">  
+		            <td width="4%">
 		              <input type="text" name="' . $PLAYERID . '_piER" size="1" value="' . $piER . '" />
 		              </td>
-		            <td width="4%">  
+		            <td width="4%">
 		              <input type="text" name="' . $PLAYERID . '_piWalks" size="1" value="' . $piWalks . '" />
 		              </td>
-		            <td width="4%">  
+		            <td width="4%">
 		              <input type="text" name="' . $PLAYERID . '_piSO" size="1" value="' . $piSO . '" />
 		              </td>
 		          </tr>';
@@ -2201,7 +2201,7 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
   echo
   '                    </select><br /><br />' . "\n" .
   '                    <div class="div-wait" id="divwaitrl0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-  '                    <input type="submit" class="button-primary" value="Set season" id="bbnuke_results_list_set_season_btn_id" name="bbnuke_results_list_set_season_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .    
+  '                    <input type="submit" class="button-primary" value="Set season" id="bbnuke_results_list_set_season_btn_id" name="bbnuke_results_list_set_season_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for=""></label></th>' . "\n" .
@@ -2210,7 +2210,7 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
   '              <tr><th class="bbnuke_option_left_part"><label for="">Total Games:</label></th>' . "\n" .
   '                  <td>' . count($games_list) . '&nbsp;&nbsp;' . "\n" .
   '                    <div class="div-wait" id="divwaitpl0"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-  '                    <input type="submit" class="button-primary" value="Delete all games" id="bbnuke_del_all_games_btn_id" name="bbnuke_del_all_games_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .    
+  '                    <input type="submit" class="button-primary" value="Delete all games" id="bbnuke_del_all_games_btn_id" name="bbnuke_del_all_games_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_results_edit_game_select">Select a game to update</label></th>' . "\n" .
@@ -2230,7 +2230,7 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
   echo
   '                    </select>' . "\n" .
   '                    <div class="div-wait" id="divwaitgl1"><img src="' . BBNPURL . 'img/loading.gif" /></div>' . "\n" .
-  '                    <input type="submit" class="button-primary" value="Edit" id="bbnuke_edit_game_btn_id" name="bbnuke_edit_game_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .    
+  '                    <input type="submit" class="button-primary" value="Edit" id="bbnuke_edit_game_btn_id" name="bbnuke_edit_game_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" /><br />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for=""></label></th>' . "\n" .
@@ -2285,8 +2285,8 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
   return $ret_flag;
 }
 
-	$latestVersion="1.0.7";
-	
+	$latestVersion="1.0.7.1";
+
 
 	function getbnukeVersion(){
 		global $prefix,$dbi;

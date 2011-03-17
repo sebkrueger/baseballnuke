@@ -186,3 +186,5 @@ Programmer/Technical Genious - Dawn Wallis
 -ENHANCEMENT - Added French language support (thanks Roland Reinhart)
 -UPDATE - Updated German language support (thanks Roland Reinhart)
 
+= 1.0.7.1 =
+-BUG FIX - Correct date header title on schedule widget.
