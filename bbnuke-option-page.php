@@ -2285,7 +2285,7 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
   return $ret_flag;
 }
 
-	$latestVersion="1.0.7.1";
+	$latestVersion="1.0.8";
 
 
 	function getbnukeVersion(){

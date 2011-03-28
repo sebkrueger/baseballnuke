@@ -5,7 +5,7 @@ Plugin Uri: http://dev.flyingdogsbaseball.com/baseballNuke
 Tags: phpnuke, baseball, team management, baseballNuke, softball
 Requires at least: 2.7
 Tested up to: WP 3.1
-Stable tag: 1.0.7.1
+Stable tag: 1.0.1
 
 
 == Description ==
@@ -188,3 +188,8 @@ Programmer/Technical Genious - Dawn Wallis
 
 = 1.0.7.1 =
 -BUG FIX - Correct date header title on schedule widget.
+
+= 1.0.8 =
+-CHANGE - removed Age column from Roster
+-UPDATE - removed comma (,) from Home field on roster when city/state are null
+-BUG Fix - fixed dropdown field select on locations widget.
