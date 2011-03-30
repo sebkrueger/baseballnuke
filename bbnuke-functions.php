@@ -1483,7 +1483,7 @@ function  bbnuke_get_last_game_results()
 {
   global $wpdb;
 
-  $query = "SELECT s.gameID, DATE_FORMAT(gameDate,'%c-%d-%Y') Gdate, TIME_FORMAT(gameTime, '%h:%i %p') Gtime, " .
+  $query = "SELECT s.gameID, gameDate as Gdate, gameTime as Gtime, " .
                  " homeTeam, visitingTeam, field, hruns, vruns " .
                  " FROM " . $wpdb->prefix . "baseballNuke_schedule s, " . $wpdb->prefix . "baseballNuke_boxscores b WHERE " . 
                  " s.gameID = b.gameID AND gameDate <= CURDATE() " .
@@ -1832,8 +1832,7 @@ function  bbnuke_widget_lastgame( $bbnuke_echo = true )
   if ( $game )
   {
     list($gameID, $Gdate, $Gtime, $homeTeam, $visitingTeam, $field, $hruns, $vruns) = $game;
-
-    $date =date_create("$gameDate $gameTime");
+    $date =date_create("$Gdate $Gtime");
     $bbnuke_content .= '<a class="game_results-page-link" href="'.$game_results_page.'?gameID='.$gameID.'" title="' . __('Show Game Results', 'bbnuke') . '">'.date_format($date,"$dateformat $timeformat").'</a><br />';
     if ($dteam == $homeTeam)
     {
@@ -1878,7 +1877,7 @@ function  bbnuke_widget_nextgame( $bbnuke_echo = true )
   {
     list($gameID, $Gdate, $Gtime, $homeTeam, $visitingTeam, $field) = $game;
 
-    $date =date_create("$gameDate $gameTime");
+    $date =date_create("$Gdate $Gtime");
     $bbnuke_content .= '<a class="game_results-page-link">'.date_format($date,"$dateformat $timeformat").'</a><br />';
     if ($dteam == $homeTeam)
     {
