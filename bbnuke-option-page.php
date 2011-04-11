@@ -319,7 +319,7 @@ function bbnuke_plugin_print_option_page()
   '      </div>' . "\n" .
   '    </div>' . "\n" .
   '  </div>' . "\n" .
-  '</div' . "\n";
+  '</div>' . "\n";
 
 }
 
@@ -497,7 +497,7 @@ function bbnuke_plugin_print_fields_page( $edit_field = false )
   '      </div>' . "\n" .
   '    </div>' . "\n" .
   '  </div>' . "\n" .
-  '</div' . "\n";
+  '</div>' . "\n";
 
   return;
 }
@@ -934,7 +934,7 @@ function bbnuke_plugin_print_players_option_page( $edit_player = false )
   '      </div>' . "\n" .
   '    </div>' . "\n" .
   '  </div>' . "\n" .
-  '</div' . "\n";
+  '</div>' . "\n";
 
 }
 
@@ -1231,7 +1231,7 @@ function bbnuke_plugin_print_schedules_page( $edit_game = false )
   '      </div>' . "\n" .
   '    </div>' . "\n" .
   '  </div>' . "\n" .
-  '</div' . "\n";
+  '</div>' . "\n";
 
   return;
 }
@@ -1511,7 +1511,7 @@ function bbnuke_plugin_print_tournaments_page( $edit_tournament = false )
   '      </div>' . "\n" .
   '    </div>' . "\n" .
   '  </div>' . "\n" .
-  '</div' . "\n";
+  '</div>' . "\n";
 
   return;
 }
@@ -1785,7 +1785,7 @@ function bbnuke_plugin_print_practice_page( $edit_practice = false )
   '      </div>' . "\n" .
   '    </div>' . "\n" .
   '  </div>' . "\n" .
-  '</div' . "\n";
+  '</div>' . "\n";
 
   return;
 }
@@ -1982,48 +1982,38 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
 			<td colspan=12>
 			<textarea class=bbnuke_textarea name=notes cols=75 rows=10>".$notes."</textarea>
 		        </td>
-		      </table>" . "\n" .
-  '          <div class="game-results-table">' . "\n" .
-  '                   <table class=gresults-form-table>
+		      </table>
+	     <div>&nbsp;</div>
+             <div class='game-results-table'>
+                 <div class='tabs'>
+                   <a class='tab' onclick=\"showTab('#Offense')\">Offense</a>
+                   <a class='tab' onclick=\"showTab('#Pitching')\">Pitching</a>
+                   <a class='tab' onclick=\"showTab('#Fielding')\">Fielding</a>
+		   <hr>
+		 </div>
+             <div>&nbsp;</div>
+		 
+             <div id='Offense' class='tabContent' style='display:block'>         
+		      <table class=gresults-form-table>
 		        <tr>
-		            <td>&nbsp;</td>
-		            <td width=1% align=center>
-		              <p><font size=-1 >Did Not Play</font></p>
-		            </td>
-		            <td width=4% align=center><font size=-1 >Batt.
-		              Ord</font></td>
-		            <td width=4% align=center><font size=-1 >Pi.
-		              Ord</font></td>
-		            <td width=4% align=center><font size=-1 >AB</font></td>
-		            <td width=4% align=center><font size=-1 >R</font></td>
-		            <td width=4% align=center><font size=-1 > 1B</font></td>
-		            <td width=4% align=center><font size=-1 >2B</font></td>
-		            <td width=4% align=center><font size=-1 >3B</font></td>
-		            <td width=4% align=center><font size=-1 >HR</font></td>
-		            <td width=4% align=center><font size=-1 >RE</font></td>
-		            <td width=4% align=center><font size=-1 >FC</font></td>
-		            <td width=4% align=center><font size=-1 >HP</font></td>
-		            <td width=4% align=center><font size=-1 >RBI</font></td>
-		            <td width=4% align=center><font size=-1 >BB</font></td>
-		            <td width=4% align=center><font size=-1 >K</font></td>
-		            <td width=4% align=center><font size=-1 >LOB</font></td>
-		            <td width=4% align=center><font size=-1 >SB</font></td>
-		            <td width=4% align=center><font size=-1 >PO</font></td>
-		            <td width=4% align=center><font size=-1 >A</font></td>
-		            <td width=4% align=center><font size=-1 >E</font></td>
-		            <td width=1% align=center><font size=-1 >W</font></td>
-		            <td width=1% align=center><font size=-1 >L</font></td>
-		            <td width=1% align=center><font size=-1 >S</font></td>
-		            <td width=4% align=center><font size=-1 >IP</font></td>
-		            <td width=4% align=center><font size=-1 >H</font></td>
-		            <td width=4% align=center><font size=-1 >R</font></td>
-		            <td width=4% align=center><font size=-1 >ER</font></td>
-		            <td width=4% align=center><font size=-1 >BB</font></td>
-		            <td width=4% align=center><font size=-1 >K</font></td>
-		          </tr>
-		          <tr>' . "\n";
-
-
+		            <th width=150px>&nbsp;</th>
+		            <th align=center>Inactive</th>
+		            <th align=center>Ord</th>
+		            <th align=center>AB</th>
+		            <th align=center>R</th>
+		            <th align=center>1B</th>
+		            <th align=center>2B</th>
+		            <th align=center>3B</th>
+		            <th align=center>HR</th>
+		            <th align=center>RE</th>
+		            <th align=center>FC</th>
+		            <th align=center>HP</th>
+		            <th align=center>RBI</th>
+		            <th align=center>BB</th>
+		            <th align=center>K</th>
+		            <th align=center>LOB</th>
+		            <th align=center>SB</th>
+			</tr>";
     //Lookup players
     if ( $presults )
       $count_p = count($presults);
@@ -2037,116 +2027,176 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
       else
         list($PLAYERID,$firstname,$middlename,$lastname) = $players[$m];
 
-      echo
-      '                         <td>' . $lastname . ', ' . $firstname . ' ' . $middlename . '</td>
-		            <td width="1%">
-		              <input type="checkbox" name="' . $PLAYERID . '_chkbxDNP" value="DNP" />
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_battOrd" size="1" value="'.$battOrd.'">
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_pitchOrd" size="1" value="' . $pitchOrd . '">
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_baAB" size="1" value="' . $baAB . '">
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_baRuns" size="1" value="' . $baRuns . '">
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_ba1b" size="1" value="' . $ba1b . '">
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_ba2b" size="1" value="' . $ba2b . '">
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_ba3b" size="1" value="' . $ba3b . '">
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_baHR" size="1" value="' . $baHR . '">
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_baRE" size="1" value="' . $baRE . '">
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_baFC" size="1" value="' . $baFC . '">
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_baHP" size="1" value="' . $baHP . '">
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_baRBI" size="1" value="' . $baRBI . '">
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_baBB" size="1" value="' . $baBB . '">
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_baK" size="1" value="' . $baK . '">
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_baLOB" size="1" value="' . $baLOB . '">
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_baSB" size="1" value="' . $baSB . '">
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_fiPO" size="1" value="' . $fiPO . '">
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_fiA" size="1" value="' . $fiA . '">
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_fiE" size="1" value="' . $fiE . '">
-		              </td>
-		            <td width="1%">  <b>
-		              <input type="checkbox" name="' . $PLAYERID . '_piWin" value="1" ';
+echo '                    <tr>
+                            <td>' . $lastname . ', ' . $firstname . ' ' . $middlename . '</td>
+                            <td align=center>
+                              <input type="checkbox" name="' . $PLAYERID . '_chkbxDNP" value="DNP" >
+                            </td>
+                            <td align=center>
+                              <input type="text" name="' . $PLAYERID . '_battOrd" size="1" value="'.$battOrd.'">
+                            </td>
+                            <td>
+                              <input type="text" name="' . $PLAYERID . '_baAB" size="1" value="' . $baAB . '">
+                            </td>
+                            <td>
+                              <input type="text" name="' . $PLAYERID . '_baRuns" size="1" value="' . $baRuns . '">
+                            </td>
+                            <td>
+                              <input type="text" name="' . $PLAYERID . '_ba1b" size="1" value="' . $ba1b . '">
+                            </td>
+                            <td>
+                              <input type="text" name="' . $PLAYERID . '_ba2b" size="1" value="' . $ba2b . '">
+                            </td>
+                            <td>
+                              <input type="text" name="' . $PLAYERID . '_ba3b" size="1" value="' . $ba3b . '">
+                            </td>
+                            <td>
+                              <input type="text" name="' . $PLAYERID . '_baHR" size="1" value="' . $baHR . '">
+                            </td>
+                            <td>
+                              <input type="text" name="' . $PLAYERID . '_baRE" size="1" value="' . $baRE . '">
+                            </td>
+                            <td>
+                              <input type="text" name="' . $PLAYERID . '_baFC" size="1" value="' . $baFC . '">
+                            </td>
+                            <td>
+                              <input type="text" name="' . $PLAYERID . '_baHP" size="1" value="' . $baHP . '">
+                            </td>
+                            <td>
+                              <input type="text" name="' . $PLAYERID . '_baRBI" size="1" value="' . $baRBI . '">
+                            </td>
+                            <td>
+                              <input type="text" name="' . $PLAYERID . '_baBB" size="1" value="' . $baBB . '">
+                            </td>
+                            <td>
+                              <input type="text" name="' . $PLAYERID . '_baK" size="1" value="' . $baK . '">
+                            </td>
+                            <td>
+                              <input type="text" name="' . $PLAYERID . '_baLOB" size="1" value="' . $baLOB . '">
+                            </td>
+                            <td>
+                              <input type="text" name="' . $PLAYERID . '_baSB" size="1" value="' . $baSB . '">
+                            </td>
+			  </tr>'."\n";
+}
 
-      if($piWin){
-			echo ' checked="checked" ';
-      }
+   echo "</table> </div>
+                  <div id='Pitching' class='tabContent' style='display:none'>
+                       <table class=gresults-form-table>
+                         <tr>
+                             <th width=150px>&nbsp;</th>
+                             <th align=center>Ord</th>
+                             <th align=center>W</th>
+                             <th align=center>L</th>
+                             <th align=center>S</th>
+                             <th align=center>IP</th>
+                             <th align=center>H</th>
+                             <th align=center>R</th>
+                             <th align=center>ER</th>
+                             <th align=center>BB</th>
+                             <th align=center>K</th>
+                        </tr>";
+    //Lookup players
+    if ( $presults )
+      $count_p = count($presults);
+    else
+      $count_p = count($players);
 
-      echo
-      ' />
-		              </b> </td>
-		            <td width="1%">
-		              <input type="checkbox" name="' . $PLAYERID . '_piLose" value="1" ';
+    for ($m=0; $m < $count_p; $m++)
+    {
+      if ( $presults )
+        list($PLAYERID,$firstname,$middlename,$lastname,$battOrd,$pitchOrd,$baAB,$ba1b,$ba2b,$ba3b,$baHR,$baRBI,$baBB,$baK,$baSB,$piWin,$piLose,$piSave,$piIP,$piHits,$piRuns,$piER,$piWalks,$piSO,$baRuns,$baRE,$baFC,$baHP,$baLOB,$fiPO,$fiA,$fiE) = $presults[$m];
+      else
+        list($PLAYERID,$firstname,$middlename,$lastname) = $players[$m];
 
-      if($piLose){
-			echo ' checked="checked" ';
-      }
-      echo ' />
-		              </td>
-		            <td width="1%">
-		              <input type="checkbox" name="' . $PLAYERID . '_piSave" value="1" ';
-      if($piSave){
-			echo ' checked="checked" ';
-      }
-      echo ' />
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_piIP" size="1" value="'.$piIP.'" />
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_piHits" size="1" value="'.$piHits.'" />
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_piRuns" size="1" value="' . $piRuns . '" />
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_piER" size="1" value="' . $piER . '" />
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_piWalks" size="1" value="' . $piWalks . '" />
-		              </td>
-		            <td width="4%">
-		              <input type="text" name="' . $PLAYERID . '_piSO" size="1" value="' . $piSO . '" />
-		              </td>
-		          </tr>';
-    }
-    print("</table></div>");
+echo '                    <tr>
+                             <td>' . $lastname . ', ' . $firstname . ' ' . $middlename . '</td>
+                             <td>
+                               <input type="text" name="' . $PLAYERID . '_pitchOrd" size="1" value="' . $pitchOrd . '">
+                             </td>
+                             <td>  <b>
+                               <input type="checkbox" name="' . $PLAYERID . '_piWin" value="1" ';
 
-    echo
+       if($piWin){
+                         echo ' checked="checked" ';
+       }
+
+       echo
+       ' >
+                               </b> </td>
+                             <td>
+                               <input type="checkbox" name="' . $PLAYERID . '_piLose" value="1" ';
+
+       if($piLose){
+                         echo ' checked="checked" ';
+       }
+       echo ' >
+                               </td>
+                             <td>
+                               <input type="checkbox" name="' . $PLAYERID . '_piSave" value="1" ';
+       if($piSave){
+                         echo ' checked="checked" ';
+       }
+       echo ' >
+                               </td>
+                             <td>
+                               <input type="text" name="' . $PLAYERID . '_piIP" size="2" value="'.$piIP.'" >
+                             </td>
+                             <td>
+                               <input type="text" name="' . $PLAYERID . '_piHits" size="1" value="'.$piHits.'" >
+                             </td>
+                             <td>
+                               <input type="text" name="' . $PLAYERID . '_piRuns" size="1" value="' . $piRuns . '" >
+                             </td>
+                             <td>
+                               <input type="text" name="' . $PLAYERID . '_piER" size="1" value="' . $piER . '" >
+                             </td>
+                             <td>
+                               <input type="text" name="' . $PLAYERID . '_piWalks" size="1" value="' . $piWalks . '" >
+                             </td>
+                             <td>
+                               <input type="text" name="' . $PLAYERID . '_piSO" size="1" value="' . $piSO . '" >
+                             </td>
+                           </tr>
+                          </tr>'."\n";
+}
+
+   echo "</table> </div>
+                  <div id='Fielding' class='tabContent' style='display:none'>
+                         <table class=gresults-form-table>
+                           <tr>
+                             <th width=150px>&nbsp;</th>
+                             <th align=center>PO</th>
+                             <th align=center>A</th>
+                             <th align=center>E</th>
+                        </tr>";
+    //Lookup players
+    if ( $presults )
+      $count_p = count($presults);
+    else
+      $count_p = count($players);
+
+    for ($m=0; $m < $count_p; $m++)
+    {
+      if ( $presults )
+        list($PLAYERID,$firstname,$middlename,$lastname,$battOrd,$pitchOrd,$baAB,$ba1b,$ba2b,$ba3b,$baHR,$baRBI,$baBB,$baK,$baSB,$piWin,$piLose,$piSave,$piIP,$piHits,$piRuns,$piER,$piWalks,$piSO,$baRuns,$baRE,$baFC,$baHP,$baLOB,$fiPO,$fiA,$fiE) = $presults[$m];
+      else
+        list($PLAYERID,$firstname,$middlename,$lastname) = $players[$m];
+
+echo '                    <tr>
+                             <td>' . $lastname . ', ' . $firstname . ' ' . $middlename . '</td>
+                             <td>
+                               <input type="text" name="' . $PLAYERID . '_fiPO" size="1" value="' . $fiPO . '">
+                               </td>
+                             <td>
+                               <input type="text" name="' . $PLAYERID . '_fiA" size="1" value="' . $fiA . '">
+                               </td>
+                             <td>
+                               <input type="text" name="' . $PLAYERID . '_fiE" size="1" value="' . $fiE . '">
+                               </td>
+                          </tr>'."\n";
+}
+   echo '</table> </div>' . "\n" .
     '              <table class="form-table">' . "\n" .
     '              <tr><th class="bbnuke_option_left_part"><label for=""></label></th>' . "\n" .
     '                  <td>' . "\n" .
@@ -2163,7 +2213,8 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
   '                    </form>' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
- */ '              </table>' . "\n";
+ */ '              </table>
+		</div>' . "\n";
 
   }
 
@@ -2280,7 +2331,7 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
   '      </div>' . "\n" .
   '    </div>' . "\n" .
   '  </div>' . "\n" .
-  '</div' . "\n";
+  '</div>' . "\n";
 
   return $ret_flag;
 }
