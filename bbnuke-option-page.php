@@ -669,7 +669,11 @@ function bbnuke_plugin_print_players_option_page( $edit_player = false )
   '                  <td><input type="text" name="bbnuke_player_edit_school" value="' . $school . '"></td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_player_edit_pictureloc">Picture Location</label></th>' . "\n" .
-  '                  <td><input type="text" name="bbnuke_player_edit_pictureloc" size="35" value="' . $piclocation . '"></td>' . "\n" .
+  '		   <td><label for="upload_image">
+ 		     <input id="upload_image" type="text" size="36" name="bbnuke_player_edit_pictureloc" value="' . $piclocation . '" />
+		     <input id="upload_image_button" type="button" value="Upload Image" />
+		     <br />Enter an URL or upload an image for player profile.
+		   </label></td>' . "\n" .
   '              </tr>' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .

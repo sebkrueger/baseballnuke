@@ -51,6 +51,11 @@ add_action( 'admin_init',   'bbnuke_admin_init_method');
 add_action( 'admin_menu',   'bbnuke_plugin_add_option_page');
 add_action( 'widgets_init', create_function('', 'return register_widget("bbnuke_Widget");'));
 
+if (isset($_GET['page']) && $_GET['page'] == 'bbnuke-players') {
+add_action('admin_print_scripts', 'upload_admin_scripts');
+add_action('admin_print_styles', 'upload_admin_styles');
+}
+
 add_filter( 'cron_schedules', 'bbnuke_more_reccurences');
 
 //  ajax calls
@@ -181,6 +186,14 @@ function  bbnuke_print_scripts()
 }
 
 
+function upload_admin_scripts() {
+ wp_enqueue_script('media-upload');
+ wp_enqueue_script('thickbox');
+ wp_register_script('bbnuke_upload_script', plugin_dir_url( __FILE__ ) .'includes/js/bbnuke_upload_script.js', array('jquery','media-upload','thickbox'));
+ wp_enqueue_script('bbnuke_upload_script');
+}
+
+
 function  bbnuke_print_styles()
 {
   if ( is_admin() )
@@ -196,6 +209,11 @@ function  bbnuke_print_styles()
   }
 
   return;
+}
+
+
+function upload_admin_styles() {
+    wp_enqueue_style('thickbox');
 }
 
 
