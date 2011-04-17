@@ -210,7 +210,7 @@ function  bbnuke_check_tables()
 
 //    $query = mysql_real_escape_string("INSERT INTO `" . $wpdb->prefix . "baseballNuke_settings` (`defaultTeam`, `defaultSeason`, `displayMenu`, `ID`, `version`) VALUES
     $query = "INSERT INTO `" . $wpdb->prefix . "baseballNuke_settings` (`defaultTeam`, `defaultSeason`, `displayMenu`, `ID`, `version`) VALUES
-			('Flying Dogs', '2008', '', 1, '1.0.8.1');";
+			('Flying Dogs', '2008', '', 1, '1.0.9');";
     mysql_query($query);
 
 
