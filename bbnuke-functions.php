@@ -467,7 +467,13 @@ function  bbnuke_upload_schedules($season)
 
   foreach ($lines as $line_num => $line) 
   {
+    $line = mysql_real_escape_string($line);
     list($visitingTeam, $homeTeam, $gameDate, $gameTime, $field)=explode(",",$line);
+      $visitingTeam = trim($visitingTeam," \t\n\r\x0B\'\"");
+      $gameDate = trim($gameDate," \t\n\r\x0B\'\"");
+      $gameTime = trim($gameTime," \t\n\r\x0B\'\"");
+      $homeTeam = trim($homeTeam," \t\n\r\x0B\'\"");
+      $field = trim($field," \t\n\r\x0B\'\"");
     $query = "INSERT INTO " . $wpdb->prefix . "baseballNuke_schedule SET visitingTeam='$visitingTeam', homeTeam='$homeTeam', gameDate='$gameDate', gameTime='$gameTime',field='$field',season='$season'";
     $result = mysql_query($query);
     if(!$result)
