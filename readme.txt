@@ -1,11 +1,10 @@
 === baseballNuke ===
-Contributors: Shawn Grimes, Christian Gnoth, Nick Collingham, Dawn Wallis
-Author Uri: http://claimid.com/shawn
+Contributors: Shawn Grimes, Christian Gnoth, Nick Collingham, Dawn Wallis, Bobby Downs
 Plugin Uri: http://dev.flyingdogsbaseball.com/baseballNuke
 Tags: phpnuke, baseball, team management, baseballNuke, softball
 Requires at least: 2.7
 Tested up to: WP 3.1
-Stable tag: 1.0.8.1
+Stable tag: 1.0.9
 
 
 == Description ==
@@ -197,4 +196,14 @@ Programmer/Technical Genious - Dawn Wallis
 = 1.0.8.1 =
 -BUG FIX - Next Game, Last Game widgets showing current date/time instead of schedule date/time
 -UPDATE - The date/time format was changed in 1.0.8.  It now uses the format specified in Wordpress settings instead of a fixed format.  This is to support international formats.
+
+= 1.0.9 =
+-ENHANCEMENT - updated game result admin console to create seperate tabs for offense, pitching and fielding.
+-ENHANCEMENT - added some verification on schedule upload to strip extra characters and verify home or away team matched default team.
+-ENHANCEMENT - integrated player profile picture field with WordPress Media Library.
+-ENHANCEMENT - integrated notes box on game results admin with wysiwyg editor
+-MODIFICATION - box score in game results admin changed from H | R | E to R | H | E
+-MODIFICATION - added additional tournament types to tournament admin page
+
+
 

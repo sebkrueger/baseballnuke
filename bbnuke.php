@@ -3,7 +3,7 @@
 Plugin Name: baseballNuke
 Plugin URI: http://dev.flyingdogsbaseball.com/baseballnuke
 Description: baseballNuke is a wordpress plugin based on the original module for the CMS phpnuke for the administration of a single baseball team.  baseballNuke is a complete team management tool and information source.  It provides team and individual information about the players including schedule, field directions, player stats, team stats, player profiles and game results.
-Version: 1.0.8.1
+Version: 1.0.9
 Author: Nick Collingham, Shawn Grimes, Christian Gnoth, Dawn Wallis
 License: GPL2
 */
@@ -51,7 +51,14 @@ add_action( 'admin_init',   'bbnuke_admin_init_method');
 add_action( 'admin_menu',   'bbnuke_plugin_add_option_page');
 add_action( 'widgets_init', create_function('', 'return register_widget("bbnuke_Widget");'));
 
+if (isset($_GET['page']) && $_GET['page'] == 'bbnuke-players') {
+add_action('admin_print_scripts', 'upload_admin_scripts');
+add_action('admin_print_styles', 'upload_admin_styles');
+}
+
 add_filter( 'cron_schedules', 'bbnuke_more_reccurences');
+add_filter('admin_head','show_tinyMCE');
+
 
 //  ajax calls
 add_action( 'wp_ajax_bbnuke_ajax_action', 'bbnuke_ajax_func');
@@ -181,6 +188,29 @@ function  bbnuke_print_scripts()
 }
 
 
+function upload_admin_scripts() {
+ wp_enqueue_script('media-upload');
+ wp_enqueue_script('thickbox');
+ wp_register_script('bbnuke_upload_script', plugin_dir_url( __FILE__ ) .'includes/js/bbnuke_upload_script.js', array('jquery','media-upload','thickbox'));
+ wp_enqueue_script('bbnuke_upload_script');
+}
+
+
+function show_tinyMCE() {
+    wp_enqueue_script( 'common' );
+    wp_enqueue_script( 'jquery-color' );
+    wp_print_scripts('editor');
+    if (function_exists('add_thickbox')) add_thickbox();
+    wp_print_scripts('media-upload');
+    if (function_exists('wp_tiny_mce')) wp_tiny_mce();
+    wp_admin_css();
+    wp_enqueue_script('utils');
+    do_action("admin_print_styles-post-php");
+    do_action('admin_print_styles');
+    remove_all_filters('mce_external_plugins');
+}
+
+
 function  bbnuke_print_styles()
 {
   if ( is_admin() )
@@ -196,6 +226,11 @@ function  bbnuke_print_styles()
   }
 
   return;
+}
+
+
+function upload_admin_styles() {
+    wp_enqueue_style('thickbox');
 }
 
 
