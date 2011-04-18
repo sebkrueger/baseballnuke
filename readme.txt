@@ -201,5 +201,8 @@ Programmer/Technical Genious - Dawn Wallis
 -ENHANCEMENT - updated game result admin console to create seperate tabs for offense, pitching and fielding.
 -ENHANCEMENT - added some verification on schedule upload.
 -ENHANCEMENT - integrated player profile picture field with WordPress Media Library.
+-ENHANCEMENT - if left blank, runs scored will be calculated automatically from the runs per inning in game results admin.
+-MODIFICATION - box score in game results admin changed from H | R | E to R | H | E
+
 
 

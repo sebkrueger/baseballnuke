@@ -462,23 +462,38 @@ function  bbnuke_update_schedule($game_id)
 function  bbnuke_upload_schedules($season)
 {
   global $wpdb;
+  $def      = bbnuke_get_defaults();
+  $defaultTeam = $def['defaultTeam'];
 
   $lines = file($_FILES['bbnuke_schedules_uploadedfile']['tmp_name']);
 
   foreach ($lines as $line_num => $line) 
   {
-    $line = mysql_real_escape_string($line);
     list($visitingTeam, $homeTeam, $gameDate, $gameTime, $field)=explode(",",$line);
+   
+//Trim unnecessary characters from beginning and end of entries
+      
       $visitingTeam = trim($visitingTeam," \t\n\r\x0B\'\"");
       $gameDate = trim($gameDate," \t\n\r\x0B\'\"");
       $gameTime = trim($gameTime," \t\n\r\x0B\'\"");
       $homeTeam = trim($homeTeam," \t\n\r\x0B\'\"");
-      $field = trim($field," \t\n\r\x0B\'\"");
+      $field = str_replace('"', '', $field);
+      $field = trim($field," \t\n\x0B\'\"\r");
+        #$field = trim($field," \t\n\x0B\'\"");
+//Prevent SQL Injection
+      	$visitingTeam = mysql_real_escape_string($visitingTeam);
+	$gameDate =mysql_real_escape_string($gameDate);
+	$gameTime =mysql_real_escape_string($gameTime);
+	$homeTeam =mysql_real_escape_string($homeTeam);
+	$field = mysql_real_escape_string($field);
+//Verify one of the teams playing is the default team
+    if (($visitingTeam == $defaultTeam) || ($homeTeam == $defaultTeam)){
     $query = "INSERT INTO " . $wpdb->prefix . "baseballNuke_schedule SET visitingTeam='$visitingTeam', homeTeam='$homeTeam', gameDate='$gameDate', gameTime='$gameTime',field='$field',season='$season'";
     $result = mysql_query($query);
     if(!$result)
     {
       echo "Failed to add: $visitingTeam vs. $homeTeam on $gameDate at $gameTime at $field ($query)";
+    }
     }
   }
 

@@ -1341,9 +1341,15 @@ function bbnuke_plugin_print_tournaments_page( $edit_tournament = false )
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_tournaments_edit_type_select">Type</label></th>' . "\n" .
   '                  <td><select size="1" id="bbnuke_tournaments_edit_type_select_id" name="bbnuke_tournaments_edit_type_select">' . "\n" .
+  '                        <option value="NABF">NABF</option>' . "\n" .
+  '                        <option value="MSBL">MSBL</option>' . "\n" .
+  '                        <option value="NABA">NABA</option>' . "\n" .
+  '                        <option value="League">League</option>' . "\n" .
   '                        <option value="USSSA">USSSA</option>' . "\n" .
   '                        <option value="AABO">AABO</option>' . "\n" .
   '                        <option value="SuperSeries">SuperSeries</option>' . "\n" .
+  '                        <option value="Independent">Independent</option>' . "\n" .
+  '                        <option value="Other">Other</option>' . "\n" .
   '                    </select>' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
@@ -1888,6 +1894,12 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
   if ( $edit_results === true )
   {
     list($gameID,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9,$h1,$h2,$h3,$h4,$h5,$h6,$h7,$h8,$h9,$vhits,$vruns,$verr,$hhits,$hruns,$herr,$notes) = $gresults[0];
+	if ( $vruns == 0){
+	  $vruns = ($v1+$v2+$v3+$v4+$v5+$v6+$v7+$v8+$v9);
+	  }
+	if ( $hruns == 0){
+	$hruns = ($h1+$h2+$h3+$h4+$h5+$h6+$h7+$h8+$h9);
+	  }
     echo
     '           <table width="75%" border="1" class="gresults-form-table">
             <tr>
@@ -1897,8 +1909,8 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
       '		              <td width="5%" align="center">' . $i . '</td>' . "\n";
 
     echo
-    '		              <td width="5%" align="center">H</td>
-		              <td width="5%" align="center">R</td>
+    '		              <td width="5%" align="center">R</td>
+		              <td width="5%" align="center">H</td>
 		              <td width="5%" align="center">E</td>
 		          </tr>
 		          <tr>
@@ -1932,11 +1944,11 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
 		            <td width=5%>
 		                <input type=text name=v9 size=2 value=".$v9.">
 		              </font></td>
+                            <td width=5%>
+                                <input type=text name=vruns size=2 value=".$vruns.">
+                              </font></td>
 		            <td width=5%>
 		                <input type=text name=vhits size=2 value=".$vhits.">
-		              </font></td>
-		            <td width=5%>
-		                <input type=text name=vruns size=2 value=".$vruns.">
 		              </font></td>
 		            <td width=5%>
 		                <input type=text name=verr size=2 value=".$verr.">
@@ -1971,11 +1983,11 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
 		            <td width=5%>
 		                <input type=text name=h9 size=2 value=".$h9.">
 		              </font></td>
+                            <td width=5%>
+                                <input type=text name=hruns size=2 value=".$hruns.">
+                              </font></td>
 		            <td width=5%>
 		                <input type=text name=hhits size=2 value=".$hhits.">
-		              </font></td>
-		            <td width=5%>
-		                <input type=text name=hruns size=2 value=".$hruns.">
 		              </font></td>
 		            <td width=5%>
 		                <input type=text name=herr size=2 value=".$herr.">
