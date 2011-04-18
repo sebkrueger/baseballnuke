@@ -1893,13 +1893,7 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
 
   if ( $edit_results === true )
   {
-    list($gameID,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9,$h1,$h2,$h3,$h4,$h5,$h6,$h7,$h8,$h9,$vhits,$vruns,$verr,$hhits,$hruns,$herr,$notes) = $gresults[0];
-	if ( $vruns == 0){
-	  $vruns = ($v1+$v2+$v3+$v4+$v5+$v6+$v7+$v8+$v9);
-	  }
-	if ( $hruns == 0){
-	$hruns = ($h1+$h2+$h3+$h4+$h5+$h6+$h7+$h8+$h9);
-	  }
+    list($gameID,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9,$h1,$h2,$h3,$h4,$h5,$h6,$h7,$h8,$h9,$vhits,$vruns,$verr,$hhits,$hruns,$herr,$content) = $gresults[0];
     echo
     '           <table width="75%" border="1" class="gresults-form-table">
             <tr>
@@ -1995,8 +1989,9 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
 		          </tr>
 			<tr>
 			<td>&nbsp;</td>
-			<td colspan=12>
-			<textarea class=bbnuke_textarea name=notes cols=75 rows=10>".$notes."</textarea>
+			<td colspan=12>";
+the_editor(stripslashes($content),'content','content', false);
+echo "
 		        </td>
 		      </table>
 	     <div>&nbsp;</div>

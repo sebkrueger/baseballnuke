@@ -249,7 +249,7 @@ function  bbnuke_update_game_results()
            '  hhits = ' . (int)$_POST['hhits'] . ', ' .
            '  hruns = ' . (int)$_POST['hruns'] . ', ' .
            '  herr  = ' . (int)$_POST['herr'] . ', ' .
-           '  notes = "' . $_POST['notes'] . '", ' .
+           '  notes  = "' . $_POST['content'] . '", ' .
            '  gameID = ' . $game_id . ' ';
     $result = mysql_query($query);
     if (mysql_error())
@@ -272,7 +272,7 @@ function  bbnuke_update_game_results()
            '  hhits = ' . (int)$_POST['hhits'] . ', ' .
            '  hruns = ' . (int)$_POST['hruns'] . ', ' .
            '  herr  = ' . (int)$_POST['herr'] . ', ' .
-           '  notes = "' . $_POST['notes'] . '" ' .
+           '  notes = "' . $_POST['content'] . '" ' .
            ' WHERE gameID = ' . $game_id . ' ';
     $result = mysql_query($query);
     if (mysql_error())
