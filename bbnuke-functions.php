@@ -1837,11 +1837,11 @@ function  bbnuke_widget_lastgame( $bbnuke_echo = true )
     if ($dteam == $homeTeam)
     {
       $bbnuke_content .= $visitingTeam . ' (' . $vruns . ')<br />';
-      $bbnuke_content .= '<b>' . $homeTeam . ' (' . $hruns . ')</b><br />';
+      $bbnuke_content .= '<strong>' . $homeTeam . ' (' . $hruns . ')</strong><br />';
     }
     else
     {
-      $bbnuke_content .= '<b>' . $visitingTeam . ' (' . $vruns . ')</b><br />';
+      $bbnuke_content .= '<strong>' . $visitingTeam . ' (' . $vruns . ')</strong><br />';
       $bbnuke_content .= $homeTeam . ' (' . $hruns . ')<br />';
     }
   }
