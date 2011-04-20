@@ -3378,20 +3378,17 @@ function  bbnuke_widget_team_schedule( $bbnuke_echo = true )
   $dseason = $defs['defaultSeason'];
   $game_results_page = get_permalink(bbnuke_get_option('bbnuke_game_results_page'));
   $locations_page = get_permalink(bbnuke_get_option('bbnuke_locations_page'));
-  $timeformat = get_option('time_format');
-  $dateformat = get_option('date_format');
   $bbnuke_content = NULL;
 
-  $bbnuke_content = 
-	'<table class="bbnuke-schedule-table">
+  $bbnuke_content .= '<table class="bbnuke-schedule-table">
 	<tr>  
 	  <th>' . __('Game Date', 'bbnuke') . '</th>
- 	<th>' . __('Home', 'bbnuke') . '</th>
+	  <th>' . __('Home', 'bbnuke') . '</th>
 	  <th>' . __('Visitor', 'bbnuke') . '</th>
 	  <th>' . __('Field', 'bbnuke') . '</th>
 	</tr>';
 		
-  $query = "SELECT s.gameID,gameTime,gameDate,homeTeam,visitingTeam, field, vruns, hruns " .
+  $query = "SELECT s.gameID, TIME_FORMAT(gameTime,'%l:%i %p') Gtime, gameDate,homeTeam,visitingTeam, field, vruns, hruns " .
            "FROM " . $wpdb->prefix . "baseballNuke_schedule s " . 
                  " LEFT JOIN " .$wpdb->prefix . "baseballNuke_boxscores b ON s.gameID = b.gameID " .
                  " WHERE DATE_FORMAT(gameDate,'%Y')= '" . $dseason . "' " .
@@ -3405,23 +3402,34 @@ function  bbnuke_widget_team_schedule( $bbnuke_echo = true )
 
   for ($m=0; $m < count($schedule); $m++) 
   {
-    list($gameID,$gameTime,$gameDate,$homeTeam,$visitingTeam,$field,$vruns,$hruns) = $schedule[$m];
+    list($gameID,$Gtime,$gameDate,$homeTeam,$visitingTeam,$field,$vruns,$hruns) = $schedule[$m];
     list($year, $month, $day) = split("-", $gameDate);
-    $modGameDate = date('M d', mktime(0, 0, 0, $month, $day, $year));
+    $modGameDate = date('m/d', mktime(0, 0, 0, $month, $day, $year));
  
-    $date =date_create("$gameDate $gameTime");
     $bbnuke_content .= "<tr>";
+    $wt = ($hruns > $vruns) ? 1 : 2;
+    
+    if($dteam == $homeTeam)
+    {
+         $result = ($wt == 1) ? 'Win' : 'Loss';
+         $score = ($wt == 1) ? $hruns.' - '.$vruns : $vruns.' - '.$hruns;
+    }
+    else {
+         $result = ($wt == 2) ? 'Win' : 'Loss';
+         $score = ($wt == 1) ? $hruns.' - '.$vruns : $vruns.' - '.$hruns;
+    }
+    
     if(!is_null($hruns))
     {
-      $bbnuke_content .= '<td><a href="'.$game_results_page.'?gameID='.$gameID.'" title="' . __('Show Game Results', 'bbnuke') . '">'.date_format($date,"$dateformat $timeformat").'</a></td>';
+      $bbnuke_content .= '<td><a href="'.$game_results_page.'?gameID='.$gameID.'" title="' . __('Show Game Results', 'bbnuke') . '">'.$result.' '.$score.'</a></td>';
     }
     else
     {
-      $bbnuke_content .= '<td>'.date_format($date,"$dateformat $timeformat").'</td>';
+      $bbnuke_content .= '<td>'.$modGameDate.' '.$Gtime.'</td>';
     }
     if(!is_null($hruns))
     {
-      $bbnuke_content .= '<td>'.$homeTeam.'<b>('.$hruns.')</b></td>';
+      $bbnuke_content .= '<td>'.$homeTeam.'</td>';
     }
     else
     {
@@ -3429,13 +3437,20 @@ function  bbnuke_widget_team_schedule( $bbnuke_echo = true )
     }
     if(!is_null($vruns))
     {
-      $bbnuke_content .= '<td>'.$visitingTeam.'<b>('.$vruns.')</b></td>';
+      $bbnuke_content .= '<td>'.$visitingTeam.'</td>';
     }
     else
     {
       $bbnuke_content .= '<td>'.$visitingTeam.'</td>';
     }
-    $bbnuke_content .= '<td><a href="' . $locations_page . '?field=' . $field . '" title="' . __('Show Locations Info', 'bbnuke') . '">'.$field.'</a></td>';
+    if(!is_null($hruns))
+    {
+       $bbnuke_content .= '<td><a href="' . $game_results_page . '?gameID=' . $gameID . '">Game Recap / Box Score</a></td>';
+    }
+    else 
+    {
+	    $bbnuke_content .= '<td><a href="' . $locations_page . '?field=' . $field . '" title="' . __('Show Locations Info', 'bbnuke') . '">'.$field.'</a></td>';
+	}
     $bbnuke_content .= '</tr>';
   }
   $bbnuke_content .= "</table>";
