@@ -1912,37 +1912,37 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
 
     echo
     "	            <td width=5%>
-	                <input type=text name=v1 size=2 value=".$v1.">
+	                <input type=text name=v1 class='v_inning' size=2 value=".$v1.">
 		              </font></td>
 		            <td width=5%>
-		                <input type=text name=v2 size=2 value=".$v2.">
+		                <input type=text name=v2 class='v_inning' size=2 value=".$v2.">
 		              </font></td>
 		            <td width=5%>
-		                <input type=text name=v3 size=2 value=".$v3.">
+		                <input type=text name=v3 class='v_inning' size=2 value=".$v3.">
 		              </font></td>
 		            <td width=5%>
-		                <input type=text name=v4 size=2 value=".$v4.">
+		                <input type=text name=v4 class='v_inning'size=2 value=".$v4.">
 		              </font></td>
 		            <td width=5%>
-		                <input type=text name=v5 size=2 value=".$v5.">
+		                <input type=text name=v5 class='v_inning' size=2 value=".$v5.">
 		              </font></td>
 		            <td width=5%>
-		                <input type=text name=v6 size=2 value=".$v6.">
+		                <input type=text name=v6 class='v_inning' size=2 value=".$v6.">
 		              </font></td>
 		            <td width=5%>
-		                <input type=text name=v7 size=2 value=".$v7.">
+		                <input type=text name=v7 class='v_inning'  size=2 value=".$v7.">
 		              </font></td>
 		            <td width=5%>
-		                <input type=text name=v8 size=2 value=".$v8.">
+		                <input type=text name=v8 class='v_inning' size=2 value=".$v8.">
 		              </font></td>
 		            <td width=5%>
-		                <input type=text name=v9 size=2 value=".$v9.">
+		                <input type=text name=v9 class='v_inning'size=2 value=".$v9.">
 		              </font></td>
                             <td width=5%>
-                                <input type=text name=vruns size=2 value=".$vruns.">
+                                <input type=text name=vruns size=2 id='vruns_total' value=".$vruns.">
                               </font></td>
 		            <td width=5%>
-		                <input type=text name=vhits size=2 value=".$vhits.">
+		                <input type=text name=vhits size=2 id='vhits_total' value=".$vhits.">
 		              </font></td>
 		            <td width=5%>
 		                <input type=text name=verr size=2 value=".$verr.">
@@ -1951,37 +1951,37 @@ function bbnuke_plugin_print_game_results_page( $edit_results = false )
 		          <tr>
 		            <td width=13%>$hteam</font></td>
 		            <td width=5%>
-		                <input type=text name=h1 size=2 value=".$h1.">
+		                <input type=text name=h1 class='h_inning' size=2 value=".$h1.">
 		              </font></td>
 		            <td width=5%>
-		                <input type=text name=h2 size=2 value=".$h2.">
+		                <input type=text name=h2 class='h_inning' size=2 value=".$h2.">
 		              </font></td>
 		            <td width=5%>
-		                <input type=text name=h3 size=2 value=".$h3.">
+		                <input type=text name=h3 class='h_inning' size=2 value=".$h3.">
 		              </font></td>
 		            <td width=5%>
-		                <input type=text name=h4 size=2 value=".$h4.">
+		                <input type=text name=h4 class='h_inning' size=2 value=".$h4.">
 		              </font></td>
 		            <td width=5%>
-		                <input type=text name=h5 size=2 value=".$h5.">
+		                <input type=text name=h5 class='h_inning' size=2 value=".$h5.">
 		              </font></td>
 		            <td width=5%>
-		                <input type=text name=h6 size=2 value=".$h6.">
+		                <input type=text name=h6 class='h_inning' size=2 value=".$h6.">
 		              </font></td>
 		            <td width=5%>
-		                <input type=text name=h7 size=2 value=".$h7.">
+		                <input type=text name=h7 class='h_inning' size=2 value=".$h7.">
 		              </font></td>
 		            <td width=5%>
-		                <input type=text name=h8 size=2 value=".$h8.">
+		                <input type=text name=h8 class='h_inning' size=2 value=".$h8.">
 		              </font></td>
 		            <td width=5%>
-		                <input type=text name=h9 size=2 value=".$h9.">
+		                <input type=text name=h9 class='h_inning' size=2 value=".$h9.">
 		              </font></td>
                             <td width=5%>
-                                <input type=text name=hruns size=2 value=".$hruns.">
+                                <input type=text name=hruns size=2 id='hruns_total' value=".$hruns.">
                               </font></td>
 		            <td width=5%>
-		                <input type=text name=hhits size=2 value=".$hhits.">
+		                <input type=text name=hhits size=2 id='hhits_total' value=".$hhits.">
 		              </font></td>
 		            <td width=5%>
 		                <input type=text name=herr size=2 value=".$herr.">
@@ -2053,16 +2053,16 @@ echo '                    <tr>
                               <input type="text" name="' . $PLAYERID . '_baRuns" size="1" value="' . $baRuns . '">
                             </td>
                             <td>
-                              <input type="text" name="' . $PLAYERID . '_ba1b" size="1" value="' . $ba1b . '">
+                              <input type="text" name="' . $PLAYERID . '_ba1b" class="classBA" size="1" value="' . $ba1b . '">
                             </td>
                             <td>
-                              <input type="text" name="' . $PLAYERID . '_ba2b" size="1" value="' . $ba2b . '">
+                              <input type="text" name="' . $PLAYERID . '_ba2b" class="classBA" size="1" value="' . $ba2b . '">
                             </td>
                             <td>
-                              <input type="text" name="' . $PLAYERID . '_ba3b" size="1" value="' . $ba3b . '">
+                              <input type="text" name="' . $PLAYERID . '_ba3b" class="classBA"" size="1" value="' . $ba3b . '">
                             </td>
                             <td>
-                              <input type="text" name="' . $PLAYERID . '_baHR" size="1" value="' . $baHR . '">
+                              <input type="text" name="' . $PLAYERID . '_baHR" class="classBA" size="1" value="' . $baHR . '">
                             </td>
                             <td>
                               <input type="text" name="' . $PLAYERID . '_baRE" size="1" value="' . $baRE . '">
@@ -2154,7 +2154,7 @@ echo '                    <tr>
                                <input type="text" name="' . $PLAYERID . '_piIP" size="2" value="'.$piIP.'" >
                              </td>
                              <td>
-                               <input type="text" name="' . $PLAYERID . '_piHits" size="1" value="'.$piHits.'" >
+                               <input type="text" name="' . $PLAYERID . '_piHits" class="classPI" size="1" value="'.$piHits.'" >
                              </td>
                              <td>
                                <input type="text" name="' . $PLAYERID . '_piRuns" size="1" value="' . $piRuns . '" >

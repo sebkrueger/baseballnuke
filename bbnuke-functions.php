@@ -3407,7 +3407,7 @@ function  bbnuke_widget_team_schedule( $bbnuke_echo = true )
 	'<table class="bbnuke-schedule-table">
 	<tr>  
 	  <th>' . __('Game Date', 'bbnuke') . '</th>
- 	<th>' . __('Home', 'bbnuke') . '</th>
+ 	  <th>' . __('Home', 'bbnuke') . '</th>
 	  <th>' . __('Visitor', 'bbnuke') . '</th>
 	  <th>' . __('Field', 'bbnuke') . '</th>
 	</tr>';
@@ -3432,31 +3432,36 @@ function  bbnuke_widget_team_schedule( $bbnuke_echo = true )
  
     $date =date_create("$gameDate $gameTime");
     $bbnuke_content .= "<tr>";
+    $wt = ($hruns > $vruns) ? 1 : 2;
+
+    if($dteam == $homeTeam)
+    {
+         $result = ($wt == 1) ? 'Win' : 'Loss';
+         $score = ($wt == 1) ? $hruns.' - '.$vruns : $vruns.' - '.$hruns;
+    }
+    else {
+         $result = ($wt == 2) ? 'Win' : 'Loss';
+         $score = ($wt == 1) ? $hruns.' - '.$vruns : $vruns.' - '.$hruns;
+    }
+
     if(!is_null($hruns))
     {
-      $bbnuke_content .= '<td><a href="'.$game_results_page.'?gameID='.$gameID.'" title="' . __('Show Game Results', 'bbnuke') . '">'.date_format($date,"$dateformat $timeformat").'</a></td>';
+      $bbnuke_content .= '<td><a href="'.$game_results_page.'?gameID='.$gameID.'" title="' . __('Show Game Results', 'bbnuke') . '">'.$result.' '.$score.'</a></td>';
     }
     else
     {
       $bbnuke_content .= '<td>'.date_format($date,"$dateformat $timeformat").'</td>';
     }
+      $bbnuke_content .= '<td>'.$homeTeam.'</td>';
+      $bbnuke_content .= '<td>'.$visitingTeam.'</td>';
     if(!is_null($hruns))
     {
-      $bbnuke_content .= '<td>'.$homeTeam.'<b>('.$hruns.')</b></td>';
+       $bbnuke_content .= '<td><a href="' . $game_results_page . '?gameID=' . $gameID . '">Game Recap / Box Score</a></td>';
     }
     else
     {
-      $bbnuke_content .= '<td>'.$homeTeam.'</td>';
-    }
-    if(!is_null($vruns))
-    {
-      $bbnuke_content .= '<td>'.$visitingTeam.'<b>('.$vruns.')</b></td>';
-    }
-    else
-    {
-      $bbnuke_content .= '<td>'.$visitingTeam.'</td>';
-    }
-    $bbnuke_content .= '<td><a href="' . $locations_page . '?field=' . $field . '" title="' . __('Show Locations Info', 'bbnuke') . '">'.$field.'</a></td>';
+            $bbnuke_content .= '<td><a href="' . $locations_page . '?field=' . $field . '" title="' . __('Show Locations Info', 'bbnuke') . '">'.$field.'</a></td>';
+        }
     $bbnuke_content .= '</tr>';
   }
   $bbnuke_content .= "</table>";
