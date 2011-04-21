@@ -8,6 +8,7 @@ function  bbnuke_save_plugin_options()
   global $wpdb;
 
   $team_leaders = $_POST['bbnuke_plugin_option_team_leaders'];
+  $erainnings = $_POST['bbnuke_plugin_option_era_innings'];
   $bg_color     = $_POST['bbnuke_plugin_option_bg_color'];
   $hover_color     = $_POST['bbnuke_plugin_option_hover_color'];
   $txt_color    = $_POST['bbnuke_plugin_option_txt_color'];
@@ -21,6 +22,7 @@ function  bbnuke_save_plugin_options()
   $locations_page   = $_POST['bbnuke_plugin_option_locations_page'];
 
   bbnuke_update_option('bbnuke_team_leaders', $team_leaders);
+  bbnuke_update_option('bbnuke_era_innings', $erainnings);
   bbnuke_update_option('bbnuke_widget_bg_color', $bg_color);
   bbnuke_update_option('bbnuke_widget_hover_color', $hover_color);
   bbnuke_update_option('bbnuke_widget_txt_color', $txt_color);
@@ -1409,9 +1411,10 @@ function  bbnuke_get_era_leaders()
   global $wpdb;
 
   $team_leaders = bbnuke_get_option('bbnuke_team_leaders');
+  $erainnings = bbnuke_get_option('bbnuke_era_innings'); 
 
   $query = "SELECT DISTINCT playerID,lastname,firstname,middlename,jerseyNum, ".
-    		" round(sum((piTotER/piTotIP)*9),2) as ERA ".
+    		" round(sum((piTotER/piTotIP)*".$erainnings."),2) as ERA ".
 		" FROM ".$wpdb->prefix."baseballNuke_pitchTotals".
 		" WHERE piTotIP>5".
 		" GROUP BY playerID".
@@ -2229,6 +2232,7 @@ function  bbnuke_widget_pitchstats( $bbnuke_echo = true )
   $defs    = bbnuke_get_defaults();
   $dteam   = $defs['defaultTeam'];
   $dseason = $defs['defaultSeason'];
+  $erainnings = bbnuke_get_option('bbnuke_era_innings');
   $player_stats_page = get_permalink(bbnuke_get_option('bbnuke_player_stats_page'));
   $SORTBY    = $_POST['bbnuke_widget_tb_head_pitchstats_sortby'];
   $SORTORDER = $_POST['bbnuke_widget_tb_head_pitchstats_sortorder'];
@@ -2281,7 +2285,7 @@ function  bbnuke_widget_pitchstats( $bbnuke_echo = true )
   {
     list($playerID,$lastname, $firstname, $middlename, $jerseyNum,$piWin,$piLose, $piSave, $piIP, $piHits, $piRuns, $piER, $piWalks, $piSO) = $presults[$m];
     if ($piIP)
-      $ERA=($piER/$piIP)*9;
+      $ERA=($piER/$piIP)*$erainnings;
     $ERA=round($ERA,2);
     $bbnuke_content .= "<tr>"; 
     $bbnuke_content .= '<td>'.$jerseyNum.'</td>
@@ -2315,7 +2319,7 @@ function  bbnuke_widget_pitchstats( $bbnuke_echo = true )
   {
     list($piWin,$piLose,$piSave,$piIP,$piHits,$piRuns,$piER,$piWalks,$piSO) = $presults[$m];
     if ($piIP)
-      $ERA=($piER/$piIP)*9;
+      $ERA=($piER/$piIP)*$erainnings;
     $ERA=round($ERA,2);
     $bbnuke_content .= '<tr><td>&nbsp;</td>
 		     <td style="text-align:left;"><b>TOTAL</b></td>
@@ -2494,6 +2498,7 @@ function  bbnuke_widget_playerstats( $player_id = NULL, $bbnuke_echo = true )
   $defs    = bbnuke_get_defaults();
   $dteam   = $defs['defaultTeam'];
   $dseason = $defs['defaultSeason'];
+  $erainnings = bbnuke_get_option('bbnuke_era_innings');
 
   $team_leaders = bbnuke_get_option('bbnuke_team_leaders');
   
@@ -2869,7 +2874,7 @@ if ($showPitchingStats>0)
 	  	$gameDate, $gameTime) = $pitchresults[$m];
     $hits=$ba1b+$ba2b+$ba3b+$baHR;
     if ($piIP > 0)
-      $ERA=($piER/$piIP)*9;
+      $ERA=($piER/$piIP)*$erainnings;
     $ERA=round($ERA,2);
     $bbnuke_content .= '<tr><td style="text-align:left;"><a href="'.$game_results_page.'?gameID='.$gameID.'" title="' . __('Show Game Results', 'bbnuke') . '">'; 
     if($homeTeam==$dteam) 	 
@@ -2913,7 +2918,7 @@ if ($showPitchingStats>0)
   {
     list($piWin,$piLose, $piSave, $piIP, $piHits, $piRuns, $piER, $piWalks, $piSO) = $pitchresults[$m];
     if ($piIP > 0)
-      $ERA=($piER/$piIP)*9;
+      $ERA=($piER/$piIP)*$erainnings;
     $ERA=round($ERA,2);
     $bbnuke_content .= '<tr><td style="text-align:left;"><b>' . __('TOTAL FOR ', 'bbnuke') . $dseason . __(' Season', 'bbnuke') . '</b></td>
 	 	<td><b>' . $piWin . '</b></td>
@@ -2949,7 +2954,7 @@ if ($showPitchingStats>0)
   {
     list($piWin,$piLose, $piSave, $piIP, $piHits, $piRuns, $piER, $piWalks, $piSO) = $pitchresults[$m];
     if ($piIP > 0)
-      $ERA=($piER/$piIP)*9;
+      $ERA=($piER/$piIP)*$erainnings;
     $ERA=round($ERA,2);
     $bbnuke_content .= '<tr><td style="text-align:left;"><b>' . __('CAREER AS ', 'bbnuke') . $dteam . ' *</b></td>
 		     <td><b>' . $piWin . '</b></td>
@@ -2986,6 +2991,7 @@ function  bbnuke_widget_top5stats( $bbnuke_echo = true )
   $defs    = bbnuke_get_defaults();
   $dteam   = $defs['defaultTeam'];
   $dseason = $defs['defaultSeason'];
+  $erainnings = bbnuke_get_option('bbnuke_era_innings');
 
   $team_leaders = bbnuke_get_option('bbnuke_team_leaders');
 
@@ -3338,7 +3344,7 @@ function  bbnuke_widget_top5stats( $bbnuke_echo = true )
     {
       $query = "SELECT DISTINCT p.playerID, lastname, firstname, middlename, jerseyNum, ".
 		" sum(piWin)as piWin, sum(piLose) as piLose, sum(piSave) as piSave,sum(piIP) as piIP, sum(piHits) as piHits, sum(piRuns) as piRuns,".
-		"  sum(piER) as piER,sum(piWalks) as piWalks, sum(piSO) as piSO, round(sum((piER/piIP)*9),2) as ERA ".
+		"  sum(piER) as piER,sum(piWalks) as piWalks, sum(piSO) as piSO, round(sum((piER/piIP)*".$erainnings."),2) as ERA ".
 		" FROM ".$wpdb->prefix."baseballNuke_stats st, ".$wpdb->prefix."baseballNuke_players p, ".$wpdb->prefix."baseballNuke_schedule s ".
 		" WHERE s.gameID=st.gameID AND p.season='".$dseason."' AND DATE_FORMAT(gameDate, '%Y')='".$dseason."' ".
 		" AND piIP>0 AND st.playerID=p.playerID GROUP BY playerID ORDER BY ERA ASC LIMIT ".$team_leaders;
@@ -3347,7 +3353,7 @@ function  bbnuke_widget_top5stats( $bbnuke_echo = true )
     {
       $query = "SELECT DISTINCT p.playerID, lastname, firstname, middlename, jerseyNum, ".
 		" sum(piWin)as piWin, sum(piLose) as piLose, sum(piSave) as piSave,sum(piIP) as piIP, sum(piHits) as piHits, sum(piRuns) as piRuns,".
-		"  sum(piER) as piER,sum(piWalks) as piWalks, sum(piSO) as piSO, round(sum((piER/piIP)*9),2) as ERA ".
+		"  sum(piER) as piER,sum(piWalks) as piWalks, sum(piSO) as piSO, round(sum((piER/piIP)*".$erainnings."),2) as ERA ".
 		" FROM ".$wpdb->prefix."baseballNuke_stats st, ".$wpdb->prefix."baseballNuke_players p, ".$wpdb->prefix."baseballNuke_schedule s ".
 		" WHERE s.gameID=st.gameID AND p.season='".$dseason."' AND DATE_FORMAT(gameDate, '%Y')='".$dseason."' ".
 		" AND piIP>0 AND st.playerID=p.playerID GROUP BY playerID ORDER BY piSO DESC LIMIT ".$team_leaders;

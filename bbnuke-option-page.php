@@ -21,6 +21,7 @@ function bbnuke_plugin_print_option_page()
   $game_results_page   = $options['bbnuke_game_results_page'];
   $player_stats_page   = $options['bbnuke_player_stats_page'];
   $locations_page   = $options['bbnuke_locations_page'];
+  $erainnings = $options['bbnuke_era_innings'];
 
   //   get seasons
   $seasons_list    = bbnuke_get_seasons();
@@ -103,6 +104,10 @@ function bbnuke_plugin_print_option_page()
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_team_leaders">Team Leaders</label></th>' . "\n" .
   '                  <td><input type="text" name="bbnuke_plugin_option_team_leaders" value="' . $team_leaders . '" />' . "\n" .
+  '                  </td>' . "\n" .
+  '              </tr>' . "\n" .
+  '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_era_innings">Game Length for ERA</label></th>' . "\n" .
+  '                  <td><input type="text" name="bbnuke_plugin_option_era_innings" value="' . $erainnings . '" />' . "\n" .
   '                  </td>' . "\n" .
   '              </tr>' . "\n" .
   '              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_plugin_option_header_bg_color">Table Header Background Color</label></th>' . "\n" .

@@ -344,7 +344,8 @@ function bbnuke_migrate_old_options()
        '16'  => 'bbnuke_game_results_page',
        '17'  => 'bbnuke_player_stats_page',
        '18'  => 'bbnuke_locations_page',
-       '19'  => 'bbnuke_widget_header_bg_color'
+       '19'  => 'bbnuke_widget_header_bg_color',
+       '20'  => 'bbnuke_era_innings'
        );
 
   $new_fields = array(
@@ -367,7 +368,8 @@ function bbnuke_migrate_old_options()
        '16'  => 'bbnuke_game_results_page',
        '17'  => 'bbnuke_player_stats_page',
        '18'  => 'bbnuke_locations_page',
-       '19'  => 'bbnuke_widget_header_bg_color'
+       '19'  => 'bbnuke_widget_header_bg_color',
+       '20'  => 'bbnuke_era_innings'
        );
 
   foreach($old_fields as $index=>$field)
@@ -421,7 +423,8 @@ function bbnuke_set_option_defaults()
        'bbnuke_game_results_page' => 'game-results',
        'bbnuke_player_stats_page' => 'player-stats',
        'bbnuke_locations_page'    => 'fields',
-       'bbnuke_widget_header_bg_color'   => 'b2b2b2'
+       'bbnuke_widget_header_bg_color'   => 'b2b2b2',
+       'bbnuke_era_innings'             => 9
         );
 
   $bbnuke_options = get_option('bbnuke_plugin_options');
