@@ -1073,22 +1073,57 @@ function  bbnuke_plugin_create_game_results_page()
     $season = $_POST['bbnuke_results_list_select_season'];
     bbnuke_delete_all_schedules($season);
   }
-  if ( $_POST['bbnuke_gameResults_bat_upload_btn'] )
+  if ( $_POST['bbnuke_gamechanger_upload_btn'] )
   {
     $game_id = bbnuke_get_option('bbnuke_game_edit_id');
     $season = bbnuke_get_option('bbnuke_schedules_season');
-    $ret = bbnuke_upload_gameResults_bat($game_id,$season);
+    $ret = bbnuke_upload_gamechanger_stats($game_id,$season);
     if ($ret)
     {
       echo '<div id="message" class="error fade">';
-      echo '<strong>Error during file uploaded ' . $game_id . '- ' . $season . ' Game results not added !!!</strong></div>';
+      echo '<strong>Error during GameChanger stats upload ' . $game_id . '- ' . $season . ' Game results not added !!!</strong></div>';
     }
     else
     {
       echo '<div id="message" class="updated fade">';
-      echo '<strong>Game results added !' . $game_id . '' . $season . ' !!</strong></div>';
+      echo '<strong>GameChanger stats uploaded !' . $game_id . '' . $season . ' !!</strong></div>';
     }
   }
+
+  if ( $_POST['bbnuke_iScore_batting_upload_btn'] )
+  {
+    $game_id = bbnuke_get_option('bbnuke_game_edit_id');
+    $season = bbnuke_get_option('bbnuke_schedules_season');
+    $ret = bbnuke_upload_iScore_battingstats($game_id,$season);
+    if ($ret)
+    {
+      echo '<div id="message" class="error fade">';
+      echo '<strong>Error during iScore batting stats upload ' . $game_id . '- ' . $season . ' Game results not added !!!</strong></div>';
+    }
+    else
+    {
+      echo '<div id="message" class="updated fade">';
+      echo '<strong>iScore batting stats uploaded !' . $game_id . '' . $season . ' !!</strong></div>';
+    }
+  }
+
+  if ( $_POST['bbnuke_iScore_pitching_upload_btn'] )
+  {
+    $game_id = bbnuke_get_option('bbnuke_game_edit_id');
+    $season = bbnuke_get_option('bbnuke_schedules_season');
+    $ret = bbnuke_upload_iScore_pitchingstats($game_id,$season);
+    if ($ret)
+    {
+      echo '<div id="message" class="error fade">';
+      echo '<strong>Error during iScore pitching stats upload ' . $game_id . '- ' . $season . ' Game results not added !!!</strong></div>';
+    }
+    else
+    {
+      echo '<div id="message" class="updated fade">';
+      echo '<strong>iScore pitching stats uploaded !' . $game_id . '' . $season . ' !!</strong></div>';
+    }
+  }
+
 
   bbnuke_plugin_print_game_results_page($edit_results);
 
