@@ -173,7 +173,9 @@ function  bbnuke_print_scripts()
   {
     //  print scripts for the public and frontend
     wp_enqueue_script( 'json2' );
-    wp_enqueue_script( 'bbnuke_script', plugin_dir_url( __FILE__ ) . 'includes/js/bbnuke_scripts.js', array('jquery', 'json2'), false, false);
+    wp_enqueue_script('tablesorter_script', plugin_dir_url( __FILE__ ) .'includes/js/jquery.tablesorter.js', array('jquery'));
+    wp_enqueue_script( 'bbnuke_script', plugin_dir_url( __FILE__ ) . 'includes/js/bbnuke_scripts.js', array('jquery', 'json2', 'tablesorter_script'), false, false);
+
     echo
     '
       <script type="text/javascript" language="javascript">
@@ -187,6 +189,10 @@ function  bbnuke_print_scripts()
   return;
 }
 
+function load_tablesorter_scripts() {
+ wp_enqueue_script('tablesorter_script', plugin_dir_url( __FILE__ ) .'includes/js/jquery.tablesorter.js', array('jquery'));
+ wp_enqueue_script('bbnuke_tablesorter_script', plugin_dir_url( __FILE__ ) .'includes/js/bbnuke_tablesorter.js', array('jquery'));
+}
 
 function upload_admin_scripts() {
  wp_enqueue_script('media-upload');
@@ -221,6 +227,7 @@ function  bbnuke_print_styles()
   }
   else
   {
+    wp_register_style('table_sorter_styles', BBNPURL . 'css/blue/style.css');
     wp_register_style('bbnuke_frontend_styles', BBNPURL . 'css/bbnuke-frontend-plugin.php');
     wp_enqueue_style( 'bbnuke_frontend_styles' );
   }
@@ -1053,6 +1060,7 @@ function  bbnuke_plugin_create_game_results_page()
     {
       echo '<div id="message" class="error fade">';
       echo '<strong>Error - game results not updated !!!</strong></div>';
+echo  mysql_error();
     }
     else
     {

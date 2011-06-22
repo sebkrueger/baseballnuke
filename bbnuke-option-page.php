@@ -2000,13 +2000,16 @@ function bbnuke_plugin_print_schedules_page( $edit_game = false )
 					<input type=text name=herr size=2 value=".$herr.">
 				      </font></td>
 				  </tr>
-				<tr>
-				<td>&nbsp;</td>
-				<td colspan=12>";
-	the_editor(stripslashes($content),'content','content', false);
-	echo "
 				</td>
 			      </table>
+		     <div class='game-results-table'>
+		     <input type='checkbox' name='bbnuke_include_post' id='bbnuke_include_post' /> Attach post to game results? <br />
+		     <div id='bbnuke_select_post' style='display:none'>
+		     Select post title: &nbsp;";
+		    echo bbnuke_display_post_selectbox();
+		    echo "
+		     </div>
+		     </div>
 		     <div>&nbsp;</div>
 		     <div class='game-results-table'>
 			 <div class='tabs'>
@@ -2235,15 +2238,18 @@ function bbnuke_plugin_print_schedules_page( $edit_game = false )
 			    <input type="submit" class="button-secondary" value="Update" id="bbnuke_save_results_btn_id" name="bbnuke_save_results_btn" onclick="document.getElementById(nameofDivWait).style.display=\'inline\';this.form.submit();" />&nbsp;
 			      </td><br><br>
 			  </tr>
+			  </table>
 			  </form>
+<div id=game-results-dump></div>
+			  <form>
+			  <table class="form-table">
 			  <tr>
 			    <th class="bbnuke_option_left_part"><label for="bbnuke_plugin_gamechanger_import">Retrieve GameChanger Results</label></th>
+		    <td><input type=hidden id="tbl_home_or_away" value= ' . $HomeAway . '></td>
                     <td width=150><input type="text" name="bbnuke_plugin_gamechanger_import" id="bbnuke_plugin_gamechanger_import"/><br>
 			<i>GameChanger Game ID</i></td>
-		    <input type=hidden id="tbl_home_or_away" value= ' . $HomeAway . '>
-                    <td align=left valign=top> <input type="button" class="button-secondary" value="Retrieve" id="bbnuke_retrieve_gamechanger_results_btn_id" name="bbnuke_retrieve_gamechanger_results_btn" />&nbsp;</td>
+                    <td align=left valign=top class=gamechanger_import_status> <input type="button" class="button-secondary" value="Retrieve" id="bbnuke_retrieve_gamechanger_results_btn_id" name="bbnuke_retrieve_gamechanger_results_btn" />&nbsp;</td>
                 </tr> 
-                <div id=gamesitedump></div>
                   <tr>
                     <th class="bbnuke_option_left_part"><label for="bbnuke_plugin_gamechanger_upload">Upload GameChanger Stats</label></th>
 		    <form enctype="multipart/form-data" method="POST" action="">

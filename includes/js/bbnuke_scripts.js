@@ -1,4 +1,7 @@
-jQuery(document).ready(function(){
+jQuery(document).ready(function($){
+        $(".bbnuke-results-table").tablesorter();
+        $(".bbnuke-schedule-table").tablesorter();
+
         jQuery(".bbnuke-results-table tr").mouseover(function(){
                 jQuery(this).addClass("over");
         });

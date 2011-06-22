@@ -1,92 +1,203 @@
-jQuery(document).ready(
-        function()
-        {
+jQuery(document).ready( function() {
           jQuery('#bbnuke_plugin_option_header_bg_color').jPicker({window:{expandable: true}});
           jQuery('#bbnuke_plugin_option_header_txt_color').jPicker({window:{expandable: true}});
           jQuery('#bbnuke_plugin_option_bg_color').jPicker({window:{expandable: true}});
           jQuery('#bbnuke_plugin_option_hover_color').jPicker({window:{expandable: true}});
           jQuery('#bbnuke_plugin_option_txt_color').jPicker({window:{expandable: true}});
-		
-          jQuery(".v_inning").blur(function() {
-	  	var Total = 0;
-		jQuery(".v_inning").each(function() {
-			if (!isNaN(this.value) && this.value.length != 0) {
-            			Total += parseFloat(this.value);
-        		}		
-			jQuery("#vruns_total").val(Total);
-		});
-	  });
+
+	  // Setup the ajax indicator
+	  
+	  jQuery('#game-results-dump').append('<div id="ajaxBusy"><p><img src="images/loading.gif"></p></div>');
 	
-          jQuery(".h_inning").blur(function() {
-                var Total = 0;
-                jQuery(".h_inning").each(function() {
-                        if (!isNaN(this.value) && this.value.length != 0) {
-                                Total += parseFloat(this.value);
-                        }
-                        jQuery("#hruns_total").val(Total);
-                });
-          });
-
-          jQuery(".classBA").blur(function() {
-                var Total = 0;
-                jQuery(".classBA").each(function() {
-                        if (!isNaN(this.value) && this.value.length != 0) {
-                                Total += parseFloat(this.value);
-                        }
-                        jQuery("#vhits_total").val(Total);
-                });
-          });
-
-          jQuery(".classPI").blur(function() {
-                var Total = 0;
-                jQuery(".classPI").each(function() {
-                        if (!isNaN(this.value) && this.value.length != 0) {
-                                Total += parseFloat(this.value);
-                        }
-                        jQuery("#hhits_total").val(Total);
-                });
-          });
-
-	  jQuery("#bbnuke_retrieve_gamechanger_results_btn_id").bind('click', function() {
-		var gameID = jQuery("#bbnuke_plugin_gamechanger_import").val();
-		var pitchLink = 'http://www.gamechanger.io/game-'+gameID+'/boxscore/batting/standard';
-		var home_or_away = jQuery("#tbl_home_or_away").val();
-		var tableToGet = "tbl_"+ home_or_away + "_batting";
-		var classSection = "offense";
-		
-		if (jQuery("#Pitching").attr("style") == "")  {
-			pitchLink = 'http://www.gamechanger.io/game-'+gameID+'/boxscore/pitching/standard';
-			tableToGet = "tbl_"+ home_or_away +"_pitching";
-			classSection = "pitching";
+  	  jQuery('#ajaxBusy').css({
+    display:"none",
+    margin:"0px",
+    paddingLeft:"0px",
+    paddingRight:"0px",
+    paddingTop:"0px",
+    paddingBottom:"0px",
+    right:"3px",
+    top:"3px",
+     width:"auto"
+ 	  });
+   jQuery(document).ajaxStart(function(){ 
+        jQuery('#ajaxBusy').show(); 
+    }).ajaxStop(function(){ 
+        jQuery('#ajaxBusy').hide();
+    });	
+	
+  jQuery(".v_inning").blur(function() {
+	var Total = 0;
+	jQuery(".v_inning").each(function() {
+		if (!isNaN(this.value) && this.value.length != 0) {
+			Total += parseFloat(this.value);
+		}		
+		jQuery("#vruns_total").val(Total);
+	});
+  });
+	
+  jQuery(".h_inning").blur(function() {
+	var Total = 0;
+	jQuery(".h_inning").each(function() {
+		if (!isNaN(this.value) && this.value.length != 0) {
+			Total += parseFloat(this.value);
 		}
-		else if (jQuery("#Fielding").attr("style") == "" ) {
-			pitchLink = 'http://www.gamechanger.io/game-'+gameID+'/boxscore/fielding/';
-			tableToGet = "tbl_"+ home_or_away + "_fielding";
-			classSection = "fielding";
+		jQuery("#hruns_total").val(Total);
+	});
+  });
+
+  jQuery(".classBA").blur(function() {
+	var Total = 0;
+	jQuery(".classBA").each(function() {
+		if (!isNaN(this.value) && this.value.length != 0) {
+			Total += parseFloat(this.value);
+		}
+		jQuery("#vhits_total").val(Total);
+	});
+  });
+
+  jQuery(".classPI").blur(function() {
+	var Total = 0;
+	jQuery(".classPI").each(function() {
+		if (!isNaN(this.value) && this.value.length != 0) {
+			Total += parseFloat(this.value);
+		}
+		jQuery("#hhits_total").val(Total);
+	});
+  });
+	  
+  jQuery("#bbnuke_include_post").click(function() {
+	jQuery("#bbnuke_select_post").toggle(this.checked);
+  });
+
+  jQuery("#bbnuke_retrieve_gamechanger_results_btn_id").bind('click', function() {
+	var gameID = jQuery("#bbnuke_plugin_gamechanger_import").val();
+	var pitchLink = 'http://www.gamechanger.io/game-'+gameID+'/boxscore/batting/standard';
+	var home_or_away = jQuery("#tbl_home_or_away").val();
+	var tableToGet = "tbl_"+ home_or_away + "_batting";
+	var classSection = "offense";
+		
+	if (jQuery("#Pitching").attr("style") == "")  {
+		pitchLink = 'http://www.gamechanger.io/game-'+gameID+'/boxscore/pitching/standard';
+		tableToGet = "tbl_"+ home_or_away +"_pitching";
+		classSection = "pitching";
+	}
+	else if (jQuery("#Fielding").attr("style") == "" ) {
+		pitchLink = 'http://www.gamechanger.io/game-'+gameID+'/boxscore/fielding/';
+		tableToGet = "tbl_"+ home_or_away + "_fielding";
+		classSection = "fielding";
+	}
+/*	else {
+		//populate top values on default click
+		_getTopValues(pitchLink,'tbl_linescore','gresults-form-table');
+	}
+*/
+
+	var yql = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent('select tbody FROM html where url ="'+ pitchLink +'" and xpath="//table[@id=' + "'" + tableToGet + "'" + ']"') + '&format=xml&callback=?';
+	jQuery.getJSON( yql, cbFunc );
+	function cbFunc(data) {
+		if ( data.results[0] ) {
+			data = data.results[0].replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+			jQuery("#game-results-dump").html(data);
+			//get data and fill form
+			_parseYQLandFillForm(data, classSection);
 		}
 		else {
+			jQuery("#game-results-dump").html("Error");
+			//jQuery('#ajaxBusy').hide();
+			throw new Error('Nothing returned from getJSON.'); 
+
+		}
+	  };
+  });
+
+
+}); //doc ready end
+
+function _getTopValues(plink, tbl, btbl) {
+	var yqlTop = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent('select * FROM html where url ="'+ plink +'" and xpath="//table[@id=' + "'" + tbl + "'" + ']"') + '&format=xml&callback=?';
+	jQuery.getJSON( yqlTop, cbFuncTop );
+	function cbFuncTop(data) {
+		if ( data.results[0] ) {
+			data = data.results[0].replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+			//get data and fill form
+			_parseYQLandFillTop(data, btbl);	
+		}
+		else {
+			jQuery("#game-results-dump").html("Error");
+			throw new Error('Nothing returned from getJSON.');
 		}
 
-		var yql = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent('select tbody FROM html where url ="'+ pitchLink +'" and xpath="//table[@id=' + "'" + tableToGet + "'" + ']"') + '&format=xml&callback=?';
-		jQuery.getJSON( yql, cbFunc );
-		function cbFunc(data) {
-			if ( data.results[0] ) {
-				data = data.results[0].replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
-				jQuery("#gamesitedump").html(data);
-				//get data and fill form
-				
-				_parseYQLandFillForm(data, classSection);
-			
-			}
-			else {
-			 	jQuery("#gamesitedump").html("Error");
-				throw new Error('Nothing returned from getJSON.'); 
-			}
-	
+         }
+}
+
+function _parseYQLandFillTop(data, btblclass) {
+	var inningsArray = data.split("<tr");
+	var topTeam = inningsArray[2];
+	var lowTeam = inningsArray[3];	
+
+	var homearray = new Array('away','home');
+
+	var headers = new Array('1','2','3','4','5','6','7','8','9','score','hits','errors');	
+
+	for (var types in homearray) {	
+		var type = homearray[types];
+		//alert(type);
+		var thisTeam = topTeam;
+		var bTeam = 'v';
+		
+		if (type == 'home') {
+			thisTeam = lowTeam;
+			bTeam = 'h';
 		}
-	  });
-	} //end function
-);
+
+		var topArray = jQuery(thisTeam.split("<td"));	
+		for (var lines in topArray) {
+			for (var i in headers) {
+				var ii = headers[i];
+				var item = 'linescore_'+type+'_inning_'+ii;
+				var Tname = bTeam+ii;
+				if (ii == 'score' )  {
+					ii = type+'-score';
+					item = ii;
+					Tname = bTeam+'runs_total';
+				} 
+				else if( ii == 'hits' ) {
+					ii = type + '-hits';
+					item = ii;
+					Tname = bTeam+'hits_total';
+				}
+				else if (ii == 'errors') {
+					ii = type+'-errors';
+					item = ii;
+					Tname = bTeam+'err';
+				}
+			
+				//jQuery().each( function() {
+				//	var value = jQuery(this).innerhtml();
+					//var value = jQuery(item).text();
+					//alert('value of ' + item + ' is ' + value + ' or maybe ' + jQuery(item).html());
+					//var pval = value;
+			//		if (jQuery(topArray[lines]):contains(item)) {
+					//gotta fix this so we get the value into the right box.
+						var pval = topArray[lines];	
+						
+						var pclass = pval.replace(/class=".+" id="/,'');
+						pclass = pval.replace(/"><p>*>/, '');
+						pclass = pval.replace(/<p>.*<\/td>/, '');
+						pval = pval.replace(/class=".*"><p>(.+)<\/p>/,'$1');
+						pval = pval.replace(/<\/td>/, '');
+						//alert('pval is ' + pval + ' pclass is ' + pclass);
+						jQuery('input[name="'+Tname+'"]').val(pval);
+			//		}
+				//});
+			}
+		}
+	}
+	//alert('out of arrays');
+	return true;
+}
+
 
 function showTab( toShow ) {
 	jQuery(".tabContent").hide();
@@ -122,7 +233,7 @@ function _parseYQLandFillForm(data, classSection) {
 			}                                        
 		});
 	}
-	return;
+	return true;
 }
 
 function _getFillData(playerTR, playerID, classSection) {
@@ -167,3 +278,5 @@ function _populateFields(statList, classSection, playerID) {
 		}
 	}
 }
+
+
