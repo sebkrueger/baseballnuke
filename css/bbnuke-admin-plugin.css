@@ -105,6 +105,23 @@
   display:   block;
   clear:     both;
   overflow:  auto;
+  padding-top:10px;
+}
+
+#game-results-dump
+{
+  position:  relative;
+  display:   block;
+  clear:     both;
+  overflow:  auto;
+}
+
+.bbnuke_loading_status
+{
+  position:  relative;
+  display:   block;
+  clear:     both;
+  overflow:  auto;
 }
 
 .gresults-form-table

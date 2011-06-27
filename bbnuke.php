@@ -173,7 +173,9 @@ function  bbnuke_print_scripts()
   {
     //  print scripts for the public and frontend
     wp_enqueue_script( 'json2' );
-    wp_enqueue_script( 'bbnuke_script', plugin_dir_url( __FILE__ ) . 'includes/js/bbnuke_scripts.js', array('jquery', 'json2'), false, false);
+    wp_enqueue_script('tablesorter_script', plugin_dir_url( __FILE__ ) .'includes/js/jquery.tablesorter.js', array('jquery'));
+    wp_enqueue_script( 'bbnuke_script', plugin_dir_url( __FILE__ ) . 'includes/js/bbnuke_scripts.js', array('jquery', 'json2', 'tablesorter_script'), false, false);
+
     echo
     '
       <script type="text/javascript" language="javascript">
@@ -187,6 +189,10 @@ function  bbnuke_print_scripts()
   return;
 }
 
+function load_tablesorter_scripts() {
+ wp_enqueue_script('tablesorter_script', plugin_dir_url( __FILE__ ) .'includes/js/jquery.tablesorter.js', array('jquery'));
+ wp_enqueue_script('bbnuke_tablesorter_script', plugin_dir_url( __FILE__ ) .'includes/js/bbnuke_tablesorter.js', array('jquery'));
+}
 
 function upload_admin_scripts() {
  wp_enqueue_script('media-upload');
@@ -221,6 +227,7 @@ function  bbnuke_print_styles()
   }
   else
   {
+    wp_register_style('table_sorter_styles', BBNPURL . 'css/blue/style.css');
     wp_register_style('bbnuke_frontend_styles', BBNPURL . 'css/bbnuke-frontend-plugin.php');
     wp_enqueue_style( 'bbnuke_frontend_styles' );
   }
@@ -344,7 +351,8 @@ function bbnuke_migrate_old_options()
        '16'  => 'bbnuke_game_results_page',
        '17'  => 'bbnuke_player_stats_page',
        '18'  => 'bbnuke_locations_page',
-       '19'  => 'bbnuke_widget_header_bg_color'
+       '19'  => 'bbnuke_widget_header_bg_color',
+       '20'  => 'bbnuke_era_innings'
        );
 
   $new_fields = array(
@@ -367,7 +375,8 @@ function bbnuke_migrate_old_options()
        '16'  => 'bbnuke_game_results_page',
        '17'  => 'bbnuke_player_stats_page',
        '18'  => 'bbnuke_locations_page',
-       '19'  => 'bbnuke_widget_header_bg_color'
+       '19'  => 'bbnuke_widget_header_bg_color',
+       '20'  => 'bbnuke_era_innings'
        );
 
   foreach($old_fields as $index=>$field)
@@ -421,7 +430,8 @@ function bbnuke_set_option_defaults()
        'bbnuke_game_results_page' => 'game-results',
        'bbnuke_player_stats_page' => 'player-stats',
        'bbnuke_locations_page'    => 'fields',
-       'bbnuke_widget_header_bg_color'   => 'b2b2b2'
+       'bbnuke_widget_header_bg_color'   => 'b2b2b2',
+       'bbnuke_era_innings'             => 9
         );
 
   $bbnuke_options = get_option('bbnuke_plugin_options');
@@ -1050,6 +1060,7 @@ function  bbnuke_plugin_create_game_results_page()
     {
       echo '<div id="message" class="error fade">';
       echo '<strong>Error - game results not updated !!!</strong></div>';
+echo  mysql_error();
     }
     else
     {
@@ -1070,22 +1081,57 @@ function  bbnuke_plugin_create_game_results_page()
     $season = $_POST['bbnuke_results_list_select_season'];
     bbnuke_delete_all_schedules($season);
   }
-  if ( $_POST['bbnuke_gameResults_bat_upload_btn'] )
+  if ( $_POST['bbnuke_gamechanger_upload_btn'] )
   {
     $game_id = bbnuke_get_option('bbnuke_game_edit_id');
     $season = bbnuke_get_option('bbnuke_schedules_season');
-    $ret = bbnuke_upload_gameResults_bat($game_id,$season);
+    $ret = bbnuke_upload_gamechanger_stats($game_id,$season);
     if ($ret)
     {
       echo '<div id="message" class="error fade">';
-      echo '<strong>Error during file uploaded ' . $game_id . '- ' . $season . ' Game results not added !!!</strong></div>';
+      echo '<strong>Error during GameChanger stats upload ' . $game_id . '- ' . $season . ' Game results not added !!!</strong></div>';
     }
     else
     {
       echo '<div id="message" class="updated fade">';
-      echo '<strong>Game results added !' . $game_id . '' . $season . ' !!</strong></div>';
+      echo '<strong>GameChanger stats uploaded !' . $game_id . '' . $season . ' !!</strong></div>';
     }
   }
+
+  if ( $_POST['bbnuke_iScore_batting_upload_btn'] )
+  {
+    $game_id = bbnuke_get_option('bbnuke_game_edit_id');
+    $season = bbnuke_get_option('bbnuke_schedules_season');
+    $ret = bbnuke_upload_iScore_battingstats($game_id,$season);
+    if ($ret)
+    {
+      echo '<div id="message" class="error fade">';
+      echo '<strong>Error during iScore batting stats upload ' . $game_id . '- ' . $season . ' Game results not added !!!</strong></div>';
+    }
+    else
+    {
+      echo '<div id="message" class="updated fade">';
+      echo '<strong>iScore batting stats uploaded !' . $game_id . '' . $season . ' !!</strong></div>';
+    }
+  }
+
+  if ( $_POST['bbnuke_iScore_pitching_upload_btn'] )
+  {
+    $game_id = bbnuke_get_option('bbnuke_game_edit_id');
+    $season = bbnuke_get_option('bbnuke_schedules_season');
+    $ret = bbnuke_upload_iScore_pitchingstats($game_id,$season);
+    if ($ret)
+    {
+      echo '<div id="message" class="error fade">';
+      echo '<strong>Error during iScore pitching stats upload ' . $game_id . '- ' . $season . ' Game results not added !!!</strong></div>';
+    }
+    else
+    {
+      echo '<div id="message" class="updated fade">';
+      echo '<strong>iScore pitching stats uploaded !' . $game_id . '' . $season . ' !!</strong></div>';
+    }
+  }
+
 
   bbnuke_plugin_print_game_results_page($edit_results);
 

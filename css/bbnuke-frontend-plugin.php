@@ -16,6 +16,31 @@ $header_txt_color    = $options['bbnuke_widget_header_txt_color'];
 ?>
 ignore{}
 
+table.bbnuke-boxscore-table
+{
+  border: 0px;
+  border-spacing: 1px 1px;
+  border-collapse: collapse;
+  font-size:13px;
+  line-height: 15px;
+  text-align: center;
+
+}
+
+table.bbnuke-boxscore-table th
+{
+  border: 0px;
+  font-weight:bold;
+  padding:2px;
+}
+
+table.bbnuke-boxscore-table td
+{
+  border: 1px solid grey;
+  padding:2px;
+}
+
+
 table.bbnuke-schedule-table
 {
   border:0px;

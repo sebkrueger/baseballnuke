@@ -205,5 +205,20 @@ Programmer/Technical Genious - Dawn Wallis
 -MODIFICATION - box score in game results admin changed from H | R | E to R | H | E
 -MODIFICATION - added additional tournament types to tournament admin page
 
+= 1.1 =
+-NEW - GameChanger.io webstats import in game results admin
+-NEW - GameChanger.io MaxPreps file import in game results admin
+-NEW - iScore Batting and Pitching CSV import
+-NEW - shortcode attribute support for team and season.
+-ENHANCEMENT - Option to attach post to game results
+-ENHANCEMENT - Added game status field to game results (completed, postponed, cancelled, suspended)
+-ENHANCEMENT - Added game length option in settings for calculating ERA
+-ENHANCEMENT - Added Sac Fly stat (SF)
+-ENHANCEMENT - Schedule now shows Win/Loss/Tie instead of date for completed games
+-ENHANCEMENT - Schedule now shows Game Results/Boxscores instead of location for completed games
+-ENHANCEMENT - Table sorting now also works on calculated stats for the batting stats, pitching stats and player stats widgets
+-FIX - Corrected OBP stat calculation
+-REMOVED - removed notes section from game results.
+
 
 
