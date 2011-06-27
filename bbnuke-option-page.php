@@ -2420,7 +2420,7 @@ $statusOptions = array("Complete", "Suspended", "Postponed", "Cancelled");
   return $ret_flag;
 }
 
-	$latestVersion="1.0.9";
+	$latestVersion="1.1";
 
 
 	function getbnukeVersion(){
