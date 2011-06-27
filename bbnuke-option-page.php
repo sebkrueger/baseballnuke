@@ -1906,7 +1906,7 @@ function bbnuke_plugin_print_schedules_page( $edit_game = false )
 
 	  if ( $edit_results === true )
 	  {
-	    list($gameID,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9,$h1,$h2,$h3,$h4,$h5,$h6,$h7,$h8,$h9,$vhits,$vruns,$verr,$hhits,$hruns,$herr,$content) = $gresults[0];
+	    list($gameID,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9,$h1,$h2,$h3,$h4,$h5,$h6,$h7,$h8,$h9,$vhits,$vruns,$verr,$hhits,$hruns,$herr,$content,$postID,$gameStatus) = $gresults[0];
 	    echo
 	    '           <table width="75%" border="1" class="gresults-form-table">
 		    <tr>
@@ -1958,7 +1958,7 @@ function bbnuke_plugin_print_schedules_page( $edit_game = false )
 					<input type=text name=vhits size=2 id='vhits_total' value=".$vhits.">
 				      </font></td>
 				    <td width=5%>
-					<input type=text name=verr size=2 value=".$verr.">
+					<input type=text name=verr size=2 id='verr_total' value=".$verr.">
 				      </font></td>
 				  </tr>
 				  <tr>
@@ -1997,13 +1997,25 @@ function bbnuke_plugin_print_schedules_page( $edit_game = false )
 					<input type=text name=hhits size=2 id='hhits_total' value=".$hhits.">
 				      </font></td>
 				    <td width=5%>
-					<input type=text name=herr size=2 value=".$herr.">
+					<input type=text name=herr size=2 id='herr_total' value=".$herr.">
 				      </font></td>
 				  </tr>
 				</td>
 			      </table>
 		     <div class='game-results-table'>
-		     <input type='checkbox' name='bbnuke_include_post' id='bbnuke_include_post' /> Attach post to game results? <br />
+		     Game status  <select name='bbnuke_game_status' id='bbnuke_game_status'>";
+$statusOptions = array("Complete", "Suspended", "Postponed", "Cancelled");
+  for ( $i=0; $i < count($statusOptions); $i++ )
+  {
+    if ( $statusOptions[$i] == $gameStatus )
+      echo '<option selected="selected" value="' . $statusOptions[$i] . '">' . $statusOptions[$i] . '</option>';
+    else
+      echo '<option value="' . $statusOptions[$i] . '">' . $statusOptions[$i] . '</option>';
+  }	
+		echo "
+		     </select><br />
+		     Attach post to game results? 
+		     <input type='checkbox' name='bbnuke_include_post' id='bbnuke_include_post' /> <br />
 		     <div id='bbnuke_select_post' style='display:none'>
 		     Select post title: &nbsp;";
 		    echo bbnuke_display_post_selectbox();
@@ -2040,6 +2052,7 @@ function bbnuke_plugin_print_schedules_page( $edit_game = false )
 				    <th align=center>K</th>
 				    <th align=center>LOB</th>
 				    <th align=center>SB</th>
+                                    <th align=center>SF</th>
 				</tr>";
 	    //Lookup players
 	    if ( $presults )
@@ -2050,13 +2063,13 @@ function bbnuke_plugin_print_schedules_page( $edit_game = false )
 	    for ($m=0; $m < $count_p; $m++)
 	    {
 	      if ( $presults )
-		list($PLAYERID,$firstname,$middlename,$lastname,$battOrd,$pitchOrd,$baAB,$ba1b,$ba2b,$ba3b,$baHR,$baRBI,$baBB,$baK,$baSB,$piWin,$piLose,$piSave,$piIP,$piHits,$piRuns,$piER,$piWalks,$piSO,$baRuns,$baRE,$baFC,$baHP,$baLOB,$fiPO,$fiA,$fiE) = $presults[$m];
+		list($PLAYERID,$firstname,$middlename,$lastname,$battOrd,$pitchOrd,$baAB,$ba1b,$ba2b,$ba3b,$baHR,$baRBI,$baBB,$baK,$baSB,$piWin,$piLose,$piSave,$piIP,$piHits,$piRuns,$piER,$piWalks,$piSO,$baRuns,$baRE,$baFC,$baHP,$baLOB,$fiPO,$fiA,$fiE,$baSF) = $presults[$m];
 	      else
 		list($PLAYERID,$firstname,$middlename,$lastname) = $players[$m];
 
 	echo '                    <tr>
 				    <td class="playername_offense">' . $lastname . ', ' . $firstname . ' ' . $middlename . '
-                                      <input type=hidden id="playerID_for_'.$lastname.$firstname.'" value="'.$PLAYERID.'">
+                                      <input type=hidden id="playerID_for_'.$lastname.'_'.$firstname.'" value="'.$PLAYERID.'">
 				    </td>
 				    <td align=center>
 				      <input type="checkbox" name="' . $PLAYERID . '_chkbxDNP" value="DNP" >
@@ -2106,6 +2119,9 @@ function bbnuke_plugin_print_schedules_page( $edit_game = false )
 				    <td>
 				      <input type="text" name="' . $PLAYERID . '_baSB" size="1" value="' . $baSB . '">
 				    </td>
+                                    <td>
+                                      <input type="text" name="' . $PLAYERID . '_baSF" size="1" value="' . $baSF . '">
+                                    </td>
 				  </tr>'."\n";
 	}
 
@@ -2140,7 +2156,7 @@ function bbnuke_plugin_print_schedules_page( $edit_game = false )
 
 	echo '                    <tr>
 				     <td class="playername_pitching">' . $lastname . ', ' . $firstname . ' ' . $middlename . '
-                                        <input type=hidden id="playerID_for_'.$lastname.$firstname.'" value="'.$PLAYERID.'">
+                                        <input type=hidden id="playerID_for_'.$lastname.'_'.$firstname.'" value="'.$PLAYERID.'">
 			     	     </td>
 				     <td>
 				       <input type="text" name="' . $PLAYERID . '_pitchOrd" size="1" value="' . $pitchOrd . '">
@@ -2216,7 +2232,7 @@ function bbnuke_plugin_print_schedules_page( $edit_game = false )
 
 	echo '                    <tr>
 				     <td class="playername_fielding">' . $lastname . ', ' . $firstname . ' ' . $middlename . '
-					<input type=hidden id="playerID_for_'.$lastname.$firstname.'" value="'.$PLAYERID.'">
+					<input type=hidden id="playerID_for_'.$lastname.'_'.$firstname.'" value="'.$PLAYERID.'">
 					</td>
 				     <td>
 				       <input type="text" name="' . $PLAYERID . '_fiPO" size="1" value="' . $fiPO . '">
@@ -2240,7 +2256,10 @@ function bbnuke_plugin_print_schedules_page( $edit_game = false )
 			  </tr>
 			  </table>
 			  </form>
+<div id=spinnerdisplay>
 <div id=game-results-dump></div>
+<div id=hiddendump style="display:none;"> </div>
+</div>
 			  <form>
 			  <table class="form-table">
 			  <tr>

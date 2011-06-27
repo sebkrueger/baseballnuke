@@ -7,24 +7,25 @@ jQuery(document).ready( function() {
 
 	  // Setup the ajax indicator
 	  
-	  jQuery('#game-results-dump').append('<div id="ajaxBusy"><p><img src="images/loading.gif"></p></div>');
+	  jQuery('#spinnerdisplay').append('<div id="ajaxBusy"><p><img src="images/loading.gif"></p></div>');
 	
   	  jQuery('#ajaxBusy').css({
-    display:"none",
-    margin:"0px",
-    paddingLeft:"0px",
-    paddingRight:"0px",
-    paddingTop:"0px",
-    paddingBottom:"0px",
-    right:"3px",
-    top:"3px",
-     width:"auto"
+	    display:"none",
+	    margin:"0px",
+	    paddingLeft:"0px",
+	    paddingRight:"0px",
+	    paddingTop:"0px",
+	    paddingBottom:"0px",
+	    right:"3px",
+	    top:"3px",
+	     width:"auto"
  	  });
-   jQuery(document).ajaxStart(function(){ 
-        jQuery('#ajaxBusy').show(); 
-    }).ajaxStop(function(){ 
-        jQuery('#ajaxBusy').hide();
-    });	
+   
+    	jQuery('#ajaxBusy').ajaxStart(function(){ 
+       	  jQuery(this).show(); 
+    	}).ajaxStop(function(){ 
+      	  jQuery(this).hide();
+    	});	
 	
   jQuery(".v_inning").blur(function() {
 	var Total = 0;
@@ -71,48 +72,58 @@ jQuery(document).ready( function() {
   });
 
   jQuery("#bbnuke_retrieve_gamechanger_results_btn_id").bind('click', function() {
-	var gameID = jQuery("#bbnuke_plugin_gamechanger_import").val();
-	var pitchLink = 'http://www.gamechanger.io/game-'+gameID+'/boxscore/batting/standard';
-	var home_or_away = jQuery("#tbl_home_or_away").val();
-	var tableToGet = "tbl_"+ home_or_away + "_batting";
-	var classSection = "offense";
+	
+	var typeArray = new Array('pitching','fielding','offense');
+	
+	for ( var typeA in typeArray) {
+	        var gameID = jQuery("#bbnuke_plugin_gamechanger_import").val();
+		var pitchLink = 'http://www.gamechanger.io/game-'+gameID+'/boxscore/batting/standard';
+		var home_or_away = jQuery("#tbl_home_or_away").val();
+		var tableToGet = "tbl_"+ home_or_away + "_batting";
+		var classSection = "offense";
+
+		var tA = typeArray[typeA];
 		
-	if (jQuery("#Pitching").attr("style") == "")  {
-		pitchLink = 'http://www.gamechanger.io/game-'+gameID+'/boxscore/pitching/standard';
-		tableToGet = "tbl_"+ home_or_away +"_pitching";
-		classSection = "pitching";
+		jQuery("#game-results-dump").html('');
+		
+		if (tA == 'pitching') {
+			pitchLink = 'http://www.gamechanger.io/game-'+gameID+'/boxscore/pitching/standard';
+			tableToGet = "tbl_"+ home_or_away +"_pitching";
+			classSection = "pitching";
+		}
+		else if ( tA == 'fielding' ) {
+			pitchLink = 'http://www.gamechanger.io/game-'+gameID+'/boxscore/fielding/';
+			tableToGet = "tbl_"+ home_or_away + "_fielding";
+			classSection = "fielding";
+		}
+		else {
+			_getTopValues(pitchLink,'tbl_linescore','gresults-form-table');
+		}
+		_callYQL(pitchLink, tableToGet, classSection);
 	}
-	else if (jQuery("#Fielding").attr("style") == "" ) {
-		pitchLink = 'http://www.gamechanger.io/game-'+gameID+'/boxscore/fielding/';
-		tableToGet = "tbl_"+ home_or_away + "_fielding";
-		classSection = "fielding";
-	}
-/*	else {
-		//populate top values on default click
-		_getTopValues(pitchLink,'tbl_linescore','gresults-form-table');
-	}
-*/
+  });
+
+}); //doc ready end
+
+function _callYQL(pitchLink, tableToGet, classSection) {
 
 	var yql = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent('select tbody FROM html where url ="'+ pitchLink +'" and xpath="//table[@id=' + "'" + tableToGet + "'" + ']"') + '&format=xml&callback=?';
 	jQuery.getJSON( yql, cbFunc );
 	function cbFunc(data) {
 		if ( data.results[0] ) {
 			data = data.results[0].replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
-			jQuery("#game-results-dump").html(data);
+			//jQuery("#game-results-dump").html(data);
+			jQuery('#hiddendump').html(data);
 			//get data and fill form
 			_parseYQLandFillForm(data, classSection);
 		}
 		else {
-			jQuery("#game-results-dump").html("Error");
-			//jQuery('#ajaxBusy').hide();
-			throw new Error('Nothing returned from getJSON.'); 
+			jQuery("#game-results-dump").append("Error loading " + classSection + "<BR>");
 
 		}
 	  };
-  });
+}
 
-
-}); //doc ready end
 
 function _getTopValues(plink, tbl, btbl) {
 	var yqlTop = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent('select * FROM html where url ="'+ plink +'" and xpath="//table[@id=' + "'" + tbl + "'" + ']"') + '&format=xml&callback=?';
@@ -121,83 +132,39 @@ function _getTopValues(plink, tbl, btbl) {
 		if ( data.results[0] ) {
 			data = data.results[0].replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
 			//get data and fill form
-			_parseYQLandFillTop(data, btbl);	
+			jQuery('#hiddendump').html(data);
+			//_parseYQLandFillTop(data, btbl);	
+			_parseYQLandFillTop();
 		}
 		else {
 			jQuery("#game-results-dump").html("Error");
-			throw new Error('Nothing returned from getJSON.');
+			//throw new Error('Nothing returned from getJSON.');
 		}
 
          }
 }
 
-function _parseYQLandFillTop(data, btblclass) {
-	var inningsArray = data.split("<tr");
-	var topTeam = inningsArray[2];
-	var lowTeam = inningsArray[3];	
-
-	var homearray = new Array('away','home');
-
-	var headers = new Array('1','2','3','4','5','6','7','8','9','score','hits','errors');	
-
-	for (var types in homearray) {	
-		var type = homearray[types];
-		//alert(type);
-		var thisTeam = topTeam;
-		var bTeam = 'v';
+function _parseYQLandFillTop() {
+	for (var count = 1; count < 10; count++) {
+		jQuery('input[name="v'+count+'"]').val( jQuery('#linescore_away_inning_'+count).html().replace('<p>','').replace('</p>','').replace('&nbsp;','0') );
+		jQuery('input[name="h'+count+'"]').val( jQuery('#linescore_home_inning_'+count).html().replace('<p>','').replace('</p>','').replace('&nbsp;','0') );
 		
-		if (type == 'home') {
-			thisTeam = lowTeam;
-			bTeam = 'h';
-		}
-
-		var topArray = jQuery(thisTeam.split("<td"));	
-		for (var lines in topArray) {
-			for (var i in headers) {
-				var ii = headers[i];
-				var item = 'linescore_'+type+'_inning_'+ii;
-				var Tname = bTeam+ii;
-				if (ii == 'score' )  {
-					ii = type+'-score';
-					item = ii;
-					Tname = bTeam+'runs_total';
-				} 
-				else if( ii == 'hits' ) {
-					ii = type + '-hits';
-					item = ii;
-					Tname = bTeam+'hits_total';
-				}
-				else if (ii == 'errors') {
-					ii = type+'-errors';
-					item = ii;
-					Tname = bTeam+'err';
-				}
+		if (count == 9) {
 			
-				//jQuery().each( function() {
-				//	var value = jQuery(this).innerhtml();
-					//var value = jQuery(item).text();
-					//alert('value of ' + item + ' is ' + value + ' or maybe ' + jQuery(item).html());
-					//var pval = value;
-			//		if (jQuery(topArray[lines]):contains(item)) {
-					//gotta fix this so we get the value into the right box.
-						var pval = topArray[lines];	
-						
-						var pclass = pval.replace(/class=".+" id="/,'');
-						pclass = pval.replace(/"><p>*>/, '');
-						pclass = pval.replace(/<p>.*<\/td>/, '');
-						pval = pval.replace(/class=".*"><p>(.+)<\/p>/,'$1');
-						pval = pval.replace(/<\/td>/, '');
-						//alert('pval is ' + pval + ' pclass is ' + pclass);
-						jQuery('input[name="'+Tname+'"]').val(pval);
-			//		}
-				//});
-			}
+			jQuery('input[name="vruns"]').val( jQuery('#away-score').html().replace('<p>','').replace('</p>','').replace('&nbsp;','0') );
+			jQuery('input[name="vhits"]').val( jQuery('#away-hits').html().replace('<p>','').replace('</p>','').replace('&nbsp;','0') );
+			jQuery('input[name="verr"]').val( jQuery('#away-errors').html().replace('<p>','').replace('</p>','').replace('&nbsp;','0') );
+
+			jQuery('input[name="hruns"]').val( jQuery('#home-score').html().replace('<p>','').replace('</p>','').replace('&nbsp;','0') );
+			jQuery('input[name="hhits"]').val( jQuery('#home-hits').html().replace('<p>','').replace('</p>','').replace('&nbsp;','0') );
+			jQuery('input[name="herr"]').val( jQuery('#home-errors').html().replace('<p>','').replace('</p>','').replace('&nbsp;','0') );
+			
 		}
 	}
-	//alert('out of arrays');
-	return true;
-}
+	
+	jQuery('#hiddendump').html('');	
 
+}
 
 function showTab( toShow ) {
 	jQuery(".tabContent").hide();
@@ -206,66 +173,80 @@ function showTab( toShow ) {
 }
 
 function _parseYQLandFillForm(data, classSection) {
+	var ord = 0;
 	var playerArray = data.split("<tr");
 	for (var a in playerArray) {
 		var gamerIDname = jQuery(playerArray[a]).find('a').text();
-
 		if (gamerIDname == 'undefined' || gamerIDname == '') { 
 			continue;
 		}
-	
 		gamerIDname = gamerIDname.toLowerCase();
 		var gamerIDname_mod = gamerIDname.split(" ");
 		var giFirst = gamerIDname_mod[0];
 		var giLast = gamerIDname_mod[1];
-	
-		jQuery('.playername_'+classSection).each(function() {
-			var bbName= jQuery(this).html();
+		jQuery('.playername_'+classSection).find('input[type=hidden]').each( function() {
+			var bbName = this.id;
+			var pID = jQuery(this).val();
+			bbName = bbName.replace(/playerID_for_/, '');
 			bbName = bbName.toLowerCase();
-			var bbName_mod = bbName.split(",");
+			var bbName_mod = bbName.split("_");
+			if (!jQuery(bbName_mod[1])) {
+				return true;
+			}
 			var bbLast = bbName_mod[0];
-			bbLast = bbLast.replace(/,/,'');
 			var bbFirst = bbName_mod[1];
-		
-			if (bbLast == giLast) { 
-				var playerID = jQuery('#playerID_for_'+bbLast+bbFirst).val();
-				var statList = _getFillData(playerArray[a], playerID, classSection);
+			var bbarr = bbFirst.split('');
+			var bF = bbarr[0];
+			if (bbLast == giLast && bF == giFirst) { 
+				ord++;
+				var playerID = pID;
+				var statList = _getFillData(playerArray[a], playerID, classSection, ord);
 			}                                        
 		});
 	}
-	return true;
+	jQuery('#hiddendump').html('');	
 }
 
-function _getFillData(playerTR, playerID, classSection) {
-	playerTR = playerTR.replace(/<p>/ig, "=");
-	playerTR = playerTR.replace(/<\/p>/ig, ";");
-	playerTR = playerTR.replace(/<td class/ig, "");
-	playerTR = playerTR.replace(/<.*?>/ig, "");
+function _getFillData(playerTR, playerID, classSection, ord) {
+	if ( classSection == 'fielding' ) {		
+        	var fieldingList = new Array(playerID+'_fiPO',playerID+'_fiE',playerID+'_fiA');
 
-	txtarray = playerTR.split(";");
-	txtarray[0] = txtarray[0].replace(/.*num ?(.*)\">=/i, "num $1=");
-
-	for (var i in txtarray) {
-		txtarray[i]=txtarray[i].replace(/>/,"");
-		txtarray[i]=txtarray[i].replace(/="(.*)"/, "$1");
+		var count = 0;
+		jQuery(playerTR).find('p').each( function() {
+			var gcP = jQuery(this).html();
+			jQuery('input[name="'+fieldingList[count]+'"]').val(gcP);
+			count++;
+		});
 	}
+	else {
+		playerTR = playerTR.replace(/<p>/ig, "=");
+		playerTR = playerTR.replace(/<\/p>/ig, ";");
+		playerTR = playerTR.replace(/<td class/ig, "");
+		playerTR = playerTR.replace(/<.*?>/ig, "");
+		txtarray = playerTR.split(";");
+		txtarray[0] = txtarray[0].replace(/.*num ?(.*)\">=/i, "num $1=");
 
-	_populateFields(txtarray, classSection, playerID);
+		for (var i in txtarray) {
+			txtarray[i]=txtarray[i].replace(/>/,"");
+			txtarray[i]=txtarray[i].replace(/="(.*)"/, "$1");
+		}
+
+		_populateFields(txtarray, classSection, playerID, ord);
+	}
 }
 
-function _populateFields(statList, classSection, playerID) {
+function _populateFields(statList, classSection, playerID, ord) {
 	var pitchingList = new Array('num IP='+playerID+'_piIP','num H:pitching='+playerID+'_piHits','num R:pitching='+playerID+'_piRA','num ER='+playerID+'_piRuns','num BB:pitching='+playerID+'_piWalks','num SO:pitching='+playerID+'_piSO','num W='+playerID+'_piWin','num L='+playerID+'_piLose','num SV='+playerID+'_piSave','num BS='+playerID+'_piBS','num HBP:pitching='+playerID+'_piHBP','num GP:pitching='+playerID+'_piGP','num SVO='+playerID+'_piSVO');
 
 	var offenseList = new Array('num AB='+playerID+'_baAB', 'num R='+playerID+'_baRuns', 'num RBI='+playerID+'_baRBI', 'num BB='+playerID+'_baBB', 'num SO='+playerID+'_baK', 'num 2B='+playerID+'_ba2b', 'num 3B='+playerID+'_ba3b', 'num HR='+playerID+'_baHR', 'num ROE='+playerID+'_baRE', 'num FC='+playerID+'_baFC', 'num HBP='+playerID+'_baHP', 'num 1B='+playerID+'_ba1b');
 
-	var fieldingList = new Array('num PO:fielding='+playerID+'_fiPO','num E:fielding='+playerID+'_fiE','num A='+playerID+'_fiA');
-
 	var list = offenseList;
 	if (classSection == 'pitching') {
 		list = pitchingList;
+		jQuery('input[name="'+playerID+'_pitchOrd"]').val(ord);
 	}
-	else if (classSection == 'fielding') {
-		list = fieldingList;
+	else {
+		jQuery('input[name="'+playerID+'_battOrd"]').val(ord);
 	}
 
 	for (var x in statList) {

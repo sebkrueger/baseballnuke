@@ -243,7 +243,6 @@ if (isset($_POST['bbnuke_include_post']))
   $postID = $_POST['bbnuke_wordpress_posts'];
 else
   $postID = 'NULL';
-
   $error_flag = NULL;
 
   //  check if entry exists
@@ -271,10 +270,10 @@ else
            '  hruns = ' . (int)$_POST['hruns'] . ', ' .
            '  herr  = ' . (int)$_POST['herr'] . ', ' .
            '  postID  = ' . $postID . ', ' .
+	   '  status  = "' . $_POST['bbnuke_game_status'] . '", ' .
            '  gameID = ' . $game_id . ' ';
     $result = mysql_query($query);
     if (mysql_error())
-      echo mysql_error();
       $error_flag = 1;
   }
   else
@@ -294,12 +293,11 @@ else
            '  hhits = ' . (int)$_POST['hhits'] . ', ' .
            '  hruns = ' . (int)$_POST['hruns'] . ', ' .
            '  herr  = ' . (int)$_POST['herr'] . ', ' .
+           '  status  = "' . $_POST['bbnuke_game_status'] . '", ' .
            '  postID = ' . $postID . 
            '  WHERE gameID = ' . $game_id . ' ';
     $result = mysql_query($query);
     if (mysql_error())
-      echo mysql_error();
-echo $query;
       $error_flag = 1;
   }
 
@@ -1001,6 +999,7 @@ function  bbnuke_assign_players_team($team, $season, $players_selected)
 
   foreach( $players_selected as $indx )
   {
+    $playerid    = $players[$indx]['playerID'];
     $firstname   = $players[$indx]['firstname'];
     $middlename  = $players[$indx]['middlename'];
     $lastname    = $players[$indx]['lastname'];
@@ -1023,7 +1022,7 @@ function  bbnuke_assign_players_team($team, $season, $players_selected)
     $email       = $players[$indx]['email'];
     $piclocation = $players[$indx]['picLocation'];
     $query = "INSERT INTO " . $wpdb->prefix . "baseballNuke_players SET teamName='$team',
-        		firstname='$firstname',middlename='$middlename',
+        		playerID='$playerid',firstname='$firstname',middlename='$middlename',
         		lastname='$lastname',positions='$positions',
         		bats='$bats',throws='$throws',height='$height',weight='$weight',
         		address='$address',city='$city',state='$state',zip='$zip',
@@ -2147,9 +2146,7 @@ function  bbnuke_widget_batstats( $atts, $bbnuke_echo = true )
               'team' => $dteam,
               'season' => $dseason,
       ), $atts));
-  $player_stats_pag = get_permalink(bbnuke_get_option('bbnuke_player_stats_page'));
-  $SORTBY    = $_POST['bbnuke_widget_tb_head_batstats_sortby'];
-  $SORTORDER = $_POST['bbnuke_widget_tb_head_batstats_sortorder'];
+  $player_stats_page = get_permalink(bbnuke_get_option('bbnuke_player_stats_page'));
 
   $bbnuke_content = NULL;
 
@@ -2188,9 +2185,9 @@ function  bbnuke_widget_batstats( $atts, $bbnuke_echo = true )
       	" sum(baHR) as baHR, sum(baRE) as baRE, sum(baFC) as baFC, sum(baSF) as baSF, sum(baHP) as baHP, sum(baRBI) as baRBI,".
       	" sum(baBB) as baBB, sum(baK) as baK, sum(baLOB) as baLOB, sum(baSB) as baSB".
       	" FROM ".$wpdb->prefix."baseballNuke_players p,".$wpdb->prefix."baseballNuke_stats st,".$wpdb->prefix."baseballNuke_schedule s".
-      	" WHERE teamName='".$team."' AND DATE_FORMAT(gameDate,'%Y')='".$season."' ".
+      	" WHERE teamName='".$team."' AND p.season='".$season."' ".
       	" AND p.playerID=st.playerID AND st.gameID=s.gameID  ".
-      	" AND p.season=DATE_FORMAT(gameDate,'%Y') GROUP BY p.playerID ORDER BY lastname,firstname ASC";
+      	" GROUP BY p.playerID ORDER BY lastname,firstname ASC";
   $result = mysql_query($query);
   while ( $row = mysql_fetch_array($result) )
     $presults[] = $row;
@@ -2213,12 +2210,13 @@ function  bbnuke_widget_batstats( $atts, $bbnuke_echo = true )
 	}
       
       if ( ($baAB+$baBB) > 0 )
-        $obp=($hits+$baBB+$baHP)/($baAB+$baBB+$baHP);
-        $obp=number_format($obp, 3, '.', '');
+        $obp=($hits+$baBB+$baHP)/($baAB+$baBB+$baHP+$baSF);
+        $obp=number_format("$obp", 3);
         $obp = ltrim($obp,"0");
-      if (($baAB+baBB+$hits)== 0)
-	{$obp = .000;}
-        $obp=number_format($obp, 3, '.', '');
+      if (($baAB+$baBB) == 0)
+	{$obp = ".000";}
+      if ($obp == 0)
+	{$obp=".000";}
 
       if ( $baAB > 0 )
 	$ops=($obp+$slg);	   
@@ -2237,7 +2235,9 @@ function  bbnuke_widget_batstats( $atts, $bbnuke_echo = true )
 	$ba=substr($ba,0,-1);
       }
       if ( $baAB == 0)
-	{$ba = 0.000;}
+	{$ba = ".000";}
+      if ($ba == 0)
+	{$ba = ".000";}
       else
       {
 	$ba=substr($ba,1);
@@ -2280,8 +2280,8 @@ function  bbnuke_widget_batstats( $atts, $bbnuke_echo = true )
            "       sum(baHR) as baHR, sum(baRE) as baRE, sum(baFC) as baFC, sum(baSF) as baSF, sum(baHP) as baHP, sum(baRBI) as baRBI, " .
            "       sum(baBB) as baBB, sum(baK) as baK, sum(baLOB) as baLOB, sum(baSB) as baSB " .
            "  FROM ".$wpdb->prefix."baseballNuke_players p, ".$wpdb->prefix."baseballNuke_stats st,".$wpdb->prefix."baseballNuke_schedule s " .
-           " WHERE teamName='".$team."' AND DATE_FORMAT(gameDate,'%Y')='".$season."' AND st.gameID=s.gameID AND " .
-           "       p.playerID=st.playerID AND p.season=DATE_FORMAT(gameDate,'%Y')";
+           " WHERE teamName='".$team."' AND p.season='".$season."' AND st.gameID=s.gameID AND " .
+           "       p.playerID=st.playerID";
   $result = mysql_query($query);
   while ( $row = mysql_fetch_array($result) )
     $gresults[] = $row;
@@ -2290,30 +2290,52 @@ function  bbnuke_widget_batstats( $atts, $bbnuke_echo = true )
   {
     // see above  $baLOB,
     list($baR, $baAB, $ba1b, $ba2b, $ba3b, $baHR, $baRE, $baFC, $baSF, $baHP, $baRBI, $baBB, $baK, $baLOB, $baSB) = $gresults[$m];
-    $hits=$ba1b+$ba2b+$ba3b+$baHR;
-    if($baAB>0)
-      $ba=round($hits/$baAB,3);
-    $ba=strval($ba);
-    $ba=str_pad($ba,5,"0");
-    $ba=substr($ba,1);
-    $ba=str_replace("0000","0",$ba);
-    if($baAB>0)
-      $obp=round(($hits+$baBB)/($baAB+$baBB),3);
-    $obp=strval($obp);
-    $obp=str_pad($obp,5,"0");
-    $obp=substr($obp,1);
-    $obp=str_replace("0000","0",$obp);
-    if($baAB>0)
-      $slg=round((($ba1b+($ba2b*2)+($ba3b*3)+($baHR*4))/$baAB),3);
-    $slg=strval($slg);
-    $slg=str_pad($slg,5,"0");
-    $slg=substr($slg,1);
-    $slg=str_replace("0000","0",$slg);
- 			
-    $ops=($obp + $slg);
-    $ops=str_pad($ops,4,"0");
-    $ops=substr($ops,1);
-    $ops=str_replace("0000","0",$ops);
+      $hits=$ba1b+$ba2b+$ba3b+$baHR;
+      if ( $baAB > 0 )
+        $slg=round((($ba1b+($ba2b*2)+($ba3b*3)+($baHR*4))/$baAB),3);
+        $slg=number_format("$slg",3);
+        $slg = ltrim($slg,"0");
+      if($slg==0){
+        $slg=".000";
+         }
+      if ( $baAB == 0 ){
+        $slg=".000";
+        }
+
+      if ( ($baAB+$baBB) > 0 )
+        $obp=($hits+$baBB+$baHP)/($baAB+$baBB+$baHP+$baSF);
+        $obp=number_format("$obp", 3);
+        $obp = ltrim($obp,"0");
+      if (($baAB+$baBB) == 0)
+        {$obp = ".000";}
+      if ($obp == 0)
+        {$obp=".000";}
+
+      if ( $baAB > 0 )
+        $ops=($obp+$slg);
+        $ops=number_format("$ops",3);
+        $ops = ltrim($ops,"0");
+      if ( $baAB == 0)
+      {
+        $ops = ".000";
+      }
+      if ( $baAB > 0)
+        $ba=round($hits/$baAB,3);
+      $ba=strval($ba);
+      $ba=str_pad($ba,5,"0");
+      if($ba=="10000")
+      {
+        $ba=substr($ba,0,-1);
+      }
+      if ( $baAB == 0)
+        {$ba = ".000";}
+      if ($ba == 0)
+        {$ba = ".000";}
+      else
+      {
+        $ba=substr($ba,1);
+        $ba=str_replace("0000","0",$ba);
+     }
 
     $bbnuke_content .= '</tbody><tr><td>&nbsp;</td>
        	      <td style="text-align:left;"><b>TOTAL</b></td>
@@ -2486,7 +2508,7 @@ function  bbnuke_widget_pitchstats( $atts, $bbnuke_echo = true )
 		 "sum(piIP) as piIP, sum(piHits) as piHits, sum(piRuns) as piRuns, sum(piER) as piER, ".
 		 "sum(piWalks) as piWalks, sum(piSO) as piSO ".
            "  FROM ".$wpdb->prefix."baseballNuke_stats st, ".$wpdb->prefix."baseballNuke_players p, ".$wpdb->prefix."baseballNuke_schedule s ".		
-           " WHERE teamName=".$team.", s.gameID=st.gameID AND p.season='".$season."' AND DATE_FORMAT(gameDate, '%Y')='".$season."' AND piIP>0 ".
+           " WHERE teamName='".$team."' AND s.gameID=st.gameID AND p.season='".$season."' AND piIP>0 ".
 		" AND st.playerID=p.playerID GROUP BY p.playerID ORDER BY lastname,firstname ASC";
 
   $result = mysql_query($query);
@@ -2758,7 +2780,7 @@ function  bbnuke_widget_playerstats( $player_id = NULL, $bbnuke_echo = true )
            '  FROM ' . $wpdb->prefix . 'baseballNuke_boxscores b, ' . $wpdb->prefix . 'baseballNuke_stats st ' .
            ' LEFT JOIN ' . $wpdb->prefix . 'baseballNuke_schedule s ON st.gameID=s.gameID ' .
            ' WHERE playerID=' . $player_id . ' AND b.gameID=s.gameID AND battOrd>0 ' .
-           ' AND DATE_FORMAT(gameDate,"%Y") = "' . $dseason . '" ORDER BY gameDate';
+           ' AND season = "' . $dseason . '" ORDER BY gameDate';
 
   $result = mysql_query($query);
   if ( $result )
@@ -2773,46 +2795,53 @@ function  bbnuke_widget_playerstats( $player_id = NULL, $bbnuke_echo = true )
   {
     list($baAB, $baRuns, $ba1b, $ba2b, $ba3b, $baHR, $baRE, $baFC, $baSF, $baHP, $baRBI, $baBB, $baK, $baLOB, $baSB, $homeTeam,
 	$visitingTeam, $hruns, $vruns, $gameDate, $gameTime, $gameID) = $bresults[$m];
-    $hits=$ba1b+$ba2b+$ba3b+$baHR;
-    if ($baAB)
-      $ba=round($hits/$baAB,3);
-    $ba=strval($ba);
-    $ba=str_pad($ba,5,"0");
-    if($ba=="10000")
-      $ba=substr($ba,0,-1);
-    else
-    {
-      $ba=substr($ba,1);
-      $ba=str_replace("0000","0",$ba);
-    }
-    if ( ($baAB+$baBB) )
-      $obp= str_pad(str_replace("0.",".",round(($hits+$baBB+$baHP)/($baAB+$baBB+$baHP+$baSF),3)),4,"0",STR_PAD_RIGHT);
-    if ($obp == "1000") 
-      $obp = "1.000";
-    if ($obp == "0") 
-      $obp = ".000";
-    if ( $baAB )
-      $slg=round((($ba1b+($ba2b*2)+($ba3b*3)+($baHR*4))/$baAB),3);
-    $slg=str_pad($slg,5,"0");
-    if($slg=="1000")
-      $slg=substr($slg,-1);
-    else
-    {
-      $slg=substr($slg,1);
-      $slg=str_replace("0000","0",$slg);
-    }
-    $ops=($obp+$slg);
-    if ($baAB)
-      $ba=round($hits/$baAB,3);
-    $ba=strval($ba);
-    $ba=str_pad($ba,5,"0");
-    if($ba=="10000")
-      $ba=substr($ba,0,-1);
-    else
-    {
-      $ba=substr($ba,1);
-      $ba=str_replace("0000","0",$ba);
-    }
+      $hits=$ba1b+$ba2b+$ba3b+$baHR;
+      if ( $baAB > 0 )
+        $slg=round((($ba1b+($ba2b*2)+($ba3b*3)+($baHR*4))/$baAB),3);
+        $slg=number_format("$slg",3);
+        $slg = ltrim($slg,"0");
+      if($slg==0){
+        $slg=".000";
+         }
+      if ( $baAB == 0 ){
+        $slg=".000";
+        }
+
+      if ( ($baAB+$baBB) > 0 )
+        $obp=($hits+$baBB+$baHP)/($baAB+$baBB+$baHP+$baSF);
+        $obp=number_format("$obp", 3);
+        $obp = ltrim($obp,"0");
+      if (($baAB+$baBB) == 0)
+        {$obp = ".000";}
+      if ($obp == 0)
+        {$obp=".000";}
+
+      if ( $baAB > 0 )
+        $ops=($obp+$slg);
+        $ops=number_format("$ops",3);
+        $ops = ltrim($ops,"0");
+      if ( $baAB == 0)
+      {
+        $ops = ".000";
+      }
+      if ( $baAB > 0)
+        $ba=round($hits/$baAB,3);
+      $ba=strval($ba);
+      $ba=str_pad($ba,5,"0");
+      if($ba=="10000")
+      {
+        $ba=substr($ba,0,-1);
+      }
+      if ( $baAB == 0)
+        {$ba = ".000";}
+      if ($ba == 0)
+        {$ba = ".000";}
+      else
+      {
+        $ba=substr($ba,1);
+        $ba=str_replace("0000","0",$ba);
+     }
+
     list($year, $month, $day) = split("-", $gameDate);
     $modGameDate = date('M d', mktime(0, 0, 0, $month, $day, $year));
 
@@ -2864,41 +2893,52 @@ function  bbnuke_widget_playerstats( $player_id = NULL, $bbnuke_echo = true )
   for ($m=0; $m < count($gresults); $m++) 
   {
     list($baAB, $baR, $ba1b, $ba2b, $ba3b, $baHR, $baRE, $baFC, $baSF, $baHP, $baRBI, $baBB, $baK, $baLOB,$baSB) = $gresults[$m];
-    $hits=$ba1b+$ba2b+$ba3b+$baHR;
-    if ($baAB)
-      $ba=round($hits/$baAB,3);
-    $ba=strval($ba);
-    $ba=str_pad($ba,5,"0");
-    $ba=substr($ba,1);
-    $ba=str_replace("0000","0",$ba);
-    if ( ($baAB+$baBB) )
-      $obp= str_pad(str_replace("0.",".",round(($hits+$baBB+$baHP)/($baAB+$baBB+$baHP+$baSF),3)),4,"0",STR_PAD_RIGHT);
-    if ($obp == "1000") 
-      $obp = "1.000";
-    if ($obp == "0") 
-      $obp = ".000";
-    if ( $baAB )
-      $slg=round((($ba1b+($ba2b*2)+($ba3b*3)+($baHR*4))/$baAB),3);
-    $slg=str_pad($slg,5,"0");
-    if($slg=="1000")
-      $slg=substr($slg,-1);
-    else 
-    {
-      $slg=substr($slg,1);
-      $slg=str_replace("0000","0",$slg);
-    }
-    $ops=($obp+$slg);
-    if ($baAB)
-      $ba=round($hits/$baAB,3);
-    $ba=strval($ba);
-    $ba=str_pad($ba,5,"0");
-    if($ba=="10000")
-      $ba=substr($ba,0,-1);
-    else
-    {
-      $ba=substr($ba,1);
-      $ba=str_replace("0000","0",$ba);
-    }
+      $hits=$ba1b+$ba2b+$ba3b+$baHR;
+      if ( $baAB > 0 )
+        $slg=round((($ba1b+($ba2b*2)+($ba3b*3)+($baHR*4))/$baAB),3);
+        $slg=number_format("$slg",3);
+        $slg = ltrim($slg,"0");
+      if($slg==0){
+        $slg=".000";
+         }
+      if ( $baAB == 0 ){
+        $slg=".000";
+        }
+
+      if ( ($baAB+$baBB) > 0 )
+        $obp=($hits+$baBB+$baHP)/($baAB+$baBB+$baHP+$baSF);
+        $obp=number_format("$obp", 3);
+        $obp = ltrim($obp,"0");
+      if (($baAB+$baBB) == 0)
+        {$obp = ".000";}
+      if ($obp == 0)
+        {$obp=".000";}
+
+      if ( $baAB > 0 )
+        $ops=($obp+$slg);
+        $ops=number_format("$ops",3);
+        $ops = ltrim($ops,"0");
+      if ( $baAB == 0)
+      {
+        $ops = ".000";
+      }
+      if ( $baAB > 0)
+        $ba=round($hits/$baAB,3);
+      $ba=strval($ba);
+      $ba=str_pad($ba,5,"0");
+      if($ba=="10000")
+      {
+        $ba=substr($ba,0,-1);
+      }
+      if ( $baAB == 0)
+        {$ba = ".000";}
+      if ($ba == 0)
+        {$ba = ".000";}
+      else
+      {
+        $ba=substr($ba,1);
+        $ba=str_replace("0000","0",$ba);
+     }
 
     $bbnuke_content .= '<tr><td style="text-align:left;"><b>' . __('TOTAL FOR ', 'bbnuke') . $dseason . __(' Season', 'bbnuke') . '</b></td>
 	          <td><b>' . $baAB . '</b></td>
@@ -2928,8 +2968,8 @@ function  bbnuke_widget_playerstats( $player_id = NULL, $bbnuke_echo = true )
   $query = 'SELECT sum(baAb) as baAB, sum(baRuns) as baR,sum(ba1b) as ba1b, sum(ba2b) as ba2b, sum(ba3b) as ba3b, ' .
            '       sum(baHR) as baHR,sum(baRE) as baRE,sum(baFC) as baFC, sum(baSF) as baSF, sum(baHP) as baHP, ' .
            '       sum(baRBI) as baRBI, sum(baBB) as baBB, sum(baK) as baK, sum(baLOB) as baLOB,sum(baSB) as baSB ' .
-           '  FROM ' . $wpdb->prefix . 'baseballNuke_stats st, ' . $wpdb->prefix . 'baseballNuke_schedule s ' .
-           ' WHERE st.gameID=s.gameID AND st.playerID = ' . $player_id . ' ';
+           '  FROM ' . $wpdb->prefix . 'baseballNuke_stats st ' .
+           ' WHERE st.playerID = ' . $player_id . ' ';
   $result = mysql_query($query);
   if ( $result )
   {
@@ -2937,41 +2977,53 @@ function  bbnuke_widget_playerstats( $player_id = NULL, $bbnuke_echo = true )
   }
 
   list($baAB, $baR, $ba1b, $ba2b, $ba3b, $baHR, $baRE, $baFC, $baSF, $baHP, $baRBI, $baBB, $baK, $baLOB,$baSB) = $row;
-  $hits=$ba1b+$ba2b+$ba3b+$baHR;
-  if ($baAB)
-    $ba=round($hits/$baAB,3);
-  $ba=strval($ba);
-  $ba=str_pad($ba,5,"0");
-  $ba=substr($ba,1);
-  $ba=str_replace("0000","0",$ba);
-  if ( ($baAB+$baBB) )
-    $obp= str_pad(str_replace("0.",".",round(($hits+$baBB+$baHP)/($baAB+$baBB+$baHP+$baSF),3)),4,"0",STR_PAD_RIGHT);
-  if ($obp == "1000") 
-    $obp = "1.000";
-  if ($obp == "0") 
-    $obp = ".000";
-  if ($baAB)
-    $slg=round((($ba1b+($ba2b*2)+($ba3b*3)+($baHR*4))/$baAB),3);
-  $slg=str_pad($slg,5,"0");
-  if($slg=="1000")
-    $slg=substr($slg,-1);
-  else
-  {
-    $slg=substr($slg,1);
-    $slg=str_replace("0000","0",$slg);
-  }
-  $ops=($obp+$slg);
-  if ($baAB)
-    $ba=round($hits/$baAB,3);
-  $ba=strval($ba);
-  $ba=str_pad($ba,5,"0");
-  if($ba=="10000")
-    $ba=substr($ba,0,-1);
-  else
-  {
-    $ba=substr($ba,1);
-    $ba=str_replace("0000","0",$ba);
-  }
+      $hits=$ba1b+$ba2b+$ba3b+$baHR;
+      if ( $baAB > 0 )
+        $slg=round((($ba1b+($ba2b*2)+($ba3b*3)+($baHR*4))/$baAB),3);
+        $slg=number_format("$slg",3);
+        $slg = ltrim($slg,"0");
+      if($slg==0){
+        $slg=".000";
+         }
+      if ( $baAB == 0 ){
+        $slg=".000";
+        }
+
+      if ( ($baAB+$baBB) > 0 )
+        $obp=($hits+$baBB+$baHP)/($baAB+$baBB+$baHP+$baSF);
+        $obp=number_format("$obp", 3);
+        $obp = ltrim($obp,"0");
+      if (($baAB+$baBB) == 0)
+        {$obp = ".000";}
+      if ($obp == 0)
+        {$obp=".000";}
+
+      if ( $baAB > 0 )
+        $ops=($obp+$slg);
+        $ops=number_format("$ops",3);
+        $ops = ltrim($ops,"0");
+      if ( $baAB == 0)
+      {
+        $ops = ".000";
+      }
+      if ( $baAB > 0)
+        $ba=round($hits/$baAB,3);
+      $ba=strval($ba);
+      $ba=str_pad($ba,5,"0");
+      if($ba=="10000")
+      {
+        $ba=substr($ba,0,-1);
+      }
+      if ( $baAB == 0)
+        {$ba = ".000";}
+      if ($ba == 0)
+        {$ba = ".000";}
+      else
+      {
+        $ba=substr($ba,1);
+        $ba=str_replace("0000","0",$ba);
+     }
+
   $bbnuke_content .= '<tr><td style="text-align:left;"><b>' . __('CAREER AS ', 'bbnuke') . $dteam . ' *</b></td>
 		      <td><b>' . $baAB . '</b></td>
 		      <td><b>' . $baR . '</b></td>
@@ -3590,11 +3642,11 @@ function  bbnuke_widget_team_schedule( $atts, $bbnuke_echo = true )
 	  <th>' . __('Field', 'bbnuke') . '</th>
 	</tr>';
 		
-  $query = "SELECT s.gameID,gameTime,gameDate,homeTeam,visitingTeam, field, vruns, hruns " .
+  $query = "SELECT s.gameID,gameTime,gameDate,homeTeam,visitingTeam, field, vruns, hruns, b.status " .
            "FROM " . $wpdb->prefix . "baseballNuke_schedule s " . 
                  " LEFT JOIN " .$wpdb->prefix . "baseballNuke_boxscores b ON s.gameID = b.gameID " .
                  " WHERE DATE_FORMAT(gameDate,'%Y')= '" . $season . "' " .
-                 " AND (homeTeam='" . $team . "' OR visitingTeam='" . $team . "') AND (visitingTeam != 'practice') AND (visitingTeam != 'tournament') " .
+                 " AND (homeTeam='" . $team . "' OR visitingTeam='" . $team . "') AND (visitingTeam != 'practice') AND (visitingTeam != 'tournament')" .
 		 "ORDER BY gameDate ASC";
   $result = mysql_query($query);
   while ( $row = mysql_fetch_array($result) )
@@ -3604,35 +3656,49 @@ function  bbnuke_widget_team_schedule( $atts, $bbnuke_echo = true )
 
   for ($m=0; $m < count($schedule); $m++) 
   {
-    list($gameID,$gameTime,$gameDate,$homeTeam,$visitingTeam,$field,$vruns,$hruns) = $schedule[$m];
+    list($gameID,$gameTime,$gameDate,$homeTeam,$visitingTeam,$field,$vruns,$hruns,$status) = $schedule[$m];
     list($year, $month, $day) = split("-", $gameDate);
     $modGameDate = date('M d', mktime(0, 0, 0, $month, $day, $year));
  
     $date =date_create("$gameDate $gameTime");
     $bbnuke_content .= "<tr>";
     $wt = ($hruns > $vruns) ? 1 : 2;
+    if ($hruns > $vruns) { $wt = 1; } else if ( $hruns == $vruns) { $wt = 3; } else { $wt = 2; }
 
     if($team == $homeTeam)
     {
-         $result = ($wt == 1) ? 'Win' : 'Loss';
-         $score = ($wt == 1) ? $hruns.' - '.$vruns : $vruns.' - '.$hruns;
+         if ($wt == 1) { $result = "Win"; } else if ($wt ==2) { $result = "Loss"; } else { $result = "Tie"; }
+	 $score = ($wt == 1) ? $hruns.' - '.$vruns : $vruns.' - '.$hruns;
     }
     else {
-         $result = ($wt == 2) ? 'Win' : 'Loss';
-         $score = ($wt == 1) ? $hruns.' - '.$vruns : $vruns.' - '.$hruns;
+         if ($wt == 2) { $result = "Win"; } else if ($wt ==1) { $result = "Loss"; } else { $result = "Tie"; }
+	 $score = ($wt == 1) ? $hruns.' - '.$vruns : $vruns.' - '.$hruns;
     }
 
-    if(!is_null($hruns))
+    if($status === "Complete")
     {
       $bbnuke_content .= '<td><a href="'.$game_results_page.'?gameID='.$gameID.'" title="' . __('Show Game Results', 'bbnuke') . '">'.$result.' '.$score.'</a></td>';
     }
+     elseif($status === "Suspended")
+     {
+       $bbnuke_content .= '<td><a href="'.$game_results_page.'?gameID='.$gameID.'" title="' . __('Show Game Results', 'bbnuke') . '">Suspended '.$score.'</a></td>';
+     }
+
+     elseif($status === "Cancelled")
+     {
+       $bbnuke_content .= '<td><a href="'.$game_results_page.'?gameID='.$gameID.'" title="' . __('Show Game Results', 'bbnuke') . '">Cancelled</a></td>';
+     }
+     elseif($status === "Postponed")
+     {
+       $bbnuke_content .= '<td><a href="'.$game_results_page.'?gameID='.$gameID.'" title="' . __('Show Game Results', 'bbnuke') . '">Postponed</a></td>';
+     }
     else
     {
       $bbnuke_content .= '<td>'.date_format($date,"$dateformat $timeformat").'</td>';
     }
       $bbnuke_content .= '<td>'.$homeTeam.'</td>';
       $bbnuke_content .= '<td>'.$visitingTeam.'</td>';
-    if(!is_null($hruns))
+    if($status === "Complete" || $status === "Suspended")
     {
        $bbnuke_content .= '<td><a href="' . $game_results_page . '?gameID=' . $gameID . '">Game Recap / Box Score</a></td>';
     }
