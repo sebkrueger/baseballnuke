@@ -4,7 +4,7 @@ Plugin Uri: http://dev.flyingdogsbaseball.com/baseballNuke
 Tags: phpnuke, baseball, team management, baseballNuke, softball
 Requires at least: 2.7
 Tested up to: WP 3.1
-Stable tag: 1.1
+Stable tag: 1.0.9
 
 
 == Description ==
