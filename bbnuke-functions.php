@@ -2149,7 +2149,6 @@ function  bbnuke_widget_batstats( $atts, $bbnuke_echo = true )
   $player_stats_page = get_permalink(bbnuke_get_option('bbnuke_player_stats_page'));
 
   $bbnuke_content = NULL;
-
   $bbnuke_content .= '<table class="bbnuke-results-table">
 		    <thead>
 		      <tr>
@@ -2185,8 +2184,8 @@ function  bbnuke_widget_batstats( $atts, $bbnuke_echo = true )
       	" sum(baHR) as baHR, sum(baRE) as baRE, sum(baFC) as baFC, sum(baSF) as baSF, sum(baHP) as baHP, sum(baRBI) as baRBI,".
       	" sum(baBB) as baBB, sum(baK) as baK, sum(baLOB) as baLOB, sum(baSB) as baSB".
       	" FROM ".$wpdb->prefix."baseballNuke_players p,".$wpdb->prefix."baseballNuke_stats st,".$wpdb->prefix."baseballNuke_schedule s".
-      	" WHERE teamName='".$team."' AND p.season='".$season."' ".
-      	" AND p.playerID=st.playerID AND st.gameID=s.gameID  ".
+      	" WHERE teamName='".$team."' AND s.season='".$season."' ".
+      	" AND p.playerID=st.playerID AND st.gameID=s.gameID AND p.season=s.season ".
       	" GROUP BY p.playerID ORDER BY lastname,firstname ASC";
   $result = mysql_query($query);
   while ( $row = mysql_fetch_array($result) )
@@ -2280,8 +2279,8 @@ function  bbnuke_widget_batstats( $atts, $bbnuke_echo = true )
            "       sum(baHR) as baHR, sum(baRE) as baRE, sum(baFC) as baFC, sum(baSF) as baSF, sum(baHP) as baHP, sum(baRBI) as baRBI, " .
            "       sum(baBB) as baBB, sum(baK) as baK, sum(baLOB) as baLOB, sum(baSB) as baSB " .
            "  FROM ".$wpdb->prefix."baseballNuke_players p, ".$wpdb->prefix."baseballNuke_stats st,".$wpdb->prefix."baseballNuke_schedule s " .
-           " WHERE teamName='".$team."' AND p.season='".$season."' AND st.gameID=s.gameID AND " .
-           "       p.playerID=st.playerID";
+           " WHERE teamName='".$team."' AND s.season='".$season."' AND st.gameID=s.gameID AND " .
+           "       p.playerID=st.playerID AND p.season=s.season";
   $result = mysql_query($query);
   while ( $row = mysql_fetch_array($result) )
     $gresults[] = $row;
@@ -2508,7 +2507,7 @@ function  bbnuke_widget_pitchstats( $atts, $bbnuke_echo = true )
 		 "sum(piIP) as piIP, sum(piHits) as piHits, sum(piRuns) as piRuns, sum(piER) as piER, ".
 		 "sum(piWalks) as piWalks, sum(piSO) as piSO ".
            "  FROM ".$wpdb->prefix."baseballNuke_stats st, ".$wpdb->prefix."baseballNuke_players p, ".$wpdb->prefix."baseballNuke_schedule s ".		
-           " WHERE teamName='".$team."' AND s.gameID=st.gameID AND p.season='".$season."' AND piIP>0 ".
+           " WHERE s.gameID=st.gameID AND s.season='".$season."' AND teamName='".$team."' AND p.season=s.season AND piIP>0 ".
 		" AND st.playerID=p.playerID GROUP BY p.playerID ORDER BY lastname,firstname ASC";
 
   $result = mysql_query($query);
@@ -2544,8 +2543,8 @@ function  bbnuke_widget_pitchstats( $atts, $bbnuke_echo = true )
                         ."as piIP, sum(piHits) as piHits, sum(piRuns) as piRuns, sum(piER) as piER, "
                         ."sum(piWalks) as piWalks, sum(piSO) as piSO " .
          "  FROM ".$wpdb->prefix."baseballNuke_players p,".$wpdb->prefix."baseballNuke_stats st,".$wpdb->prefix."baseballNuke_schedule s " .
-         " WHERE pitchOrd>0 AND teamName='".$team."' AND DATE_FORMAT(gameDate,'%Y')='".$season."' AND p.playerID=st.playerID AND " .
-         "       st.gameID=s.gameID AND p.season=DATE_FORMAT(gameDate,'%Y')";
+         " WHERE pitchOrd>0 AND teamName='".$team."' AND s.season='".$season."' AND p.playerID=st.playerID AND " .
+         "       st.gameID=s.gameID AND p.season=s.season";
   $result = mysql_query($query);
     while ( $row = mysql_fetch_array($result) )
       $presults[] = $row;
@@ -2706,6 +2705,7 @@ function  bbnuke_widget_playerstats( $player_id = NULL, $bbnuke_echo = true )
 
   $defs    = bbnuke_get_defaults();
   $dseason = $defs['defaultSeason'];
+  $dteam   = $defs['defaultTeam'];
   $erainnings = bbnuke_get_option('bbnuke_era_innings');
 
   $team_leaders = bbnuke_get_option('bbnuke_team_leaders');
