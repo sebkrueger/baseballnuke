@@ -180,6 +180,11 @@ function  bbnuke_save_plugin_options()
     $pitching_era = 'true';
   else
     $pitching_era = 'false';
+  if (isset($_POST['bbnuke_plugin_option_pitching_whip']))
+    $pitching_whip = 'true';
+  else
+    $pitching_whip = 'false';
+
 
 
   bbnuke_update_option('bbnuke_team_leaders', $team_leaders);
@@ -235,6 +240,7 @@ function  bbnuke_save_plugin_options()
   bbnuke_update_option('bbnuke_pitching_bb', $pitching_bb);
   bbnuke_update_option('bbnuke_pitching_k', $pitching_k);
   bbnuke_update_option('bbnuke_pitching_era', $pitching_era);
+  bbnuke_update_option('bbnuke_pitching_whip', $pitching_whip);
   return;
 }
 
@@ -3151,6 +3157,7 @@ function  bbnuke_widget_pitchstats( $atts, $bbnuke_echo = true )
   $pitching_bb = bbnuke_get_option('bbnuke_pitching_bb');
   $pitching_k = bbnuke_get_option('bbnuke_pitching_k');
   $pitching_era = bbnuke_get_option('bbnuke_pitching_era');
+  $pitching_whip = bbnuke_get_option('bbnuke_pitching_whip');
   $erainnings = bbnuke_get_option('bbnuke_era_innings');
   $player_stats_page = get_permalink(bbnuke_get_option('bbnuke_player_stats_page'));
   $SORTBY    = $_POST['bbnuke_widget_tb_head_pitchstats_sortby'];
@@ -3201,6 +3208,9 @@ function  bbnuke_widget_pitchstats( $atts, $bbnuke_echo = true )
                   if ( $pitching_era == 'true')
                     $bbnuke_content .= '<th>ERA</th>';
    		  else $bbnuke_content .= '<th style="display:none"></th>';
+                  if ( $pitching_whip == 'true')
+                    $bbnuke_content .= '<th>WHIP</th>';
+                  else $bbnuke_content .= '<th style="display:none"></th>';
   $bbnuke_content .= '</tr>
 		</thead> 
 		<tbody>';	
@@ -3221,9 +3231,12 @@ function  bbnuke_widget_pitchstats( $atts, $bbnuke_echo = true )
   for ($m=0; $m < count($presults); $m++) 
   {
     list($playerID,$lastname, $firstname, $middlename, $jerseyNum,$piWin,$piLose, $piSave, $piIP, $piHits, $piRuns, $piER, $piWalks, $piSO) = $presults[$m];
-    if ($piIP)
+    if ($piIP){
       $ERA=($piER/$piIP)*$erainnings;
       $ERA=number_format($ERA, 2, '.', '');
+      $WHIP=(($piWalks + $piHits) / $piIP);
+      $WHIP=number_format($WHIP, 2, '.', '');
+    }
     $bbnuke_content .= '<tr>'; 
                   if ( $pitching_num == 'true')
                     $bbnuke_content .= '<td>'.$jerseyNum.'</td>';
@@ -3261,6 +3274,9 @@ function  bbnuke_widget_pitchstats( $atts, $bbnuke_echo = true )
                   if ( $pitching_era == 'true')
                     $bbnuke_content .= '<td>'.$ERA.'</td>';
                   else $bbnuke_content .= '<td style="display:none"></td>';
+                  if ( $pitching_whip == 'true')
+                    $bbnuke_content .= '<td>'.$WHIP.'</td>';
+                  else $bbnuke_content .= '<td style="display:none"></td>';
 $bbnuke_content .= '</tr>';
   }
 		
@@ -3279,9 +3295,12 @@ $bbnuke_content .= '</tr>';
   for ($m=0; $m < count($presults); $m++) 
   {
     list($piWin,$piLose,$piSave,$piIP,$piHits,$piRuns,$piER,$piWalks,$piSO) = $presults[$m];
-    if ($piIP)
+    if ($piIP){
       $ERA=($piER/$piIP)*$erainnings;
       $ERA=number_format($ERA, 2, '.', '');
+      $WHIP=(($piWalks + $piHits) / $piIP);
+      $WHIP=number_format($WHIP, 2, '.', '');
+    }
     $bbnuke_content .= '</tbody><tr>';
                   if ( $pitching_num == 'true')
                     $bbnuke_content .= '<td>&nbsp;</td>';
@@ -3319,6 +3338,10 @@ $bbnuke_content .= '</tr>';
                   if ( $pitching_era == 'true')
                     $bbnuke_content .= '<td>'.$ERA.'</td>';
                   else $bbnuke_content .= '<td style="display:none"></td>';
+                  if ( $pitching_whip == 'true')
+                    $bbnuke_content .= '<td>'.$WHIP.'</td>';
+                  else $bbnuke_content .= '<td style="display:none"></td>';
+
 $bbnuke_content .= ' </tr>
 		 </table>';
   } 
@@ -3341,6 +3364,7 @@ $bbnuke_content .= ' </tr>
 	<tr><td>BB</td><td>' . __('Walks (Bases on Balls)', 'bbnuke') . '</td></tr>
 	<tr><td>K</td><td>' . __('Strikeouts', 'bbnuke') . '</td></tr>
 	<tr><td>ERA</td><td>' . __('Earned Run Average', 'bbnuke') . '</td></tr>
+        <tr><td>WHIP</td><td>' . __('Walks plus Hits per Inning Pitched', 'bbnuke') . '</td></tr>
       </table>
       </div>
       <br>&nbsp;<br>
@@ -4949,7 +4973,7 @@ function  bbnuke_widget_game_results( $atts, $game_id = NULL, $player_id = NULL,
       <td>
 	<table style="border-width: 0px;">
 	 <tr>
-	 <td style="padding: 10px; border-width: 0px;">
+	 <td style="padding: 10px; border-width: 0px; vertical-align:top;">
            ';
 
 ///////////////////////////////////////////
@@ -5012,7 +5036,7 @@ function  bbnuke_widget_game_results( $atts, $game_id = NULL, $player_id = NULL,
   $hresult = mysql_query($homebatstats);
   
     $bbnuke_content .= '
-         </table></td><td style="padding: 10px; border-width: 0px;">
+         </table></td><td style="padding: 10px; border-width: 0px;  vertical-align:top;">
          <table class="bbnuke-schedule-table">
            <tr>
               <th><b>'.$HOMETEAM.'</b></td>
@@ -5056,7 +5080,7 @@ function  bbnuke_widget_game_results( $atts, $game_id = NULL, $player_id = NULL,
        <td style="border-width: 0px;">&nbsp;</td>
        <td style="border-width: 0px;">&nbsp;</td>
      </tr>
-       <td style="padding: 10px; border-width: 0px;">
+       <td style="padding: 10px; border-width: 0px;  vertical-align:top;">
          <table class="bbnuke-schedule-table">
            <tr>
              <th><b>'.$VISITTEAM.'</b></th>
@@ -5109,7 +5133,7 @@ function  bbnuke_widget_game_results( $atts, $game_id = NULL, $player_id = NULL,
     $bbnuke_content .= '
           </table>
        </td>
-       <td style="padding: 10px; border-width: 0px;">
+       <td style="padding: 10px; border-width: 0px; vertical-align:top;">
          <table class="bbnuke-schedule-table">
            <tr>
              <th><b>'.$HOMETEAM.'</b></th>

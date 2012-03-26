@@ -234,10 +234,10 @@ Programmer/Technical Genious - Dawn Wallis
 - MODIFICATON: consolidated schedule/practice/tournament admin pages
 - MODIFICATION: created tabs for offense/pitching/defence on player stats page
 - MODIFICATION: modified css for stats tables
-- MODIFICATION: moved stat keys for batting/pitching/fielding widgets to thickbox popup
 - NEW: added option to select which columns to display on stats tables
 - NEW: added career stats to player stats page
 - NEW: added league value for team in shortcodes.  a value of league will return results for all teams.
+- NEW: added WHIP stat to pitching stats widget
 - REMOVED: Deleted admin_bbnuke user.  This account was only needed in early versions of bbnuke and is no longer needed.
 - RETIRED: Top 5 stats widget. 
 - RETIRED: Gamechanger import

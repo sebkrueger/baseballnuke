@@ -399,7 +399,8 @@ function bbnuke_migrate_old_options()
 	'57'  => 'bbnuke_pitching_er',
 	'58'  => 'bbnuke_pitching_bb',
 	'59'  => 'bbnuke_pitching_k',
-	'60'  => 'bbnuke_pitching_era'
+	'60'  => 'bbnuke_pitching_era',
+        '61'  => 'bbnuke_pitching_whip'
        );
 
   $new_fields = array(
@@ -463,7 +464,8 @@ function bbnuke_migrate_old_options()
 	'57'  => 'bbnuke_pitching_er',
 	'58'  => 'bbnuke_pitching_bb',
 	'59'  => 'bbnuke_pitching_k',
-	'60'  => 'bbnuke_pitching_era'
+	'60'  => 'bbnuke_pitching_era',
+        '61'  => 'bbnuke_pitching_whip'
        );
 
   foreach($old_fields as $index=>$field)
@@ -558,7 +560,8 @@ function bbnuke_set_option_defaults()
 	'bbnuke_pitching_er'	 => 'true',
 	'bbnuke_pitching_bb'	 => 'true',
 	'bbnuke_pitching_k'	 => 'true',
-	'bbnuke_pitching_era'	 => 'true'
+	'bbnuke_pitching_era'	 => 'true',
+        'bbnuke_pitching_whip'    => 'true'
         );
 
   $bbnuke_options = get_option('bbnuke_plugin_options');

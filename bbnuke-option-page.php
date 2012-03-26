@@ -62,6 +62,7 @@ function bbnuke_plugin_print_option_page()
   $pitching_bb = $options['bbnuke_pitching_bb'];
   $pitching_k = $options['bbnuke_pitching_k'];
   $pitching_era = $options['bbnuke_pitching_era'];
+  $pitching_whip = $options['bbnuke_pitching_whip'];
 
 
   //   get seasons
@@ -397,6 +398,7 @@ echo '
                     <th id="bbnuke_option_subtable">BB</th>
                     <th id="bbnuke_option_subtable">K</th>
                     <th id="bbnuke_option_subtable">ERA</th>
+                    <th id="bbnuke_option_subtable">WHIP</th>
                   </tr>
                   <tr>';
                   if ($pitching_num == 'true')
@@ -447,6 +449,10 @@ echo '
                     echo '<td id="bbnuke_option_subtable"><input type=checkbox name="bbnuke_plugin_option_pitching_era" value="era" checked="checked"></td>';
                   else
                     echo '<td id="bbnuke_option_subtable"><input type=checkbox name="bbnuke_plugin_option_pitching_era" value="era"></td>';
+                  if ($pitching_whip == 'true')
+                    echo '<td id="bbnuke_option_subtable"><input type=checkbox name="bbnuke_plugin_option_pitching_whip" value="whip" checked="checked"></td>';
+                  else
+                    echo '<td id="bbnuke_option_subtable"><input type=checkbox name="bbnuke_plugin_option_pitching_whip" value="whip"></td>';
 echo '
                   </tr>
                 </table>
