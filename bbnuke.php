@@ -295,7 +295,6 @@ function bbnuke_admin_init_method()
   {
     // delete user if exists - no longer needed 
     $user = get_userdatabylogin($user_name);
-    var_dump($user);
     wp_delete_user( $user->ID );
   }
 
