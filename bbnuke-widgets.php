@@ -1,6 +1,5 @@
 <?php
 
-
 class bbnuke_Widget extends WP_Widget 
 {
 
@@ -60,12 +59,15 @@ class bbnuke_Widget extends WP_Widget
   function update($new_instance, $old_instance) 
   {
     $instance = $old_instance;
-
+    if ($new_instance['display_def_title'] = 'on'){
+      $instance['title']           = $this->display_types[$instance['display_type']];
+    }else{
     $instance['title']             = strip_tags($new_instance['title']);
+    }
     $instance['display_type']      = (int) $new_instance['display_type'];
     $instance['display_def_title'] = $new_instance['display_def_title'];
-    $instance['team']              = strip_tags($new_instance['team']);
-    $instance['season']            = (int) $new_instance['season'];
+    $instance['team']              = $new_instance['team'];
+    $instance['season']            = $new_instance['season'];
 
     return $instance;
   }
@@ -77,6 +79,9 @@ class bbnuke_Widget extends WP_Widget
 			'title' => '', 'display_type' => 0, 'display_def_title' => 'on', 'team' => 'Flying Dogs', 
 			'season' => '2008'
 		);
+    $defs = bbnuke_get_defaults();
+    $seasons_list = bbnuke_get_seasons();
+    $team_list    = bbnuke_get_teams();
 
     $instance = wp_parse_args((array) $instance, $defaults);
 
@@ -105,26 +110,26 @@ class bbnuke_Widget extends WP_Widget
          <span style="line-height:15px"><br /><br /></span>
          <table>
          <tr>
-           <td><strong>' . __('Title', 'bbnuke') . '</strong></td>
+           <td style="text-align:left;"><strong>' . __('Title', 'bbnuke') . '</strong></td>
            <td><input style="text-align:right" type="text" id="' . $this->get_field_id('title') . '" name="' . $this->get_field_name('title') . '" value="' . esc_attr($instance['title']) . '" /></td>
            <td style="font-size:0.75em">' . __('Custom Title - shown in sidebar.', 'bbnuke') . '</td>
          </tr>
          <tr>
-           <td><strong>' . __('Display default title', 'bbnuke') . '</strong></td>
+           <td style="text-align:left;"><strong>' . __('Display default title', 'bbnuke') . '</strong></td>
            <td><input class="checkbox" type="checkbox" ' . checked( $instance['display_def_title'], 'on', false ) . ' id="' . $this->get_field_id('display_def_title') . '" name="' . $this->get_field_name('display_def_title') . '" /></td>
            <td style="font-size:0.75em">' . __('Display the default title or the custom title.', 'bbnuke') . '</td>
          </tr>
          <tr>
-           <td><strong>' . __('Display Type', 'bbnuke') . '</strong></td>
+           <td style="text-align:left;"><strong>' . __('Display Type', 'bbnuke') . '</strong></td>
            <td style="text-align:right;">
-             <select id="' . $this->get_field_id('display_type') . '" name="' . $this->get_field_name('display_type') . '" size="1">' . "\n";
+             <select id="' . $this->get_field_id('display_type') . '" name="' . $this->get_field_name('display_type') . '" size="1">';
 
     for ( $i=0; $i < count($this->display_types); $i++ )
     {
       if ( $instance['display_type'] == $i )
-        echo '    <option value="' . $i . '" selected="selected">' . $this->display_types[$i] . '</option>' . "\n";
+        echo '    <option value="' . $i . '" selected="selected">' . $this->display_types[$i] . '</option>';
       else
-        echo '    <option value="' . $i . '">' . $this->display_types[$i] . '</option>' . "\n";
+        echo '    <option value="' . $i . '">' . $this->display_types[$i] . '</option>';
     }
 
     echo 
@@ -133,8 +138,38 @@ class bbnuke_Widget extends WP_Widget
            </td>
            <td style="font-size:0.75em">' . __('What type of statistic should be displayed', 'bbnuke') . '</td> 
          </tr>
-         </table>
-       </div>' . "\n";
+         <tr>
+           <td style="text-align:left;"><strong>' . __('Team', 'bbnuke') . '</strong></td>
+           <td style="text-align:right;">
+             <select id="' . $this->get_field_id('team') . '" name="' . $this->get_field_name('team') . '" size="1">';
+  for ( $i=0; $i < count($team_list); $i++ )
+  {
+    if ( $team_list[$i] == $defs['defaultTeam'] )
+    echo '<option value="' . $team_list[$i] . '" selected="yes">' . $team_list[$i] . '</option>';
+    else
+    echo '<option value="' . $team_list[$i] . '">' . $team_list[$i] . '</option>';
+  }
+
+    echo '
+           </td>
+         </tr>
+         <tr>
+           <td style="text-align:left;"><strong>' . __('Season', 'bbnuke') . '</strong></td>
+           <td style="text-align:right;">
+             <select id="' . $this->get_field_id('season') . '" name="' . $this->get_field_name('season') . '" size="1">';
+  for ( $i=0; $i < count($seasons_list); $i++ )
+  {
+    if ( $seasons_list[$i] == $defs['defaultSeason'] )
+    echo '<option value="' . $seasons_list[$i] . '" selected="yes">' . $seasons_list[$i] . '</option>';
+    else
+    echo '<option value="' . $seasons_list[$i] . '">' . $seasons_list[$i] . '</option>';
+  }
+
+    echo '
+           </td>
+         </tr>
+       </table>
+     </div>';
   }
 }
 

@@ -15,4 +15,8 @@ jQuery(document).ready(function($){
         	jQuery(this).removeClass("over");
 	});
 });
+function showTab( toShow ) {
+        jQuery(".tabContent").hide();
+        jQuery(toShow).show();
 
+}

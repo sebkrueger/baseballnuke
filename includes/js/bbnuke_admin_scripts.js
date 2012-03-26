@@ -4,7 +4,13 @@ jQuery(document).ready( function() {
           jQuery('#bbnuke_plugin_option_bg_color').jPicker({window:{expandable: true}});
           jQuery('#bbnuke_plugin_option_hover_color').jPicker({window:{expandable: true}});
           jQuery('#bbnuke_plugin_option_txt_color').jPicker({window:{expandable: true}});
-
+          jQuery('#CSVTable').CSVToTable('/wp-content/plugins/baseballnuke/upload_tmp');
+          jQuery('#bbnuke_schedules_edit_type_select_id').change(function(){
+	    var typeVal = jQuery('#bbnuke_schedules_edit_type_select_id').val(); 
+	    if ((typeVal != 'game')){
+	      jQuery('#bbnuke_schedules_edit_vteam_select_id').val("");
+	    }
+           });
 	  // Setup the ajax indicator
 	  
 	  jQuery('#spinnerdisplay').append('<div id="ajaxBusy"><p><img src="images/loading.gif"></p></div>');
@@ -26,7 +32,10 @@ jQuery(document).ready( function() {
     	}).ajaxStop(function(){ 
       	  jQuery(this).hide();
     	});	
-	
+
+////////////////////////////////////////////////////////////
+// Auto Calculate Hits/Runs/Errors for Entering Game Results
+///////////////////////////////////////////////////////////	
   jQuery(".v_inning").blur(function() {
 	var Total = 0;
 	jQuery(".v_inning").each(function() {
@@ -66,20 +75,29 @@ jQuery(document).ready( function() {
 		jQuery("#hhits_total").val(Total);
 	});
   });
-	  
+	 
+//////////////////////////////////////////////////
+//   Show posts dropdown menu on select
+///////////////////////////////////////////////// 
   jQuery("#bbnuke_include_post").click(function() {
 	jQuery("#bbnuke_select_post").toggle(this.checked);
   });
 
+
+//////////////////////////////////////////////////////////////////
+//  Retrieve stats for game from gamechanger.io
+//  depricated as of release 1.2, gamechanger now requires a login
+///////////////////////////////////////////////////////////////////
   jQuery("#bbnuke_retrieve_gamechanger_results_btn_id").bind('click', function() {
 	
 	var typeArray = new Array('pitching','fielding','offense');
-	
+//        var pitchLink = 'https://www.gamechanger.io/game-'+gameID+'/stats/batting/standard';
+
 	for ( var typeA in typeArray) {
 	        var gameID = jQuery("#bbnuke_plugin_gamechanger_import").val();
-		var pitchLink = 'http://www.gamechanger.io/game-'+gameID+'/boxscore/batting/standard';
+		var pitchLink = 'https://www.gamechanger.io/game-'+gameID+'/stats/batting/standard';
 		var home_or_away = jQuery("#tbl_home_or_away").val();
-		var tableToGet = "tbl_"+ home_or_away + "_batting";
+		var tableToGet = "tbl_"+ home_or_away +"_batting";
 		var classSection = "offense";
 
 		var tA = typeArray[typeA];
@@ -87,12 +105,12 @@ jQuery(document).ready( function() {
 		jQuery("#game-results-dump").html('');
 		
 		if (tA == 'pitching') {
-			pitchLink = 'http://www.gamechanger.io/game-'+gameID+'/boxscore/pitching/standard';
+			pitchLink = 'https://www.gamechanger.io/game-'+gameID+'/stats/pitching/standard';
 			tableToGet = "tbl_"+ home_or_away +"_pitching";
 			classSection = "pitching";
 		}
 		else if ( tA == 'fielding' ) {
-			pitchLink = 'http://www.gamechanger.io/game-'+gameID+'/boxscore/fielding/';
+			pitchLink = 'https://www.gamechanger.io/game-'+gameID+'/stats/fielding/';
 			tableToGet = "tbl_"+ home_or_away + "_fielding";
 			classSection = "fielding";
 		}
@@ -102,6 +120,54 @@ jQuery(document).ready( function() {
 		_callYQL(pitchLink, tableToGet, classSection);
 	}
   });
+
+//////////////////////////////////////////////
+// UPDATE TEAMS LIST BASED ON SELECTED SEASON
+/////////////////////////////////////////////
+  jQuery('#bbnuke_player_edit_season_id').change(function() {
+        var seasonSel = jQuery('#bbnuke_player_edit_season_id').val(); //get selected season
+	var path = jQuery('#path').val();  
+	jQuery('#bbnuke_player_edit_team_id').empty(); //empty teams array
+        jQuery.get(path, { season: seasonSel, load: 'pass' }, function(json) {
+		var teams = jQuery.parseJSON(json); //make an array of returned elements
+                jQuery.each(teams, function(key, value) { //sort through each value and build the options list
+			    jQuery('#bbnuke_player_edit_team_id')
+                                .append(jQuery("<option></option>")
+                                .attr("value", value)
+                                .text(value));
+                });
+        });
+  });
+
+  jQuery('#bbnuke_select_season_id').change(function() {
+        var seasonSel = jQuery('#bbnuke_select_season_id').val(); //get selected season
+        var path = jQuery('#path').val();
+        jQuery('#bbnuke_select_season_team_id').empty(); //empty teams array
+        jQuery.get(path, { season: seasonSel, load: 'pass' }, function(json) {
+                var teams = jQuery.parseJSON(json); //make an array of returned elements
+                jQuery.each(teams, function(key, value) { //sort through each value and build the options list
+                            jQuery('#bbnuke_select_season_team_id')
+                                .append(jQuery("<option></option>")
+                                .attr("value", value)
+                                .text(value));
+                });
+        });
+  });
+  jQuery('#bbnuke_players_select_season_id').change(function() {
+        var seasonSel = jQuery('#bbnuke_players_select_season_id').val(); //get selected season
+        var path = jQuery('#path').val();
+        jQuery('#bbnuke_players_select_season_team_id').empty(); //empty teams array
+        jQuery.get(path, { season: seasonSel, load: 'pass' }, function(json) {
+                var teams = jQuery.parseJSON(json); //make an array of returned elements
+                jQuery.each(teams, function(key, value) { //sort through each value and build the options list
+                            jQuery('#bbnuke_players_select_season_team_id')
+                                .append(jQuery("<option></option>")
+                                .attr("value", value)
+                                .text(value));
+                });
+        });
+  });
+
 
 }); //doc ready end
 
@@ -166,6 +232,9 @@ function _parseYQLandFillTop() {
 
 }
 
+//////////////////////////////////////////////
+//  Show/Hide data on click for TABS
+//////////////////////////////////////////////
 function showTab( toShow ) {
 	jQuery(".tabContent").hide();
 	jQuery(toShow).show();

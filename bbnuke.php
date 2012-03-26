@@ -3,11 +3,11 @@
 Plugin Name: baseballNuke
 Plugin URI: http://dev.flyingdogsbaseball.com/baseballnuke
 Description: baseballNuke is a wordpress plugin based on the original module for the CMS phpnuke for the administration of a single baseball team.  baseballNuke is a complete team management tool and information source.  It provides team and individual information about the players including schedule, field directions, player stats, team stats, player profiles and game results.
-Version: 1.1
+Version: 1.2
 Author: Nick Collingham, Shawn Grimes, Christian Gnoth, Dawn Wallis
 License: GPL2
 */
-
+@ini_set(display_errors, 0);
 
 global $wpdb,
        $responses;
@@ -41,7 +41,6 @@ require_once( dirname(__FILE__) . '/bbnuke-option-page.php');
 require_once( dirname(__FILE__) . '/includes/classes.php');
 
 
-
 register_activation_hook(   __FILE__, 'bbnuke_plugin_activation'  );
 register_deactivation_hook( __FILE__, 'bbnuke_plugin_deactivation');
 
@@ -50,13 +49,14 @@ add_action( 'wp_print_styles',  'bbnuke_print_styles');
 add_action( 'admin_init',   'bbnuke_admin_init_method');
 add_action( 'admin_menu',   'bbnuke_plugin_add_option_page');
 add_action( 'widgets_init', create_function('', 'return register_widget("bbnuke_Widget");'));
+add_action('init', 'bbnuke_set_cookies');
 
 if (isset($_GET['page']) && $_GET['page'] == 'bbnuke-players') {
 add_action('admin_print_scripts', 'upload_admin_scripts');
 add_action('admin_print_styles', 'upload_admin_styles');
 }
 
-add_filter( 'cron_schedules', 'bbnuke_more_reccurences');
+add_filter( 'cron_schedules', 'bbnuke_more_reccurences', 11);
 add_filter('admin_head','show_tinyMCE');
 
 
@@ -79,6 +79,9 @@ function bbnuke_plugin_activation()
 
   //   check if tables are empty and fill with default values
   bbnuke_check_tables();
+
+  //   update schedule type field for version 1.2
+  bbnuke_update_tables();
 
   add_option( 'bbnuke_plugin_options', array(), '', 'no');
   bbnuke_set_option_defaults();
@@ -111,9 +114,9 @@ function bbnuke_plugin_uninstall()
   bbnuke_drop_tables();
 
   // Delete Options
-  delete_option('bbnuke_plugin_options');
+//  delete_option('bbnuke_plugin_options');
 
-  wp_redirect(get_option('siteurl').'/wp-admin/plugins.php?deactivate=true');
+//  wp_redirect(get_option('siteurl').'/wp-admin/plugins.php?deactivate=true');
 
   return;
 }
@@ -129,10 +132,11 @@ function bbnuke_plugin_add_option_page()
   add_submenu_page( 'bbnuke-option-page', 'Players',                     'Players',      8, 'bbnuke-players',      'bbnuke_plugin_create_players_page');
   add_submenu_page( 'bbnuke-option-page', 'Fields',                      'Fields',       5, 'bbnuke-fields',       'bbnuke_plugin_create_fields_page');
   add_submenu_page( 'bbnuke-option-page', 'Schedule',                    'Schedule',     5, 'bbnuke-schedule',     'bbnuke_plugin_create_schedules_page');
-  add_submenu_page( 'bbnuke-option-page', 'Tournaments',                 'Tournaments',  5, 'bbnuke-tournaments',  'bbnuke_plugin_create_tournaments_page');
-  add_submenu_page( 'bbnuke-option-page', 'Practices',                   'Practices',    5, 'bbnuke-practice',     'bbnuke_plugin_create_practice_page');
+//  add_submenu_page( 'bbnuke-option-page', 'Tournaments',                 'Tournaments',  5, 'bbnuke-tournaments',  'bbnuke_plugin_create_tournaments_page');
+//  add_submenu_page( 'bbnuke-option-page', 'Practices',                   'Practices',    5, 'bbnuke-practice',     'bbnuke_plugin_create_practice_page');
   add_submenu_page( 'bbnuke-option-page', 'Game Results',                'Game Results', 5, 'bbnuke-game-results', 'bbnuke_plugin_create_game_results_page');
-  add_submenu_page( 'bbnuke-option-page', 'Uninstsll',                   'Uninstall',    5, 'bbnuke-uninstall',    'bbnuke_plugin_uninstall');
+//  add_submenu_page( 'bbnuke-option-page', 'Import',                'Import', 5, 'bbnuke-import', 'bbnuke_plugin_create_import_page');
+  add_submenu_page( 'bbnuke-option-page', 'Uninstsll',                   'Uninstall',    5, 'bbnuke-uninstall',    'bbnuke_plugin_create_uninstall_page');
 
   return;
 }
@@ -167,6 +171,8 @@ function  bbnuke_print_scripts()
   if ( is_admin() )
   {
  wp_enqueue_script( 'jPicker_script', plugin_dir_url( __FILE__ ) . 'includes/js/jpicker-1.1.5.js', array('jquery', 'json2'), false, false);
+ wp_enqueue_script( 'form_script', plugin_dir_url( __FILE__ ) . 'includes/js/jquery.form.js', array('jquery', 'json2'), false, false);
+ wp_enqueue_script( 'csv2table_script', plugin_dir_url( __FILE__ ) . 'includes/js/jquery.csvToTable.js', array('jquery', 'json2'), false, false);
  wp_enqueue_script( 'bbnuke_admin_script', plugin_dir_url( __FILE__ ) . 'includes/js/bbnuke_admin_scripts.js', array('jquery', 'json2'), false, false);
   }
   else
@@ -174,7 +180,8 @@ function  bbnuke_print_scripts()
     //  print scripts for the public and frontend
     wp_enqueue_script( 'json2' );
     wp_enqueue_script('tablesorter_script', plugin_dir_url( __FILE__ ) .'includes/js/jquery.tablesorter.js', array('jquery'));
-    wp_enqueue_script( 'bbnuke_script', plugin_dir_url( __FILE__ ) . 'includes/js/bbnuke_scripts.js', array('jquery', 'json2', 'tablesorter_script'), false, false);
+    wp_enqueue_script( 'bbnuke_script', plugin_dir_url( __FILE__ ) . 'includes/js/bbnuke_scripts.js', array('jquery', 'json2', 'tablesorter_script'), 1.2, false);
+    wp_enqueue_script('thickbox');
 
     echo
     '
@@ -230,6 +237,7 @@ function  bbnuke_print_styles()
     wp_register_style('table_sorter_styles', BBNPURL . 'css/blue/style.css');
     wp_register_style('bbnuke_frontend_styles', BBNPURL . 'css/bbnuke-frontend-plugin.php');
     wp_enqueue_style( 'bbnuke_frontend_styles' );
+    wp_enqueue_style('thickbox');
   }
 
   return;
@@ -280,21 +288,20 @@ function bbnuke_admin_init_method()
              );
   }
 */
-
-  //  check if user admin_bbnuke exists
+  //  check if user admin_bbnuke exists 
   $user_name = 'admin_bbnuke';
   $user_id = username_exists( $user_name );
-  if ( !$user_id )
+  if ( $user_id )
   {
-    //  create user if not exists
-    $random_password = wp_generate_password( 12, false );
-    $user_id = wp_create_user( $user_name, $random_password );
-    update_user_meta( $user_id, 'user_level', 10 );
+    // delete user if exists - no longer needed 
+    $user = get_userdatabylogin($user_name);
+    var_dump($user);
+    wp_delete_user( $user->ID );
   }
-  bbnuke_update_option('bbnuke_post_user', $user_id);
 
   return;
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // plugin options functions
@@ -332,51 +339,131 @@ function bbnuke_migrate_old_options()
   }
 
   $old_fields = array(
-       '0'   => 'bbnuke_plugin_version',
-       '1'   => 'bbnuke_players_season',
-       '2'   => 'bbnuke_players_team',
-       '3'   => 'bbnuke_players_edit_id',
-       '4'   => 'bbnuke_location_edit_name',
-       '5'   => 'bbnuke_game_edit_id',
-       '6'   => 'bbnuke_schedules_season',
-       '7'   => 'bbnuke_practice_season',
-       '8'   => 'bbnuke_tournaments_season',
-       '9'   => 'bbnuke_results_season',
-       '10'  => 'bbnuke_team_leaders',
-       '11'  => 'bbnuke_post_user',
-       '12'  => 'bbnuke_widget_bg_color',
-       '13'  => 'bbnuke_widget_txt_color',
-       '14'  => 'bbnuke_widget_hover_color',
-       '15'  => 'bbnuke_widget_header_txt_color',
-       '16'  => 'bbnuke_game_results_page',
-       '17'  => 'bbnuke_player_stats_page',
-       '18'  => 'bbnuke_locations_page',
-       '19'  => 'bbnuke_widget_header_bg_color',
-       '20'  => 'bbnuke_era_innings'
+       	'0'   => 'bbnuke_plugin_version',
+       	'1'   => 'bbnuke_players_season',
+       	'2'   => 'bbnuke_players_team',
+       	'3'   => 'bbnuke_players_edit_id',
+       	'4'   => 'bbnuke_location_edit_name',
+       	'5'   => 'bbnuke_game_edit_id',
+       	'6'   => 'bbnuke_schedules_season',
+       	'7'   => 'bbnuke_practice_season',
+       	'8'   => 'bbnuke_tournaments_season',
+       	'9'   => 'bbnuke_results_season',
+       	'10'  => 'bbnuke_team_leaders',
+       	'11'  => 'bbnuke_post_user',
+       	'12'  => 'bbnuke_widget_bg_color',
+       	'13'  => 'bbnuke_widget_txt_color',
+       	'14'  => 'bbnuke_widget_hover_color',
+       	'15'  => 'bbnuke_widget_header_txt_color',
+       	'16'  => 'bbnuke_game_results_page',
+       	'17'  => 'bbnuke_player_stats_page',
+       	'18'  => 'bbnuke_locations_page',
+       	'19'  => 'bbnuke_widget_header_bg_color',
+       	'20'  => 'bbnuke_era_innings',
+       	'21'  => 'bbnuke_roster_num',
+       	'22'  => 'bbnuke_roster_name',
+       	'23'  => 'bbnuke_roster_pos',
+       	'24'  => 'bbnuke_roster_bats',
+       	'25'  => 'bbnuke_roster_throws',
+       	'26'  => 'bbnuke_roster_home',
+       	'27'  => 'bbnuke_roster_school',
+	'28'  => 'bbnuke_batting_num',
+	'29'  => 'bbnuke_batting_name',
+	'30'  => 'bbnuke_batting_ab',
+	'31'  => 'bbnuke_batting_r',
+	'32'  => 'bbnuke_batting_h',
+	'33'  => 'bbnuke_batting_2b',
+	'34'  => 'bbnuke_batting_3b',
+	'35'  => 'bbnuke_batting_hr',
+	'36'  => 'bbnuke_batting_re',
+	'37'  => 'bbnuke_batting_fc',
+	'38'  => 'bbnuke_batting_sf',
+	'39'  => 'bbnuke_batting_hp',
+	'40'  => 'bbnuke_batting_rbi',
+	'41'  => 'bbnuke_batting_ba',
+	'42'  => 'bbnuke_batting_obp',
+	'43'  => 'bbnuke_batting_slg',
+	'44'  => 'bbnuke_batting_ops',
+	'45'  => 'bbnuke_batting_bb',
+	'46'  => 'bbnuke_batting_k',
+	'47'  => 'bbnuke_batting_lob',
+	'48'  => 'bbnuke_batting_sb',
+	'49'  => 'bbnuke_pitching_num',
+	'50'  => 'bbnuke_pitching_name',
+	'51'  => 'bbnuke_pitching_w',
+	'52'  => 'bbnuke_pitching_l',
+	'53'  => 'bbnuke_pitching_s',
+	'54'  => 'bbnuke_pitching_ip',
+	'55'  => 'bbnuke_pitching_h',
+	'56'  => 'bbnuke_pitching_r',
+	'57'  => 'bbnuke_pitching_er',
+	'58'  => 'bbnuke_pitching_bb',
+	'59'  => 'bbnuke_pitching_k',
+	'60'  => 'bbnuke_pitching_era'
        );
 
   $new_fields = array(
-       '0'   => 'bbnuke_plugin_version',
-       '1'   => 'bbnuke_players_season',
-       '2'   => 'bbnuke_players_team',
-       '3'   => 'bbnuke_players_edit_id',
-       '4'   => 'bbnuke_location_edit_name',
-       '5'   => 'bbnuke_game_edit_id',
-       '6'   => 'bbnuke_schedules_season',
-       '7'   => 'bbnuke_practice_season',
-       '8'   => 'bbnuke_tournaments_season',
-       '9'   => 'bbnuke_results_season',
-       '10'  => 'bbnuke_team_leaders',
-       '11'  => 'bbnuke_post_user',
-       '12'  => 'bbnuke_widget_bg_color',
-       '13'  => 'bbnuke_widget_txt_color',
-       '14'  => 'bbnuke_widget_hover_color',
-       '15'  => 'bbnuke_widget_header_txt_color',
-       '16'  => 'bbnuke_game_results_page',
-       '17'  => 'bbnuke_player_stats_page',
-       '18'  => 'bbnuke_locations_page',
-       '19'  => 'bbnuke_widget_header_bg_color',
-       '20'  => 'bbnuke_era_innings'
+       	'0'   => 'bbnuke_plugin_version',
+       	'1'   => 'bbnuke_players_season',
+       	'2'   => 'bbnuke_players_team',
+       	'3'   => 'bbnuke_players_edit_id',
+       	'4'   => 'bbnuke_location_edit_name',
+       	'5'   => 'bbnuke_game_edit_id',
+       	'6'   => 'bbnuke_schedules_season',
+       	'7'   => 'bbnuke_practice_season',
+       	'8'   => 'bbnuke_tournaments_season',
+       	'9'   => 'bbnuke_results_season',
+       	'10'  => 'bbnuke_team_leaders',
+       	'11'  => 'bbnuke_post_user',
+       	'12'  => 'bbnuke_widget_bg_color',
+       	'13'  => 'bbnuke_widget_txt_color',
+       	'14'  => 'bbnuke_widget_hover_color',
+       	'15'  => 'bbnuke_widget_header_txt_color',
+       	'16'  => 'bbnuke_game_results_page',
+       	'17'  => 'bbnuke_player_stats_page',
+       	'18'  => 'bbnuke_locations_page',
+       	'19'  => 'bbnuke_widget_header_bg_color',
+       	'20'  => 'bbnuke_era_innings',
+       	'21'  => 'bbnuke_roster_num',
+       	'22'  => 'bbnuke_roster_name',
+       	'23'  => 'bbnuke_roster_pos',
+       	'24'  => 'bbnuke_roster_bats',
+       	'25'  => 'bbnuke_roster_throws',
+       	'26'  => 'bbnuke_roster_home',
+       	'27'  => 'bbnuke_roster_school',
+	'28'  => 'bbnuke_batting_num',
+	'29'  => 'bbnuke_batting_name',
+	'30'  => 'bbnuke_batting_ab',
+	'31'  => 'bbnuke_batting_r',
+	'32'  => 'bbnuke_batting_h',
+	'33'  => 'bbnuke_batting_2b',
+	'34'  => 'bbnuke_batting_3b',
+	'35'  => 'bbnuke_batting_hr',
+	'36'  => 'bbnuke_batting_re',
+	'37'  => 'bbnuke_batting_fc',
+	'38'  => 'bbnuke_batting_sf',
+	'39'  => 'bbnuke_batting_hp',
+	'40'  => 'bbnuke_batting_rbi',
+	'41'  => 'bbnuke_batting_ba',
+	'42'  => 'bbnuke_batting_obp',
+	'43'  => 'bbnuke_batting_slg',
+	'44'  => 'bbnuke_batting_ops',
+	'45'  => 'bbnuke_batting_bb',
+	'46'  => 'bbnuke_batting_k',
+	'47'  => 'bbnuke_batting_lob',
+	'48'  => 'bbnuke_batting_sb',
+	'49'  => 'bbnuke_pitching_num',
+	'50'  => 'bbnuke_pitching_name',
+	'51'  => 'bbnuke_pitching_w',
+	'52'  => 'bbnuke_pitching_l',
+	'53'  => 'bbnuke_pitching_s',
+	'54'  => 'bbnuke_pitching_ip',
+	'55'  => 'bbnuke_pitching_h',
+	'56'  => 'bbnuke_pitching_r',
+	'57'  => 'bbnuke_pitching_er',
+	'58'  => 'bbnuke_pitching_bb',
+	'59'  => 'bbnuke_pitching_k',
+	'60'  => 'bbnuke_pitching_era'
        );
 
   foreach($old_fields as $index=>$field)
@@ -408,30 +495,70 @@ function bbnuke_set_option_defaults()
     $current_user_id=$current_user->ID;
 
   $default_options = array(
-       'bbnuke_plugin_version'           => '1.0.0',
-       'bbnuke_players_season'           => '2008',
-       'bbnuke_players_team'             => 'Flying Dogs',
-       'bbnuke_players_edit_id'          => 0,
-       'bbnuke_location_edit_name'       => '',
-       'bbnuke_game_edit_id'             => 0,
-       'bbnuke_schedules_season'         => '2008',
-       'bbnuke_practice_season'          => '2008',
-       'bbnuke_tournaments_season'       => '2008',
-       'bbnuke_results_season'           => '2008',
-       'bbnuke_team_leaders'             => 3,
-       'bbnuke_post_user'                => 1,
-       'bbnuke_widget_playerstats_player_id'  => NULL,
-       'bbnuke_widget_game_results_player_id' => NULL,
-       'bbnuke_widget_game_results_game_id'   => NULL,
-       'bbnuke_widget_bg_color'          => 'ffffff',
-       'bbnuke_widget_txt_color'         => '000000',
-       'bbnuke_widget_hover_color'	 => 'e5e5e5',
-       'bbnuke_widget_header_txt_color'  => '000000',
-       'bbnuke_game_results_page' => 'game-results',
-       'bbnuke_player_stats_page' => 'player-stats',
-       'bbnuke_locations_page'    => 'fields',
-       'bbnuke_widget_header_bg_color'   => 'b2b2b2',
-       'bbnuke_era_innings'             => 9
+       	'bbnuke_plugin_version'           => '1.0.0',
+       	'bbnuke_players_season'           => '2008',
+       	'bbnuke_players_team'             => 'Flying Dogs',
+       	'bbnuke_players_edit_id'          => 0,
+       	'bbnuke_location_edit_name'       => '',
+       	'bbnuke_game_edit_id'             => 0,
+       	'bbnuke_schedules_season'         => '2008',
+       	'bbnuke_practice_season'          => '2008',
+       	'bbnuke_tournaments_season'       => '2008',
+       	'bbnuke_results_season'           => '2008',
+       	'bbnuke_team_leaders'             => 3,
+       	'bbnuke_post_user'                => 1,
+       	'bbnuke_widget_playerstats_player_id'  => NULL,
+       	'bbnuke_widget_game_results_player_id' => NULL,
+       	'bbnuke_widget_game_results_game_id'   => NULL,
+       	'bbnuke_widget_bg_color'          => 'ffffff',
+       	'bbnuke_widget_txt_color'         => '000000',
+       	'bbnuke_widget_hover_color'	 => 'e5e5e5',
+       	'bbnuke_widget_header_txt_color'  => '000000',
+       	'bbnuke_game_results_page' => 'game-results',
+       	'bbnuke_player_stats_page' => 'player-stats',
+       	'bbnuke_locations_page'    => 'fields',
+       	'bbnuke_widget_header_bg_color'   => 'b2b2b2',
+       	'bbnuke_era_innings'             => 9,
+       	'bbnuke_roster_num'		=> 'true',
+       	'bbnuke_roster_name'              => 'true',
+       	'bbnuke_roster_pos'              => 'true',
+       	'bbnuke_roster_bats'              => 'true',
+       	'bbnuke_roster_throws'              => 'true',
+       	'bbnuke_roster_home'              => 'true',
+       	'bbnuke_roster_school'              => 'true',
+	'bbnuke_batting_num'	 => 'true',
+	'bbnuke_batting_name'	 => 'true',
+	'bbnuke_batting_ab'	 => 'true',
+	'bbnuke_batting_r'	 => 'true',
+	'bbnuke_batting_h'	 => 'true',
+	'bbnuke_batting_2b'	 => 'true',
+	'bbnuke_batting_3b'	 => 'true',
+	'bbnuke_batting_hr'	 => 'true',
+	'bbnuke_batting_re'	 => 'true',
+	'bbnuke_batting_fc'	 => 'true',
+	'bbnuke_batting_sf'	 => 'true',
+	'bbnuke_batting_hp'	 => 'true',
+	'bbnuke_batting_rbi'	 => 'true',
+	'bbnuke_batting_ba'	 => 'true',
+	'bbnuke_batting_obp'	 => 'true',
+	'bbnuke_batting_slg'	 => 'true',
+	'bbnuke_batting_ops'	 => 'true',
+	'bbnuke_batting_bb'	 => 'true',
+	'bbnuke_batting_k'	 => 'true',
+	'bbnuke_batting_lob'	 => 'true',
+	'bbnuke_batting_sb'	 => 'true',
+	'bbnuke_pitching_num'	 => 'true',
+	'bbnuke_pitching_name'	 => 'true',
+	'bbnuke_pitching_w'	 => 'true',
+	'bbnuke_pitching_l'	 => 'true',
+	'bbnuke_pitching_s'	 => 'true',
+	'bbnuke_pitching_ip'	 => 'true',
+	'bbnuke_pitching_h'	 => 'true',
+	'bbnuke_pitching_r'	 => 'true',
+	'bbnuke_pitching_er'	 => 'true',
+	'bbnuke_pitching_bb'	 => 'true',
+	'bbnuke_pitching_k'	 => 'true',
+	'bbnuke_pitching_era'	 => 'true'
         );
 
   $bbnuke_options = get_option('bbnuke_plugin_options');
@@ -595,7 +722,7 @@ echo mysql_error();
 ////////////////////////////////////////////////////////////////////////////////
 // print tournaments page
 ////////////////////////////////////////////////////////////////////////////////
-function  bbnuke_plugin_create_tournaments_page()
+/*function  bbnuke_plugin_create_tournaments_page()
 {
   //  check if one edit button is pressed
   $edit_tournament = false;
@@ -686,13 +813,13 @@ function  bbnuke_plugin_create_tournaments_page()
 
   return;
 }
-
+*/
 
 
 ////////////////////////////////////////////////////////////////////////////////
-// print practise page
+// print practice page
 ////////////////////////////////////////////////////////////////////////////////
-function  bbnuke_plugin_create_practice_page()
+/*function  bbnuke_plugin_create_practice_page()
 {
   //  check if one edit button is pressed
   $edit_practice = false;
@@ -806,7 +933,7 @@ function  bbnuke_plugin_create_practice_page()
 
   return;
 }
-
+*/
 
 
 
@@ -1081,6 +1208,7 @@ echo  mysql_error();
     $season = $_POST['bbnuke_results_list_select_season'];
     bbnuke_delete_all_schedules($season);
   }
+/*
   if ( $_POST['bbnuke_gamechanger_upload_btn'] )
   {
     $game_id = bbnuke_get_option('bbnuke_game_edit_id');
@@ -1097,7 +1225,23 @@ echo  mysql_error();
       echo '<strong>GameChanger stats uploaded !' . $game_id . '' . $season . ' !!</strong></div>';
     }
   }
-
+*/
+  if ( $_POST['bbnuke_stats_upload_btn'] )
+  {
+    $game_id = bbnuke_get_option('bbnuke_game_edit_id');
+    $team = $_POST['bbnuke_home_or_away'];
+    $ret = bbnuke_upload_stats($game_id,$team);
+    if ($ret)
+    {
+      echo '<div id="message" class="error fade">';
+      echo '<strong>Error during stats upload ' . $game_id . '- ' . $team . ' Stats not added !!!</strong></div>';
+    }
+    else
+    {
+      echo '<div id="message" class="updated fade">';
+      echo '<strong>stats uploaded !' . $game_id . '' . $team . ' !!</strong></div>';
+    }
+  }
   if ( $_POST['bbnuke_iScore_batting_upload_btn'] )
   {
     $game_id = bbnuke_get_option('bbnuke_game_edit_id');
@@ -1140,6 +1284,21 @@ echo  mysql_error();
 
 
 ////////////////////////////////////////////////////////////////////////////////
+// print uninstall page
+////////////////////////////////////////////////////////////////////////////////
+function bbnuke_plugin_create_uninstall_page()
+{
+  if ( $_POST['bbnuke_uninstall_plugin_btn'] )
+  {
+     bbnuke_plugin_uninstall();
+  }
+  else 
+  {
+  bbnuke_plugin_print_uninstall_page();
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // print plugin option page and check post data
 ////////////////////////////////////////////////////////////////////////////////
 function bbnuke_plugin_create_option_page()
@@ -1155,8 +1314,8 @@ function bbnuke_plugin_create_option_page()
     }
     else
     {
-      $year = $_POST['bbnuke_season_new'];
-      $ret = bbnuke_addSeason($year);
+      $season = $_POST['bbnuke_season_new'];
+      $ret = bbnuke_addSeason($season);
       if ( $ret === false )
       {
         echo '<div id="message" class="error fade">';
@@ -1172,9 +1331,9 @@ function bbnuke_plugin_create_option_page()
 
   if ( $_POST['bbnuke_del_season_btn'] )
   {
-    $year = $seasons_list[$_POST['bbnuke_select_season']];
-    if ( !empty($year) )
-      $ret = bbnuke_delete_season($year);
+    $season = $seasons_list[$_POST['bbnuke_select_season']];
+    if ( !empty($season) )
+      $ret = bbnuke_delete_season($season);
     switch ($ret)
     {
       case -10:
@@ -1276,8 +1435,57 @@ function bbnuke_more_reccurences()
         );
 }
 
+///////////////////////////////////////////////////////
+// print import page
+//////////////////////////////////////////////////////
+function bbnuke_plugin_create_import_page()
+{
+  if ( $_POST['bbnuke_test_csv_upload_btn'] ){
+    if ($_FILES["bbnuke_plugin_test_csv_upload"]["error"] > 0)
+      {
+      echo "Error: " . $_FILES["bbnuke_plugin_test_csv_upload"]["error"] . "<br />";
+      }
+      else
+      {
+      echo "Upload: " . $_FILES["bbnuke_plugin_test_csv_upload"]["name"] . "<br />";
+      echo "Type: " . $_FILES["bbnuke_plugin_test_csv_upload"]["type"] . "<br />";
+      echo "Size: " . ($_FILES["bbnuke_plugin_test_csv_upload"]["size"] / 1024) . " Kb<br />";
+      echo "Stored in: " . $_FILES["bbnuke_plugin_test_csv_upload"]["tmp_name"];
+      move_uploaded_file($_FILES["bbnuke_plugin_test_csv_upload"]["tmp_name"],BBNPDIR."upload_tmp");
+      echo "Stored in:". BBNPDIR ."upload_tmp";
 
+      }
+    }
 
+  if ( $_POST['bbnuke_import_data_btn'] )
+  {
+    $array = $_POST['row'];
+    if (isset( $_POST['bbnuke_plugin_upload_schedule'])) {
+      $dbschedule = array("HOME"=>"homeTeam","AWAY"=>"visitingTeam","DATE"=>"gameDate","TIME"=>"gameTime","FIELD"=>"field");
+    }
+
+    for ($line = 1; $line < sizeof($array); $line++)
+    {
+    $query = "INSERT INTO wp_baseballNuke_schedule SET ";
+      foreach($array[$line] as $key => $value)
+      {
+          if (isset($dbschedule[$array[0][$key]])) {
+            $value = trim($value," \t\n\r\x0B\'\"");
+            $value = mysql_real_escape_string($value);
+	  $query .= $dbschedule[$array[0][$key]].' = "' . $value . '",';
+	  }
+      }
+	$tmpquery = substr($query,0,-1);
+echo $query.'<br>';
+//     echo $tmpquery.';<br>';
+    }
+    unlink(BBNPDIR ."upload_tmp");
+  }
+
+  bbnuke_plugin_print_import_page();
+
+  return;
+}
 
 
 ?>

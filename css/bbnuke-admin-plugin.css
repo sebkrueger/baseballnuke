@@ -1,6 +1,6 @@
 #bbnuke-plugin-main
 {
-  width:  74%;
+  width:  90%;
 }
 
 #bbnuke-plugin-main .postbox,
@@ -328,7 +328,7 @@ select#fitcash_import_cats_select_tag
 }
     
 div.tabs {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: bold;
 }
 
@@ -336,7 +336,7 @@ a.tab {
   background-color: #f0f0f0;
   border: 1px solid #000000;
   border-bottom-width: 0px;
-  padding: 2px 1em 2px 1em;
+  padding: 2px 2em 2px 2em;
   text-decoration: none;
 }
 
@@ -348,5 +348,8 @@ a.tab:hover {
   background-color: #d0d0d0;
   color: #606060;
 }
-    
-
+  
+#bbnuke_option_subtable {
+  padding: 2px;
+}
+ 
