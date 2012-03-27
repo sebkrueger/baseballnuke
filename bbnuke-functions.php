@@ -4604,15 +4604,15 @@ function  bbnuke_widget_team_schedule( $atts, $bbnuke_echo = true )
     $date =date_create("$gameDate $gameTime");
     $bbnuke_content .= "<tr>";
    $wt = ($hruns > $vruns) ? 1 : 2;
-    if ($hruns > $vruns) { $wt = 1; } else if ( $hruns == $vruns) { $wt = 3; } else { $wt = 2; }
+    if ($hruns > $vruns) { $wt = 1; } elseif ( $hruns == $vruns) { $wt = 3; } else { $wt = 2; }
 
-    if($team == $homeTeam)
+    if(strtolower($team) == strtolower($homeTeam))
     {
-         if ($wt == 1) { $result = "Win"; } else if ($wt ==2) { $result = "Loss"; } else { $result = "Tie"; }
+         if ($wt == 1) { $result = "Win"; } elseif ($wt ==2) { $result = "Loss"; } else { $result = "Tie"; }
          $score = ($wt == 1) ? $hruns.' - '.$vruns : $vruns.' - '.$hruns;
     }
     else {
-         if ($wt == 2) { $result = "Win"; } else if ($wt ==1) { $result = "Loss"; } else { $result = "Tie"; }
+         if ($wt == 2) { $result = "Win"; } elseif ($wt ==1) { $result = "Loss"; } else { $result = "Tie"; }
          $score = ($wt == 1) ? $hruns.' - '.$vruns : $vruns.' - '.$hruns;
     }
 
@@ -4620,7 +4620,7 @@ function  bbnuke_widget_team_schedule( $atts, $bbnuke_echo = true )
     {
       $bbnuke_content .= '<td><a href="'.$game_results_page.$qstring.'gameID='.$gameID.'" title="' . __('Show Game Results', 'bbnuke') . '">'.$result.' '.$score.'</a></td>';
     }
-    if(($status === "Complete") && ($team == 'league'))
+    elseif(($status === "Complete") && ($team == 'league'))
     {
       $bbnuke_content .= '<td><a href="'.$game_results_page.$qstring.'gameID='.$gameID.'" title="' . __('Show Game Results', 'bbnuke') . '">Final '.$score.'</a></td>';
     }
