@@ -9,7 +9,7 @@ require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 function  bbnuke_db_delta()
 {
   global $wpdb;
-
+  global $bbnuke_db_version;
   if ($wpdb->supports_collation())
   {
     if ( ! empty($wpdb->charset) )
@@ -205,6 +205,8 @@ function  bbnuke_db_delta()
 
   mysql_query($query);
 
+  update_option( "bbnuke_db_version", $bbnuke_db_version );
+
   $wpdb->flush();
 
   return;
@@ -213,22 +215,31 @@ function  bbnuke_db_delta()
 function bbnuke_update_tables()
 {
   global $wpdb;
-
+echo "<br><br><br>UPDATE";
 //  Set version
-    $wpdb->query("UPDATE {$wpdb->prefix}baseballNuke_settings SET version='1.2' WHERE version is NOT NULL;");
+    $query = $wpdb->query("UPDATE {$wpdb->prefix}baseballNuke_settings SET version='1.2.1' WHERE version is NOT NULL;");
+    mysql_query($query);
 
+// Add status column
+    $query = $wpdb->query = ("ALTER TABLE {$wpdb->prefix}baseballNuke_boxscores ADD `status` varchar(20) default NULL;");
+    mysql_query($query);
 
 //  Update type field in the schedule table RELEASE 1.2
-    $wpdb->query("UPDATE {$wpdb->prefix}baseballNuke_schedule SET type='game' WHERE visitingTeam!='tournament' AND visitingTeam!='practice' AND type IS NULL;");
+    $query = $wpdb->query("UPDATE {$wpdb->prefix}baseballNuke_schedule SET type='game' WHERE visitingTeam!='tournament' AND visitingTeam!='practice' AND type IS NULL;");
+    mysql_query($query);
 
-    $wpdb->query("UPDATE {$wpdb->prefix}baseballNuke_schedule SET type='practice' WHERE visitingTeam='practice' AND type IS NULL;");
+    $query = $wpdb->query("UPDATE {$wpdb->prefix}baseballNuke_schedule SET type='practice' WHERE visitingTeam='practice' AND type IS NULL;");
+    mysql_query($query);
 
-    $wpdb->query("UPDATE {$wpdb->prefix}baseballNuke_schedule SET type='tournament' WHERE visitingTeam='tournament' AND type IS NULL;");
+    $query = $wpdb->query("UPDATE {$wpdb->prefix}baseballNuke_schedule SET type='tournament' WHERE visitingTeam='tournament' AND type IS NULL;");
+    mysql_query($query);
 
 // Remove pitchTotals and batTotals VIEW's.  No longer needed from v1.2 +
-    $wpdb->query = ("DROP VIEW {$wpdb->prefix}baseballNuke_batTotals;");
+    $query = $wpdb->query = ("DROP VIEW {$wpdb->prefix}baseballNuke_batTotals;");
+    mysql_query($query);
 
-    $wpdb->query = ("DROP VIEW {$wpdb->prefix}baseballNuke_pitchTotals;");
+    $query = $wpdb->query = ("DROP VIEW {$wpdb->prefix}baseballNuke_pitchTotals;");
+    mysql_query($query);
 
     return;
 }
@@ -275,7 +286,7 @@ function  bbnuke_check_tables()
 
 //    $query = mysql_real_escape_string("INSERT INTO `" . $wpdb->prefix . "baseballNuke_settings` (`defaultTeam`, `defaultSeason`, `displayMenu`, `ID`, `version`) VALUES
     $query = "INSERT INTO `" . $wpdb->prefix . "baseballNuke_settings` (`defaultTeam`, `defaultSeason`, `displayMenu`, `ID`, `version`) VALUES
-			('Flying Dogs', '2008', '', 1, '1.2');";
+			('Flying Dogs', '2008', '', 1, '1.2.1');";
     mysql_query($query);
 
 

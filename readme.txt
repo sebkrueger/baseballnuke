@@ -1,17 +1,17 @@
 === baseballNuke ===
 Contributors: Shawn Grimes, Christian Gnoth, Nick Collingham, Dawn Wallis, Bobby Downs
 Plugin Uri: http://dev.flyingdogsbaseball.com/baseballNuke
-Tags: phpnuke, baseball, team management, baseballNuke, softball
+Tags: phpnuke, baseball, team management, baseballNuke, softball, league
 Requires at least: 2.7
-Tested up to: WP 3.1
-Stable tag: 1.1
+Tested up to: WP 3.3.1
+Stable tag: 1.2.1
 
 
 == Description ==
 
 Tested with **Wordpress 3.1**
 
-baseballNuke is a wordpress plugin for the administration of a single baseball team.  baseballNuke is a complete team management tool and information source.  It provides team and individual information about the players including schedule, field directions, player stats, team stats, player profiles and game results.
+baseballNuke is a wordpress plugin for the administration of a single baseball team or league.  baseballNuke is a complete team management tool and information source.  It provides team and individual information about the players including schedule, field directions, player stats, team stats, player profiles and game results.
 
 
 == Support ==
@@ -25,11 +25,6 @@ manager@flyingdogsbaseball.com
 1) Extract the file 
 2) Copy the files to your wp-content/plugins directory 
 3) Activate the plugin under the wp admin plugins page
-4) download and install "Cookie Monster" plugin (or similar)
-5) add the following URL Parameters on the Cookie Monster admin console under settings:
-	- playerID
-	- gameID
-	- field
 
 == Getting Started ==
 
@@ -61,24 +56,25 @@ To use in a page, use the following shortcodes in the content of your page:
      [bbnuke_pitchstats team=teamname season=seasonname] - Pitching Stats*
      [bbnuke_fieldstats team=teamname season=seasonname] - Fielding Stats*
      [bbnuke_playerstats] - Player Stats
-     [bbnuke_top5stats] - Top 5 Stats
      [bbnuke_schedule team=teamname season=seasonname] - Schedule*
      [bbnuke_practice team=teamname season=seasonname] - Practice Schedule*
      [bbnuke_tournament team=teamname season=seasonname] - Tournament Schedule*
      [bbnuke_fields] - Field Locations
      [bbnuke_gameresults] - Game Results
 * team and season attributes are optional.  If not included the default team and season will be used
+* a value of "league" in the team attribute will display all teams.
 
 == Frequently Asked Questions ==
 
 = If I try to activate the plugin, I get a 404 error message =
-
 You must login to wordpress with an administrator user.
 
-= When I click on the player link to see the profile, nothing happens=
+= When I click on the player link to see the profile, nothing happens =
+You must create a player profile page (shortcode [bbnuke_playerstats]) and specify it on the settings page of the baseballNuke admin console.  
 
-You must create a player profile page (shortcode [bbnuke_playerstats]) and specify it on the settings page of the baseballNuke admin console.  Also, be sure that you have installed and configured the "Cookie Monster" plugin and configured it properly.
-
+= After upgrading, my previously defined shortcodes are not being displayed. =
+Before changing anyting, first try disabling then re-enabling the plugin.
+ 
 == Screenshots ==
 1. WP Admin Backend - Plugin Option Page
 
@@ -234,11 +230,17 @@ Programmer/Technical Genious - Dawn Wallis
 - MODIFICATON: consolidated schedule/practice/tournament admin pages
 - MODIFICATION: created tabs for offense/pitching/defence on player stats page
 - MODIFICATION: modified css for stats tables
-- MODIFICATION: moved stat keys for batting/pitching/fielding widgets to thickbox popup
 - NEW: added option to select which columns to display on stats tables
 - NEW: added career stats to player stats page
 - NEW: added league value for team in shortcodes.  a value of league will return results for all teams.
+- NEW: added WHIP stat to pitching stats widget
 - REMOVED: Deleted admin_bbnuke user.  This account was only needed in early versions of bbnuke and is no longer needed.
 - RETIRED: Top 5 stats widget. 
 - RETIRED: Gamechanger import
 
+= 1.2 =
+- BUG FIX: new database column for game status was not added to existing bbnuke installations that were upgrading causing issues with the schedule widget.
+- BUG FIX: schedule did not display properly for games in complete status
+- BUG FIX: player profile showed multiple profiles if player exists in seasons with similar names, ex: "2012" and "2012 Preseason"
+
+- BUG FIX: 
