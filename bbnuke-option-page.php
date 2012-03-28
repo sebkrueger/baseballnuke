@@ -3149,7 +3149,7 @@ echo '
 }
 
 
-	$latestVersion="1.2";
+	$latestVersion="1.2.1";
 
 
 	function getbnukeVersion(){

@@ -712,14 +712,12 @@ function  bbnuke_upload_stats($game_id,$team)
   {
     list($jersey,$battOrd,$baAB,$ba1b,$ba2b,$ba3b,$baHR,$baRBI,$baBB,$baK,$baSB,$baRuns,$baRE,$baFC,$baHP,$baLOB,$baSF,$pitchOrd,$piWin,$piLose,$piSave,$piIP,$piHits,$piRuns,$piER,$piWalks,$piSO,$fiPO,$fiA,$fiE)=explode(",",$line);
   $playerID="0";
-echo "***".$game_id."*".$season."*".$team."*".$jersey."***";
   $playerID=bbnuke_get_playerID_from_jersey($jersey,$season,$team);
   $presults    = bbnuke_get_game_player_results ($game_id,$playerID);
   if (!$presults)
    $new_entry = true;
   else
    $new_entry = false;
-echo $playerID . $new_entry;
   if ($playerID && $new_entry)
   {
     $query = "INSERT INTO " . $wpdb->prefix . "baseballNuke_stats
@@ -3511,7 +3509,7 @@ function  bbnuke_widget_playerstats( $player_id = NULL, $bbnuke_echo = true )
     $player_id = bbnuke_get_option('bbnuke_widget_playerstats_player_id');
 
   $query = 'SELECT playerID,teamname,firstname, middlename,lastname,positions,bats,throws,height,weight,jerseyNum,picLocation,profile ' .
-           '  FROM ' . $wpdb->prefix . 'baseballNuke_players WHERE playerID = ' . $player_id . ' AND season=' . $dseason . '';
+           '  FROM ' . $wpdb->prefix . 'baseballNuke_players WHERE playerID = ' . $player_id . ' AND season="' . $dseason . '"';
   $result = mysql_query($query);
   if ($result)
   {
