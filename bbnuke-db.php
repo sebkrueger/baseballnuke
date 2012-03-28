@@ -45,6 +45,7 @@ function  bbnuke_db_delta()
            `hruns` int(11) default NULL,
            `herr` int(11) default NULL,
            `notes` longtext,
+           `status` varchar(20) NOT NULL default '',
            PRIMARY KEY  (`gameID`)
            ) ENGINE=MyISAM " . $charset_collate . ";";
   dbDelta($query);
