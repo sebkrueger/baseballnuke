@@ -215,9 +215,8 @@ function  bbnuke_db_delta()
 function bbnuke_update_tables()
 {
   global $wpdb;
-echo "<br><br><br>UPDATE";
 //  Set version
-    $query = $wpdb->query("UPDATE {$wpdb->prefix}baseballNuke_settings SET version='1.2.1' WHERE version is NOT NULL;");
+    $query = $wpdb->query("UPDATE {$wpdb->prefix}baseballNuke_settings SET version='1.2.2' WHERE version is NOT NULL;");
     mysql_query($query);
 
 // Add status column
@@ -286,7 +285,7 @@ function  bbnuke_check_tables()
 
 //    $query = mysql_real_escape_string("INSERT INTO `" . $wpdb->prefix . "baseballNuke_settings` (`defaultTeam`, `defaultSeason`, `displayMenu`, `ID`, `version`) VALUES
     $query = "INSERT INTO `" . $wpdb->prefix . "baseballNuke_settings` (`defaultTeam`, `defaultSeason`, `displayMenu`, `ID`, `version`) VALUES
-			('Flying Dogs', '2008', '', 1, '1.2.1');";
+			('Flying Dogs', '2008', '', 1, '1.2.2');";
     mysql_query($query);
 
 

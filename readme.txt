@@ -4,7 +4,7 @@ Plugin Uri: http://dev.flyingdogsbaseball.com/baseballNuke
 Tags: phpnuke, baseball, team management, baseballNuke, softball, league
 Requires at least: 2.7
 Tested up to: WP 3.3.1
-Stable tag: 1.2.1
+Stable tag: 1.2
 
 
 == Description ==
@@ -238,9 +238,13 @@ Programmer/Technical Genious - Dawn Wallis
 - RETIRED: Top 5 stats widget. 
 - RETIRED: Gamechanger import
 
-= 1.2 =
+= 1.2.1 =
 - BUG FIX: new database column for game status was not added to existing bbnuke installations that were upgrading causing issues with the schedule widget.
 - BUG FIX: schedule did not display properly for games in complete status
 - BUG FIX: player profile showed multiple profiles if player exists in seasons with similar names, ex: "2012" and "2012 Preseason"
 
-- BUG FIX: 
+= 1.2.2 =
+- BUG FIX: Assign players to season does not add most recent player entries.
+- BUG FIX: Batting and pitching widgets do not support the "league" value for team attribute in shortcode.
+- BUG FIX: schedules that are imported do not show on schedule.
+- BUB FIX: schedules uploaded from CSV dont show up on schedule widget.
