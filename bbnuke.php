@@ -3,14 +3,17 @@
 Plugin Name: baseballNuke
 Plugin URI: http://dev.flyingdogsbaseball.com/baseballnuke
 Description: baseballNuke is a wordpress plugin based on the original module for the CMS phpnuke for the administration of a single baseball team.  baseballNuke is a complete team management tool and information source.  It provides team and individual information about the players including schedule, field directions, player stats, team stats, player profiles and game results.
-Version: 1.2
+Version: 1.2.2
 Author: Nick Collingham, Shawn Grimes, Christian Gnoth, Dawn Wallis
 License: GPL2
 */
 @ini_set(display_errors, 0);
 
 global $wpdb,
-       $responses;
+       $responses,
+       $bbnuke_db_version;
+
+$bbnuke_db_version = 1.22;
 
 define('BBNPURL', WP_PLUGIN_URL . '/' . str_replace(basename( __FILE__),"",plugin_basename(__FILE__)) );
 define('BBNPDIR', WP_PLUGIN_DIR . '/' . str_replace(basename( __FILE__),"",plugin_basename(__FILE__)) );
@@ -44,6 +47,7 @@ require_once( dirname(__FILE__) . '/includes/classes.php');
 register_activation_hook(   __FILE__, 'bbnuke_plugin_activation'  );
 register_deactivation_hook( __FILE__, 'bbnuke_plugin_deactivation');
 
+add_action('plugins_loaded', 'bbnuke_update_db_check');
 add_action( 'wp_print_scripts', 'bbnuke_print_scripts');
 add_action( 'wp_print_styles',  'bbnuke_print_styles');
 add_action( 'admin_init',   'bbnuke_admin_init_method');
@@ -81,12 +85,23 @@ function bbnuke_plugin_activation()
   bbnuke_check_tables();
 
   //   update schedule type field for version 1.2
-  bbnuke_update_tables();
+  //bbnuke_update_tables();
 
   add_option( 'bbnuke_plugin_options', array(), '', 'no');
   bbnuke_set_option_defaults();
 
   return;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// upgrade activation hook
+////////////////////////////////////////////////////////////////////////////////
+function bbnuke_update_db_check() {
+    global $bbnuke_db_version;
+    if (get_site_option('bbnuke_db_version') != $bbnuke_db_version) {
+       // bbnuke_db_delta();
+	bbnuke_update_tables();
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -295,7 +310,6 @@ function bbnuke_admin_init_method()
   {
     // delete user if exists - no longer needed 
     $user = get_userdatabylogin($user_name);
-    var_dump($user);
     wp_delete_user( $user->ID );
   }
 
@@ -399,7 +413,8 @@ function bbnuke_migrate_old_options()
 	'57'  => 'bbnuke_pitching_er',
 	'58'  => 'bbnuke_pitching_bb',
 	'59'  => 'bbnuke_pitching_k',
-	'60'  => 'bbnuke_pitching_era'
+	'60'  => 'bbnuke_pitching_era',
+        '61'  => 'bbnuke_pitching_whip'
        );
 
   $new_fields = array(
@@ -463,7 +478,8 @@ function bbnuke_migrate_old_options()
 	'57'  => 'bbnuke_pitching_er',
 	'58'  => 'bbnuke_pitching_bb',
 	'59'  => 'bbnuke_pitching_k',
-	'60'  => 'bbnuke_pitching_era'
+	'60'  => 'bbnuke_pitching_era',
+        '61'  => 'bbnuke_pitching_whip'
        );
 
   foreach($old_fields as $index=>$field)
@@ -558,7 +574,8 @@ function bbnuke_set_option_defaults()
 	'bbnuke_pitching_er'	 => 'true',
 	'bbnuke_pitching_bb'	 => 'true',
 	'bbnuke_pitching_k'	 => 'true',
-	'bbnuke_pitching_era'	 => 'true'
+	'bbnuke_pitching_era'	 => 'true',
+        'bbnuke_pitching_whip'    => 'true'
         );
 
   $bbnuke_options = get_option('bbnuke_plugin_options');

@@ -62,6 +62,7 @@ function bbnuke_plugin_print_option_page()
   $pitching_bb = $options['bbnuke_pitching_bb'];
   $pitching_k = $options['bbnuke_pitching_k'];
   $pitching_era = $options['bbnuke_pitching_era'];
+  $pitching_whip = $options['bbnuke_pitching_whip'];
 
 
   //   get seasons
@@ -80,14 +81,35 @@ echo '
     <hr />
     <p>
       <b>Welcome to baseballNuke</b><br />
-     '. __('baseballNuke is a wordpress plugin based on the module for the CMS phpnuke <a href="http://phpnuke.org" target="_blank">http://phpnuke.org</a> for the administration of a single baseball team. It is a complete team management tool and information source. baseballNuke provides team and individual information about the players including schedule, field directions, player stats, team stats, player profiles and game results.', 'bbnuke') . '<br />
+     '. __('baseballNuke is a wordpress plugin for the administration of a single baseball team or league. It is a complete team management tool and information source. baseballNuke provides team and individual information about the players including schedule, field directions, player stats, team stats, player profiles and game results.', 'bbnuke') . '<br />
     </p>
     <hr />
-    <div class="clear"></div>
     <div class="metabox-holder has-right-sidebar" id="plugin-panel-widgets">
       <div class="postbox-container" id="bbnuke-plugin-main">
         <div class="has-sidebar-content">
           <div class="meta-box-sortables ui-sortable" id="normal-sortables" unselectable="on">
+
+        <div class="postbox ui-droppable" id="bbnuke_links">
+          <div title="' . __('Zum umschalten klicken', 'bbnuke') . '" class="handlediv"><br /></div>
+          <h3 class="hndle">Donations</h3>
+          <div class="inside">
+            <p>Help support baseballNuke by making a donation to the Flying Dogs!</p>
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" name="paypal-form">
+              <input type="hidden" name="cmd" value="_xclick">
+              <input type="hidden" name="business" value="manager@frederickcardinals.com">
+              <input type="hidden" name="item_name" value="Flying Dogs Donation">
+              <input type="hidden" name="item_number" value="2007donation">
+              <input type="hidden" name="no_shipping" value="0">
+              <input type="hidden" name="no_note" value="1">
+              <input type="hidden" name="currency_code" value="USD">
+              <input type="hidden" name="tax" value="0">
+              <input type="hidden" name="lc" value="US">
+              <input type="hidden" name="bn" value="PP-DonationsBF">
+              <input type="image" src="https://www.paypal.com/en_US/i/btn/x-click-but04.gif" border="0" name="submit" alt="Make payments with PayPal - it\'s fast, free and secure!">
+            </form>
+          </div>
+        </div>
+    <div class="clear"></div>
             <div class="postbox ui-droppable" id="bbnuke-settings">
               <div title="' . __('Zum umschalten klicken', 'bbnuke') . '" class="handlediv"><br /></div>
               <h3 class="hndle">' . __('Settings', 'bbnuke') . '</h3>
@@ -397,6 +419,7 @@ echo '
                     <th id="bbnuke_option_subtable">BB</th>
                     <th id="bbnuke_option_subtable">K</th>
                     <th id="bbnuke_option_subtable">ERA</th>
+                    <th id="bbnuke_option_subtable">WHIP</th>
                   </tr>
                   <tr>';
                   if ($pitching_num == 'true')
@@ -447,6 +470,10 @@ echo '
                     echo '<td id="bbnuke_option_subtable"><input type=checkbox name="bbnuke_plugin_option_pitching_era" value="era" checked="checked"></td>';
                   else
                     echo '<td id="bbnuke_option_subtable"><input type=checkbox name="bbnuke_plugin_option_pitching_era" value="era"></td>';
+                  if ($pitching_whip == 'true')
+                    echo '<td id="bbnuke_option_subtable"><input type=checkbox name="bbnuke_plugin_option_pitching_whip" value="whip" checked="checked"></td>';
+                  else
+                    echo '<td id="bbnuke_option_subtable"><input type=checkbox name="bbnuke_plugin_option_pitching_whip" value="whip"></td>';
 echo '
                   </tr>
                 </table>
@@ -574,8 +601,8 @@ echo '
           </div>
         </div>
       </div>
-    </div>
-    <div class="postbox-container" id="bbnuke-plugin-news">
+    </div>';
+/*    <div class="postbox-container" id="bbnuke-plugin-news">
       <div class="meta-box-sortables ui-sortable" id="side-sortables" unselectable="on">
         <div class="postbox ui-droppable" id="bbnuke_info">
           <div title="' . __('Zum umschalten klicken', 'bbnuke') . '" class="handlediv"><br /></div>
@@ -608,6 +635,9 @@ echo '
         </div>
       </div>
     </div>
+*/
+echo '
+
   </div>
 </div>';
 
@@ -3143,7 +3173,7 @@ echo '
 }
 
 
-	$latestVersion="1.2";
+	$latestVersion="1.2.2";
 
 
 	function getbnukeVersion(){
