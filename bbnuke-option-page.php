@@ -877,7 +877,7 @@ echo '
               <tr><th class="bbnuke_option_left_part"><label for="bbnuke_player_edit_lname">Last Name</label></th>
                   <td><input type="text" name="bbnuke_player_edit_lname" value="' . $lastname . '"></td>
               </tr>
-              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_player_edit_pprofile">Player Profile</label></th>
+              <tr><th class="bbnuke_option_left_part"><label for="bbnuke_player_edit_pprofile">  </label></th>
                   <td><textarea class="bbnuke_textarea" rows="20" cols="55" name="bbnuke_player_edit_pprofile">' . $profile . '</textarea></td>
               </tr>';
         $ajpath = BBNPURL.'bbnuke-get-teams.php';

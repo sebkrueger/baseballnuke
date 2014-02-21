@@ -33,7 +33,7 @@ msgstr "Hits"
 #: bbnuke-functions.php:1636
 #: bbnuke-functions.php:3310
 msgid "Home"
-msgstr "Heim"
+msgstr "Heimmannschaft"
 
 #: bbnuke-functions.php:1637
 msgid "RBI"
@@ -91,13 +91,13 @@ msgstr "Es gibt keine Ergebnisse."
 
 #: bbnuke-functions.php:1889
 msgid "There are no upcoming games."
-msgstr "Es gibt keine kommende Spiele."
+msgstr "Keine Spiele geplant."
 
 #: bbnuke-functions.php:2091
 #: bbnuke-functions.php:2241
 #: bbnuke-functions.php:2376
 msgid "Key"
-msgstr "Schlüssel"
+msgstr "Legende"
 
 #: bbnuke-functions.php:2091
 #: bbnuke-functions.php:2241
@@ -220,7 +220,7 @@ msgstr "Fielding Percentage"
 
 #: bbnuke-functions.php:2434
 msgid "Positions:"
-msgstr "Positionen"
+msgstr "Positionen:"
 
 #: bbnuke-functions.php:2435
 msgid "Bats:"
@@ -251,7 +251,7 @@ msgstr "Saison"
 #: bbnuke-functions.php:2692
 #: bbnuke-functions.php:2853
 msgid "CAREER AS "
-msgstr "KARRIERE ALS"
+msgstr "Gesamt bei den "
 
 #: bbnuke-functions.php:2761
 msgid "Pitching Statistics"

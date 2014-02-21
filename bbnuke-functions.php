@@ -3433,10 +3433,6 @@ function  bbnuke_widget_fieldstats( $atts, $bbnuke_echo = true )
               'team' => $dteam,
               'season' => $dseason,
       ), $atts));
-  if ( get_option('permalink_structure') != '' )
-    $qstring='?';
-  else
-    $qstring='&';
   
   $bbnuke_content = NULL;
 
@@ -3444,7 +3440,7 @@ function  bbnuke_widget_fieldstats( $atts, $bbnuke_echo = true )
 		<thead>
 		<tr>
 		  <th>#</th>
-                  <th>' . __('Fielder', 'bbnuke') . '</th>
+                  <th>Fielder</th>
                   <th>PO</th>
                   <th>A</th>
                   <th>E</th>
@@ -3455,20 +3451,12 @@ function  bbnuke_widget_fieldstats( $atts, $bbnuke_echo = true )
 ';
 
   //Fielding STATS
-  if ( $dteam == 'league' )
-  {
-  $query = "SELECT p.playerID,p.lastname,p.firstname,p.middlename,p.jerseyNum,".
-                " sum(st.fiPO)as fiPO, sum(st.fiA) as fiA, sum(st.fiE) as fiE ".
-                " FROM ".$wpdb->prefix."baseballNuke_players p,".$wpdb->prefix."baseballNuke_stats st,".$wpdb->prefix."baseballNuke_schedule s ".
-                " WHERE p.playerID=st.playerID AND season='".$season."'".
-                " AND st.gameID=s.gameID AND GROUP BY p.playerID ORDER BY lastname,firstname ASC";
-  } else {
   $query = "SELECT p.playerID,p.lastname,p.firstname,p.middlename,p.jerseyNum,".
 		" sum(st.fiPO)as fiPO, sum(st.fiA) as fiA, sum(st.fiE) as fiE ".
 		" FROM ".$wpdb->prefix."baseballNuke_players p,".$wpdb->prefix."baseballNuke_stats st,".$wpdb->prefix."baseballNuke_schedule s ".
-		" WHERE p.playerID=st.playerID AND teamName='".$team."' AND season='".$season."'".
-		" AND st.gameID=s.gameID AND GROUP BY p.playerID ORDER BY lastname,firstname ASC";
-  }	
+		" WHERE p.playerID=st.playerID AND teamName='".$team."' AND DATE_FORMAT(gameDate,'%Y')='".$season."'".
+		" AND st.gameID=s.gameID AND p.season=DATE_FORMAT(gameDate,'%Y') GROUP BY p.playerID ORDER BY lastname,firstname ASC";
+	
   $result = mysql_query($query);
   if ($result)
   {
@@ -3493,7 +3481,7 @@ function  bbnuke_widget_fieldstats( $atts, $bbnuke_echo = true )
       $FP = ".000";
 
     $bbnuke_content .= '<tr><td>'.$jerseyNum.'</td>
-		  	    <td style="text-align:left;"><a class="players-page-link" href="' . $player_stats_page . $qstring . 'playerID=' . $playerID . '" title="' . __('Show Players Info', 'bbnuke') . '">'.$lastname.', '.$firstname.'</a></td>
+		  	    <td style="text-align:left;"><a class="players-page-link" href="' . $player_stats_page . '?playerID=' . $playerID . '" title="' . __('Show Players Info', 'bbnuke') . '">'.$lastname.', '.$firstname.'</a></td>
 			    <td>'.$fiPO.'</td>
 		            <td>'.$fiA.'</td>
 		            <td>'.$fiE.'</td>
@@ -3509,26 +3497,19 @@ function  bbnuke_widget_fieldstats( $atts, $bbnuke_echo = true )
 	<td><strong>'.$SumfiA.'</strong></td>
 	<td><strong>'.$SumfiE.'</strong></td>
 	<td><strong>'.$SumfiFP.'</strong></td>
-	</tr>
-      </table>';
+	</tr>';
 
-  $bbnuke_content .= '
-      <div><a href="#TB_inline?height=300&width=300&inlineId=bbnuke_field_stat_key_popup" class="thickbox">' . __('Stat Key', 'bbnuke') . '</a></div>
-      <div id="bbnuke_field_stat_key_popup" style="display:none">
-      <h2>' . __('Fielding Stats Key', 'bbnuke') . '</h2>
-        <div>
-          <table class="bbnuke-results-table">
-	  <tr><td><u>' . __('Key', 'bbnuke') . '</u></td><td><u>' . __('Meaning', 'bbnuke') . '</u></td></tr>
-	  <tr><td colspan="2"><hr /></td></tr>
-	  <tr><td>PO</td><td>' . __('Putouts', 'bbnuke') . '</td></tr>
-	  <tr><td>A</td><td>' . __('Assists', 'bbnuke') . '</td></tr>
-          <tr><td>E</td><td>' . __('Errors', 'bbnuke') . '</td></tr>
-	  <tr><td>FP</td><td>' . __('Fielding Percentage', 'bbnuke') . '</td></tr>
-        </table>
-      </div>
-      <br>&nbsp;<br>
-      <strong>Just click outside the pop-up to close it.</strong>
-    </div>';
+  $bbnuke_content .= '</table>';
+
+  $bbnuke_content .= '<br /><table><tr><td><hr /></td></tr><tr><td><table class="bbnuke-results-table">
+	<tr><td><u>' . __('Key', 'bbnuke') . '</u></td><td><u>' . __('Meaning', 'bbnuke') . '</u></td></tr>
+	<tr><td colspan="2"><hr /></td></tr>
+	<tr><td>PO</td><td>' . __('Putouts', 'bbnuke') . '</td></tr>
+	<tr><td>A</td><td>' . __('Assists', 'bbnuke') . '</td></tr>
+    <tr><td>E</td><td>' . __('Errors', 'bbnuke') . '</td></tr>
+	<tr><td>FP</td><td>' . __('Fielding Percentage', 'bbnuke') . '</td></tr>
+        </table></td></tr></table>';
+
   if ( $bbnuke_echo )
     echo $bbnuke_content;
   else
@@ -3536,6 +3517,9 @@ function  bbnuke_widget_fieldstats( $atts, $bbnuke_echo = true )
  
   return;
 }
+
+
+
 
 
 function  bbnuke_widget_playerstats( $player_id = NULL, $bbnuke_echo = true )
@@ -3580,13 +3564,13 @@ function  bbnuke_widget_playerstats( $player_id = NULL, $bbnuke_echo = true )
     $bbnuke_content .= '<b>#' . $jerseyNum . '</b><br />';
     $bbnuke_content .= '<br /><b>' . $lastname . ', ' . $firstname . '</b><br />';
     $bbnuke_content .= '<br /><b>' . __('Positions:', 'bbnuke') . '</b> ' . $positions . '<br />';
-    $bbnuke_content .= '<b>' . __('Bats:', 'bbnuke') . '</b> ' . $bats . '    <b>' . __('Throws:', 'bbnuke') . '</b>' . $throws . '<br />';
+    $bbnuke_content .= '<b>' . __('Schl&aumlgt:', 'bbnuke') . '</b> ' . $bats . '    <b>' . __('Wirft:', 'bbnuke') . '</b>' . $throws . '<br />';
     if($height)
-      $bbnuke_content .= '<b>' . __('Height:', 'bbnuke') . '</b> ' . $usheight . '';
+      $bbnuke_content .= '<b>' . __('Gr&oumlsse:', 'bbnuke') . '</b> ' . $usheight . '';
     if($weight)
-      $bbnuke_content .= ' <b>' . __('Weight:', 'bbnuke') . '</b>' . $weight . '';
+      $bbnuke_content .= ' <b>' . __('Gewicht:', 'bbnuke') . '</b>' . $weight . '';
     if($profile)
-      $bbnuke_content .= '<p><b>' . __('Player Profile:', 'bbnuke') . '</b> ' . $profile . '</p>';
+      $bbnuke_content .= '<p><b>' . __('', 'bbnuke') . '</b> ' . $profile . '</p>';
     $bbnuke_content .= '</td></tr></table>
                      <div style="width:100%">
                          <div class="tabs">
@@ -4397,7 +4381,7 @@ function  bbnuke_widget_top5stats( $atts, $bbnuke_echo = true )
 
 
 
-
+ 
 
 
 
@@ -4776,147 +4760,6 @@ function  bbnuke_widget_team_practices( $atts, $bbnuke_echo = true )
 
 
 
-function  bbnuke_widget_team_tournament( $atts, $bbnuke_echo = true )
-{
-  global $wpdb;
-
-  $defs    = bbnuke_get_defaults();
-  $dteam   = $defs['defaultTeam'];
-  $dseason = $defs['defaultSeason'];
-     extract(shortcode_atts(array(
-              'team' => $dteam,
-              'season' => $dseason,
-      ), $atts));
-  $timeformat = get_option('time_format');
-  $dateformat = get_option('date_format');
-  $locations_page = get_permalink(bbnuke_get_option('bbnuke_locations_page'));
-  if ( get_option('permalink_structure') != '' )
-    $qstring='?';
-  else
-    $qstring='&';
-  $bbnuke_content = NULL;
-
-  $bbnuke_content .= '<table class="bbnuke-schedule-table">
-	<tr>
-	  <th><b>' . __('Tournament Date', 'bbnuke') . '</b></td>
-	  <th><b>' . __('Type', 'bbnuke') . '</b></td>
-	  <th><b>' . __('Location', 'bbnuke') . '</b></td>
-	  <th><b>' . __('Notes', 'bbnuke') . '</b></td>
-	</tr>';
-
-  if ( $dteam == 'league' ){
-    $query = "SELECT gameID, gameDate, gameTime, field, type, notes " .
-             " FROM " . $wpdb->prefix . "baseballNuke_schedule " .
-             " WHERE season = '" . $dseason . "' AND type = 'tournament' ORDER BY gameDate ASC";
-  }else{
-        $query = "SELECT gameID, gameDate, gameTime, field, type, notes " .
-             " FROM " . $wpdb->prefix . "baseballNuke_schedule " .
-             " WHERE homeTeam='" . $dteam . "' AND season = '" . $dseason . "' AND type = 'tournament' ORDER BY gameDate ASC";
-  }
-  $resultSchedule = mysql_query($query);
-
-  while ( $row = mysql_fetch_array($resultSchedule) )
-  {
-    $tournaments[] = $row;
-  }
-
-  for ($m=0; $m < count($tournaments); $m++) 
-  {
-    list($gameID,$Gdate,$Gtime,$field,$Type,$Notes) = $tournaments[$m];
-    $date =date_create("$Gdate $Gtime");
-    $bbnuke_content .= '<tr><td>'.date_format($date,"$dateformat $timeformat").'</td>';
-    $bbnuke_content .= '<td>'.$Type.'</td>';
-    $bbnuke_content .= '<td><a href="' . $locations_page . $qstring . 'field=' . $field . '" title="' . __('Show Locations Info', 'bbnuke') . '">'.$field.'</a></td>';
-    $bbnuke_content .= '<td>'.$Notes.'</td></tr>';
-  }
-
-  $bbnuke_content .= "</table>";
-
-  if ( $bbnuke_echo )
-    echo $bbnuke_content;
-  else
-    return $bbnuke_content;
-
-  return;
-}
-
-
-
-function  bbnuke_widget_locations_info( $bbnuke_echo = true )
-{
-  global $wpdb;
-
-  $bbnuke_content = NULL;
-
-  $field = $_GET['field'];
-
-  $query = "SELECT DISTINCT fieldname, directions FROM ".$wpdb->prefix."baseballNuke_locations ";
-  $result = mysql_query($query);
-  if ($result)
-    while ( $row = mysql_fetch_array($result) )
-      $field_arr[] = $row;
-  else
-    return false;
-
-  if (empty($field_arr))
-    return false;
-
-  $bbnuke_content .= '<form action="" name="name" method="get">
-        <table>
-        <tr>
-          <td>
-            <select size="1" name="field">';
-
-  for ($i=0; $i < count($field_arr); $i++ )
-  {
-    if ( $field_arr[$i]['fieldname'] == $field )
-    {
-      $bbnuke_content .= '<option selected="selected" value="' . $field_arr[$i]['fieldname'] . '">' . $field_arr[$i]['fieldname'] . '</option>' . "\n";
-      $field_key = $i;
-    }
-    else
-      $bbnuke_content .= '<option value="' . $field_arr[$i]['fieldname'] . '">' . $field_arr[$i]['fieldname'] . '</option>' . "\n";
-  }
-
-  $bbnuke_content .= '    </select>&nbsp;
-            <input type="submit" value="' . __('Set Location', 'bbnuke') . '" />
-          </td>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td align="center">
-          <h3><b>'.$field.'</b></h3> 
-          </td>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-          <td>';
-
-  if ( $field_arr[$field_key]['directions'] )
-    $bbnuke_content .= $field_arr[$field_key]['directions'];
-  else
-    $bbnuke_content .= __('No info for that field were found.', 'bbnuke') . "\n";
-
-  $bbnuke_content .= "  </td>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
-        </tr></table></form>" . "\n";
-
-  if ( $bbnuke_echo )
-    echo $bbnuke_content;
-  else
-    return $bbnuke_content;
-
-  return;
-}
-
-
-
 function  bbnuke_widget_game_results( $atts, $game_id = NULL, $player_id = NULL, $bbnuke_echo = true )
 {
   global $wpdb;
@@ -4928,15 +4771,9 @@ function  bbnuke_widget_game_results( $atts, $game_id = NULL, $player_id = NULL,
               'team' => $dteam,
               'season' => $dseason,
       ), $atts));
-  $timeformat = get_option('time_format');
-  $dateformat = get_option('date_format');
   $player_stats_page = get_permalink(bbnuke_get_option('bbnuke_player_stats_page'));
   $bbnuke_content = NULL;
   $game_id = $_COOKIE["gameID"];
-  if ( get_option('permalink_structure') != '' )
-    $qstring='?';
-  else
-    $qstring='&';
 
   if ( ($game_id == NULL) AND ($player_id == NULL) )	
   {
@@ -4944,24 +4781,22 @@ function  bbnuke_widget_game_results( $atts, $game_id = NULL, $player_id = NULL,
     $player_id = bbnuke_get_option('bbnuke_widget_game_results_player_id');
   }
 	
-  $query = 'SELECT visitingTeam, homeTeam, gameDate, gameTime ' .
+  $query = 'SELECT visitingTeam, homeTeam, DATE_FORMAT(gameDate,"%c-%d-%Y") Gdate, TIME_FORMAT(gameTime,"%h:%i") Gtime ' .
            '  FROM ' . $wpdb->prefix . 'baseballNuke_schedule where gameID=' . $game_id . ' ';
   $result = mysql_query($query);
   if ($result)
-    $game = mysql_fetch_array($result);
-  list($VISITTEAM, $HOMETEAM, $Gdate, $Gtime) = $game;
-  $date =date_create("$Gdate $Gtime");
+    $game   = mysql_fetch_array($result);
+  list($VISITTEAM, $HOMETEAM, $GAMEDATE, $GAMETIME) = $game;
+		
   $query  = 'SELECT * FROM ' . $wpdb->prefix . 'baseballNuke_boxscores WHERE gameID=' . $game_id . ' ';
   $result = mysql_query($query);
   if ($result)
     $score  = mysql_fetch_array($result);
   list($gameID,$v1,$v2,$v3,$v4,$v5,$v6,$v7,$v8,$v9,$h1,$h2,$h3,$h4,$h5,$h6,$h7,$h8,$h9,$vhits,$vruns,$verr,$hhits,$hruns,$herr,$notes,$postID) = $score;
-
-  $bbnuke_content .= '<div align="center">
+		
+  $bbnuke_content .= '<table align="center">
         <tr>
-          <td><h2 style="text-align:center;">' . $VISITTEAM . ' ' . $vruns . ' , ' . $HOMETEAM . ' ' . $hruns . '<br>
-		'.date_format($date,"$dateformat $timeformat").'</h2></td>
-
+          <td align="center"><h2>' . $VISITTEAM . ' ' . $vruns . ' , ' . $HOMETEAM . ' ' . $hruns . '</h2></td>
    </tr>
    <tr>
       <td>&nbsp;</td>
@@ -4978,8 +4813,6 @@ function  bbnuke_widget_game_results( $atts, $game_id = NULL, $player_id = NULL,
               <th width="20">5</th>
               <th width="20">6</th>
               <th width="20">7</th>
-              <th width="20">8</th>
-              <th width="20">9</th>
               <th width="20">R</th>
               <th width="20">H</th>
               <th width="20">E</th>
@@ -4992,9 +4825,7 @@ function  bbnuke_widget_game_results( $atts, $game_id = NULL, $player_id = NULL,
               <td width="20">' . $v4 . '</td>
               <td width="20">' . $v5 . '</td>
               <td width="20">' . $v6 . '</td>
-              <td width="20">' . $v7 . '</td>
-              <td width="20">' . $v8 . '</td>
-              <td width="20">' . $v9 . '</td>            
+              <td width="20">' . $v7 . '</td>         
               <td width="20">' . $vruns . '</td>
 	      <td width="20">' . $vhits . '</td>
               <td width="20">' . $verr . '</td>
@@ -5007,9 +4838,7 @@ function  bbnuke_widget_game_results( $atts, $game_id = NULL, $player_id = NULL,
               <td width="20">' . $h4 . '</td>
               <td width="20">' . $h5 . '</td>
               <td width="20">' . $h6 . '</td>
-              <td width="20">' . $h7 . '</td>
-              <td width="20">' . $h8 . '</td>
-              <td width="20">' . $h9 . '</td>            
+              <td width="20">' . $h7 . '</td>           
               <td width="20">' . $hruns . '</td>
 	      <td width="20">' . $hhits . '</td>
               <td width="20">' . $herr . '</td>
@@ -5020,33 +4849,35 @@ function  bbnuke_widget_game_results( $atts, $game_id = NULL, $player_id = NULL,
    <tr><td>&nbsp;</td></tr> 
    <tr>
       <td>
-	<table style="border-width: 0px;">
-	 <tr>
-	 <td style="padding: 10px; border-width: 0px; vertical-align:top;">
-           ';
-
-///////////////////////////////////////////
-// GET VISITING TEAM BATTING STATS
-///////////////////////////////////////////
-    $bbnuke_content .= '
          <table class="bbnuke-schedule-table">
            <tr>
-              <th><b>'.$VISITTEAM.'</b></td>
+              <th><b>' . __('Hitters', 'bbnuke') . '</b></td>
               <th>AB</th>
               <th>R</th>
-              <th>H</th>
-              <th>BB</th>
-              <th>SO</th>
+              <th>1B</th>
+              <th>2B</th>
+              <th>3B</th>
+              <th>HR</th>
+              <th>RE</th>
+              <th>FC</th>
+              <th>SF</th>
+              <th>HP</th>
               <th>RBI</th>
-            </tr>';
+              <th>BB</th>
+              <th>K</th>
+              <th>LOB</th>
+              <th>SB</th>
+           </tr>
+           ';
 
+  //Lookup players
   $query = "SELECT st.gameID,st.playerID,battOrd,pitchOrd, " .
                    " baAB,ba1b,ba2b,ba3b,baHR,baRE,baFC,baSF,baHP,baRBI,baBB,baK,baLOB,baSB,baRuns,fiPO,fiA,fiE, " .
                    " piWin,piLose,piSave, piIP,piHits,piRuns,piER,piWalks,piSO,firstname, middlename,lastname " .
                    " FROM ".$wpdb->prefix."baseballNuke_players p, ".$wpdb->prefix."baseballNuke_stats st, " . 
                    " " . $wpdb->prefix."baseballNuke_schedule s " .
-                   " WHERE battOrd > 0 AND st.gameID=$game_id AND p.playerID=st.playerID AND p.teamName='$VISITTEAM'" .
-                   " AND p.season=s.season AND st.gameID=s.gameID ORDER BY battOrd ASC";
+                   " WHERE battOrd > 0 AND teamName='$team' AND st.gameID=$game_id AND p.playerID=st.playerID " .
+                   " AND p.season='$season' AND st.gameID=s.gameID ORDER BY battOrd ASC";
   $result = mysql_query($query);
   if ($result)
     while( $row = mysql_fetch_array($result) )
@@ -5057,94 +4888,51 @@ function  bbnuke_widget_game_results( $atts, $game_id = NULL, $player_id = NULL,
   {
     list($gameID,$playerID,$battOrd,$pitchOrd,$baAB,$ba1b,$ba2b,$ba3b,$baHR, $baRE, $baFC, $baSF, $baHP, $baRBI, $baBB,$baK, $baLOB, $baSB,$baRuns,
          $fiPO, $fiA, $fiE, $piWin,$piLose,$piSave,$piIP,$piHits,$piRuns,$piER,$piWalks,$piSO,$firstname,$middlename,$lastname) = $gresults[$m];
-    $bahits = ($ba1b+$ba2b+$ba3b+$baHR);
 
-    $bbnuke_content .= ' 
-	    <tr>
-	      <td style="text-align:left;"><a class="players-page-link" href="' . $player_stats_page . $qstring . 'playerID=' . $playerID . '" title="' . __('Show Players Info', 'bbnuke') . '">'.$lastname.', '.$firstname.'</a></td> 
+    $bbnuke_content .= ' <tr>
+	      <td style="text-align:left;"><a class="players-page-link" href="' . $player_stats_page . '?playerID=' . $playerID . '" title="' . __('Show Players Info', 'bbnuke') . '">'.$lastname.', '.$firstname.'</a></td> 
               <td> '.$baAB.'</td>
               <td> '.$baRuns.'</td>
-              <td> '.$bahits.'</td>
-	      <td> '.$baBB.'</td>
-	      <td> '.$baK.'</td>
+              <td> '.$ba1b.'</td>
+              <td> '.$ba2b.'</td>
+              <td> '.$ba3b.'</td>
+              <td> '.$baHR.'</td>
+              <td> '.$baRE.'</td>
+              <td> '.$baFC.'</td>
+              <td> '.$baSF.'</td>
+              <td> '.$baHP.'</td>
               <td> '.$baRBI.'</td>
-           </tr>';
-  }
-
-///////////////////////////////////////////
-//  GET HOME TEAM BATTING STATS
-//////////////////////////////////////////
-
-  $homebatstats = "SELECT st.gameID,st.playerID,battOrd,pitchOrd, " .
-                   " baAB,ba1b,ba2b,ba3b,baHR,baRE,baFC,baSF,baHP,baRBI,baBB,baK,baLOB,baSB,baRuns,fiPO,fiA,fiE, " .
-                   " piWin,piLose,piSave, piIP,piHits,piRuns,piER,piWalks,piSO,firstname, middlename,lastname " .
-                   " FROM ".$wpdb->prefix."baseballNuke_players p, ".$wpdb->prefix."baseballNuke_stats st, " .
-                   " " . $wpdb->prefix."baseballNuke_schedule s " .
-                   " WHERE battOrd > 0 AND st.gameID=$game_id AND p.playerID=st.playerID AND p.teamName='$HOMETEAM'" .
-                   " AND p.season=s.season AND st.gameID=s.gameID ORDER BY battOrd ASC";
-  $hresult = mysql_query($homebatstats);
-  
-    $bbnuke_content .= '
-         </table></td><td style="padding: 10px; border-width: 0px;  vertical-align:top;">
-         <table class="bbnuke-schedule-table">
-           <tr>
-              <th><b>'.$HOMETEAM.'</b></td>
-              <th>AB</th>
-              <th>R</th>
-              <th>H</th>
-              <th>BB</th>
-              <th>SO</th>
-              <th>RBI</th>
-           </tr>';
-
-
-    while( $row = mysql_fetch_array($hresult) )
-    {
-      $hresults[] = $row;
-    }
-  for ($m=0; $m < count($hresults); $m++)
-  {
-    list($gameID,$playerID,$battOrd,$pitchOrd,$baAB,$ba1b,$ba2b,$ba3b,$baHR, $baRE, $baFC, $baSF, $baHP, $baRBI, $baBB,$baK, $baLOB, $baSB,$baRuns,
-         $fiPO, $fiA, $fiE, $piWin,$piLose,$piSave,$piIP,$piHits,$piRuns,$piER,$piWalks,$piSO,$firstname,$middlename,$lastname) = $hresults[$m];
-    $bahits = ($ba1b+$ba2b+$ba3b+$baHR);
-
-    $bbnuke_content .= '
-            <tr>
-              <td style="text-align:left;"><a class="players-page-link" href="' . $player_stats_page . $qstring . 'playerID=' . $playerID . '" title="' . __('Show Players Info', 'bbnuke') . '">'.$lastname.', '.$firstname.'</a></td>
-              <td> '.$baAB.'</td>
-              <td> '.$baRuns.'</td>
-              <td> '.$bahits.'</td>
               <td> '.$baBB.'</td>
               <td> '.$baK.'</td>
-              <td> '.$baRBI.'</td>
+              <td> '.$baLOB.'</td>
+              <td> '.$baSB.'</td>
            </tr>';
   }
-
-/////////////////////////////////////
-//  VISITING TEAM PITCHING STATS
-/////////////////////////////////////
-    $bbnuke_content .= '
-</table></td></tr>
-     <tr>
-       <td style="border-width: 0px;">&nbsp;</td>
-       <td style="border-width: 0px;">&nbsp;</td>
-     </tr>
-       <td style="padding: 10px; border-width: 0px;  vertical-align:top;">
+  $bbnuke_content .= '</table></td>
+        </tr>
+   <tr><td><p>&nbsp;</p></td></tr>
+   <tr>
+      <td>
          <table class="bbnuke-schedule-table">
-           <tr>
-             <th><b>'.$VISITTEAM.'</b></th>
-             <th>IP</th>
-             <th>H</th>
-             <th>R</th>
-             <th>ER</th>
-             <th>BB</th>
-             <th>K</th>
-           </tr>';
+            <tr>
+               <th><b>' . __('Pitchers', 'bbnuke') . '</b></th>
+	       <th>W</th>
+               <th>L</th>
+               <th>S</th>
+               <th>IP</th>
+               <th>H</th>
+               <th>R</th>
+               <th>ER</th>
+               <th>BB</th>
+               <th>K</th>
+               </tr>
+                ';
 
+  //Lookup players
   $query = "SELECT st.*, p.firstname, p.middlename,p.lastname " .
-           "  FROM ".$wpdb->prefix."baseballNuke_players p, ".$wpdb->prefix."baseballNuke_stats st, " .
+           "  FROM ".$wpdb->prefix."baseballNuke_players p, ".$wpdb->prefix."baseballNuke_stats st, " . 
            "       ".$wpdb->prefix."baseballNuke_schedule s " .
-           " WHERE pitchOrd > 0 AND teamName='$VISITTEAM' AND st.gameID=$game_id AND p.playerID=st.playerID and " .
+           " WHERE pitchOrd > 0 AND teamName='$team' AND st.gameID=$game_id AND p.playerID=st.playerID and " .
            "       p.season='$season' and st.gameID=s.gameID ORDER BY pitchOrd ASC";
   $result = mysql_query($query);
   if ($result)
@@ -5152,75 +4940,34 @@ function  bbnuke_widget_game_results( $atts, $game_id = NULL, $player_id = NULL,
     {
       $presults[] = $row;
     }
-  for ($m=0; $m < count($presults); $m++)
+  for ($m=0; $m < count($presults); $m++) 
   {
     list($gameID,$playerID,$battOrd,$pitchOrd,$baAB,$ba1b,$ba2b,$ba3b,$baHR,$baRBI,$baBB,$baK,$baSB,$piWin,$piLose,
          $piSave,$piIP,$piHits,$piRuns,$piER,$piWalks,$piSO,$baRuns,$baRE, $baFC, $baSF, $baHP, $baLOB, $fiPO, $fiA, $fiE,
-                                                $firstname,$middlename,$lastname) = $presults[$m];
+						$firstname,$middlename,$lastname) = $presults[$m];
+    $bbnuke_content .= '<tr><td style="text-align:left;"><a class="players-page-link" href="' . $player_stats_page . '?playerID=' . $playerID . '" title="' . __('Show Players Info', 'bbnuke') . '">'.$lastname.', '.$firstname.'</a></td>
+       <td>  <b> 
+       <input type="checkbox" name="'.$playerID.piWIN.'" value="1" ';
 
-    if ($piWin)
-    $bbnuke_content .= '<tr><td style="text-align:left;"><a class="players-page-link" href="' . $player_stats_page . $qstring . 'playerID=' . $playerID . '" title="' . __('Show Players Info', 'bbnuke') . '">'.$lastname.', '.$firstname.'</a> (W)</td>';
-    elseif ($piLose)
-    $bbnuke_content .= '<tr><td style="text-align:left;"><a class="players-page-link" href="' . $player_stats_page . $qstring . 'playerID=' . $playerID . '" title="' . __('Show Players Info', 'bbnuke') . '">'.$lastname.', '.$firstname.'</a> (L)</td>';
-    elseif ($piSave)
-    $bbnuke_content .= '<tr><td style="text-align:left;"><a class="players-page-link" href="' . $player_stats_page . $qstring . 'playerID=' . $playerID . '" title="' . __('Show Players Info', 'bbnuke') . '">'.$lastname.', '.$firstname.'</a> (S)</td>';
-    else
-    $bbnuke_content .= '<tr><td style="text-align:left;"><a class="players-page-link" href="' . $player_stats_page . $qstring . 'playerID=' . $playerID . '" title="' . __('Show Players Info', 'bbnuke') . '">'.$lastname.', '.$firstname.'</a></td>';
-
-    $bbnuke_content .= '
-               <td> '.$piIP.'</td>
-               <td> '.$piHits.'</td>
-               <td> '.$piRuns.'</td>
-               <td> '.$piER.'</td>
-               <td> '.$piWalks.'</td>
-               <td> '.$piSO.'</td>
-            </tr>';
-  }
-///////////////////////////////
-//  Home Pitching Stats
-/////////////////////////////////////
-    $bbnuke_content .= '
-          </table>
-       </td>
-       <td style="padding: 10px; border-width: 0px; vertical-align:top;">
-         <table class="bbnuke-schedule-table">
-           <tr>
-             <th><b>'.$HOMETEAM.'</b></th>
-             <th>IP</th>
-             <th>H</th>
-             <th>R</th>
-             <th>ER</th>
-             <th>BB</th>
-             <th>K</th>
-           </tr>';
-
-  $hpquery = "SELECT st.*, p.firstname, p.middlename,p.lastname " .
-           "  FROM ".$wpdb->prefix."baseballNuke_players p, ".$wpdb->prefix."baseballNuke_stats st, " . 
-           "       ".$wpdb->prefix."baseballNuke_schedule s " .
-           " WHERE pitchOrd > 0 AND teamName='$HOMETEAM' AND st.gameID=$game_id AND p.playerID=st.playerID and " .
-           "       p.season='$season' and st.gameID=s.gameID ORDER BY pitchOrd ASC";
-  $hpresult = mysql_query($hpquery);
-  if ($hpresult)
-    while ( $row = mysql_fetch_array($hpresult) )
-    {
-      $hpresults[] = $row;
-    }
-  for ($m=0; $m < count($hpresults); $m++) 
-  {
-    list($gameID,$playerID,$battOrd,$pitchOrd,$baAB,$ba1b,$ba2b,$ba3b,$baHR,$baRBI,$baBB,$baK,$baSB,$piWin,$piLose,
-         $piSave,$piIP,$piHits,$piRuns,$piER,$piWalks,$piSO,$baRuns,$baRE, $baFC, $baSF, $baHP, $baLOB, $fiPO, $fiA, $fiE,
-						$firstname,$middlename,$lastname) = $hpresults[$m];
-
-    if ($piWin)
-    $bbnuke_content .= '<tr><td style="text-align:left;"><a class="players-page-link" href="' . $player_stats_page . $qstring . 'playerID=' . $playerID . '" title="' . __('Show Players Info', 'bbnuke') . '">'.$lastname.', '.$firstname.'</a> (W)</td>';
-    elseif ($piLose)
-    $bbnuke_content .= '<tr><td style="text-align:left;"><a class="players-page-link" href="' . $player_stats_page . $qstring . 'playerID=' . $playerID . '" title="' . __('Show Players Info', 'bbnuke') . '">'.$lastname.', '.$firstname.'</a> (L)</td>';
-    elseif ($piSave)
-    $bbnuke_content .= '<tr><td style="text-align:left;"><a class="players-page-link" href="' . $player_stats_page . $qstring . 'playerID=' . $playerID . '" title="' . __('Show Players Info', 'bbnuke') . '">'.$lastname.', '.$firstname.'</a> (S)</td>';
-    else
-    $bbnuke_content .= '<tr><td style="text-align:left;"><a class="players-page-link" href="' . $player_stats_page . $qstring . 'playerID=' . $playerID . '" title="' . __('Show Players Info', 'bbnuke') . '">'.$lastname.', '.$firstname.'</a></td>';
-
-    $bbnuke_content .= '
+    if($piWin){
+			$bbnuke_content .= ' checked="checked" ';
+		}
+    $bbnuke_content .= ' />
+               </b> </td>
+               <td>  
+               <input type="checkbox" name="'.$playerID.piLose.'" value="1" ';
+    if($piLose){
+      $bbnuke_content .= ' checked="checked" ';
+                }
+    $bbnuke_content .= ' />
+               </td>
+               <td>  
+               <input type="checkbox" name="'.$playerID.piSave.'" value="1" ';
+    if($piSave){
+      $bbnuke_content .= ' checked="checked" ';
+                }
+    $bbnuke_content .= ' />
+               </td>
                <td> '.$piIP.'</td>
                <td> '.$piHits.'</td>
                <td> '.$piRuns.'</td>
@@ -5230,11 +4977,11 @@ function  bbnuke_widget_game_results( $atts, $game_id = NULL, $player_id = NULL,
             </tr>';
   }
 
-  $bbnuke_content .= '</table></td></tr></table></td></tr>
+  $bbnuke_content .= '</table></td></tr>
    <tr>
       <td>';
 
-  $bbnuke_content .= "</td></tr></div><br>";
+  $bbnuke_content .= "</td></tr></table><br><hr>";
   
   if($postID){
   $bnuke_content .= query_posts( 'p='.$postID );
