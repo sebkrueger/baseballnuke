@@ -247,7 +247,7 @@ function  bbnuke_save_plugin_options()
 function bbnuke_set_cookies() {
   global $attribute;
 
-  $cookies = array('playerID','gameID','field');
+  $cookies = array('playerID','gameID','field','playerTeam','playerSeason');
         foreach($cookies as $cookie) {
 	  $attribute = $_COOKIE[$cookie];
 
@@ -3121,9 +3121,12 @@ function  bbnuke_widget_roster( $atts, $bbnuke_echo = true )
           		    if ($roster_num == 'true')
             		      $bbnuke_content .= '<td>'.$jerseyNum.'</td>';
                             else $bbnuke_content .= '<td style="text-align:left; display:none"></td>';
-		            if ($roster_name == 'true')
- 		              $bbnuke_content .= '<td style="text-align:left;"><a class="players-page-link" href="' . $player_stats_page .  $qstring . 'playerID=' . $playerID . '" title="' . __('Show Players Info', 'bbnuke') . '">'.$lastname.', '.$firstname.'</a></td>';
- 		            else $bbnuke_content .= '<td style="text-align:left; display:none"></td>';
+		            if ($roster_name == 'true') {
+ 		              $bbnuke_content .= '<td style="text-align:left;"><a class="players-page-link" ';
+ 		              $bbnuke_content .= 'href="' . $player_stats_page .  $qstring . 'playerID=' . $playerID;
+                      $bbnuke_content .= '&playerTeam='.urldecode($team).'&playerSeason='.urldecode($season).'" ';
+                      $bbnuke_content .= 'title="' . __('Show Players Info', 'bbnuke') . '">'.$lastname.', '.$firstname.'</a></td>';
+                    } else $bbnuke_content .= '<td style="text-align:left; display:none"></td>';
 		            if ($roster_pos == 'true')
 		              $bbnuke_content .= '<td>'.$positions.'</td>';
                             else $bbnuke_content .= '<td style="text-align:left; display:none"></td>';
@@ -3533,6 +3536,16 @@ function  bbnuke_widget_playerstats( $player_id = NULL, $bbnuke_echo = true )
   $erainnings = bbnuke_get_option('bbnuke_era_innings');
   $team_leaders = bbnuke_get_option('bbnuke_team_leaders');
   $player_id = $_COOKIE["playerID"];
+
+  if($_COOKIE["playerTeam"]!=null) {
+      // Override the default Team with roster page player team
+      $dteam = $_COOKIE["playerTeam"];
+  }
+  if($_COOKIE["playerSeason"]!=null) {
+      // Override the default Team with roster page player season
+      $dseason = $_COOKIE["playerSeason"];
+  }
+
   $game_results_page = get_permalink(bbnuke_get_option('bbnuke_game_results_page'));
   if ( get_option('permalink_structure') != '' )
     $qstring='?';
@@ -3545,6 +3558,8 @@ function  bbnuke_widget_playerstats( $player_id = NULL, $bbnuke_echo = true )
 
   $query = 'SELECT playerID,teamname,firstname, middlename,lastname,positions,bats,throws,height,weight,jerseyNum,picLocation,profile ' .
            '  FROM ' . $wpdb->prefix . 'baseballNuke_players WHERE playerID = ' . $player_id . ' AND season="' . $dseason . '"';
+
+
   $result = mysql_query($query);
   if ($result)
   {
