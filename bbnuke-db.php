@@ -193,7 +193,10 @@ function  bbnuke_db_delta()
 	sum(`" . $wpdb->prefix . "baseballNuke_stats`.`piRuns`) AS `piTotRuns`,
 	sum(`" . $wpdb->prefix . "baseballNuke_stats`.`piER`) AS `piTotER`,
 	sum(`" . $wpdb->prefix . "baseballNuke_stats`.`piWalks`) AS `piTotWalks`,
-	sum(`" . $wpdb->prefix . "baseballNuke_stats`.`piSO`) AS `piTotSO` 
+	sum(`" . $wpdb->prefix . "baseballNuke_stats`.`piSO`) AS `piTotSO`,
+	sum(`" . $wpdb->prefix . "baseballNuke_stats`.`fiA`) AS `fiTotA`,
+	sum(`" . $wpdb->prefix . "baseballNuke_stats`.`fiPO`) AS `fiTotPO`,
+	sum(`" . $wpdb->prefix . "baseballNuke_stats`.`fiE`) AS `fiTotE`
 	from ((`" . $wpdb->prefix . "baseballNuke_players`  
 	join `" . $wpdb->prefix . "baseballNuke_stats`)  
 	join `" . $wpdb->prefix . "baseballNuke_schedule`)  

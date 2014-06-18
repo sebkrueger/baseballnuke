@@ -4235,11 +4235,159 @@ unset($pitchresults);
 }else{
   $bbnuke_content .= 'No pitching stats available';
 }
-  $bbnuke_content .= '</table>
+    $bbnuke_content .= '</table>
+		   </div>';
+
+    /////////////////////////
+    //	FIELDING STATS
+    //////////////////////////
+    $query = 'SELECT fiA, fiPO, fiE,homeTeam,visitingTeam,gameDate,gameTime,s.gameID ' .
+        '  FROM ' . $wpdb->prefix . 'baseballNuke_boxscores b, ' . $wpdb->prefix . 'baseballNuke_stats st ' .
+        ' LEFT JOIN ' . $wpdb->prefix . 'baseballNuke_schedule s ON st.gameID=s.gameID ' .
+        ' WHERE playerID = ' . $player_id . ' AND b.gameID=s.gameID AND season = "' . $dseason . '" AND (battOrd>0 OR pitchOrd>0) ORDER BY gameDate';
+
+    $result = mysql_query($query);
+
+    $showFieldingStats = false;
+
+    if ($result)
+    {
+        while ( $row = mysql_fetch_array($result) )
+        {
+            $fieldingresults[] = $row;
+            $showFieldingStats = true;
+        }
+    }
+    $bbnuke_content .= '<div id="Fielding" class="tabContent" style="display:none;width:100%">';
+    if ($showFieldingStats)
+    {
+        $bbnuke_content .= '<b>' . __('Fielding Statistics', 'bbnuke') . '&nbsp;' .$dseason . '</b><br />
+		<table class="bbnuke-results-table">
+		  <thead>
+		  <tr>
+		    <th>' . __('Game', 'bbnuke') . '</th>
+                    <th>A</th>
+                    <th>PO</th>
+                    <th>E</th>
+		  </tr>
+		  </thead>
+		  <tbody> ';
+
+        for ($m=0; $m < count($fieldingresults); $m++)
+        {
+            list($fiA,$fiPO, $fiE, $homeTeam, $visitingTeam, $gameDate, $gameTime, $gameID) = $fieldingresults[$m];
+            $bbnuke_content .= '<tr><td style="text-align:left;"><a href="'.$game_results_page.$qstring.'gameID='.$gameID.'" title="' . __('Show Game Results', 'bbnuke') . '">';
+            if($homeTeam==$dteam)
+                $bbnuke_content .= $visitingTeam;
+            else
+                $bbnuke_content .=  ' @ ' . $homeTeam;
+
+            $bbnuke_content .= '</a></td>
+			  <td>' . $fiA . '</td>
+		          <td>' . $fiPO . '</td>
+		          <td>' . $fiE . '</td>
+		        </tr>';
+        }
+
+////////////////////////////////
+// FIELDING TOTAL FOR SEASON
+////////////////////////////////
+        unset($fieldingresults);
+        $query = 'SELECT fiTotA,fiTotPO,fiTotE ' .
+            'FROM ' . $wpdb->prefix . 'baseballNuke_statTotals ' .
+            'WHERE (fiTotA>0 OR fiTotPO>0 OR fiTotE>0) AND season = "' . $dseason . '" AND playerID = ' . $player_id . ' ';
+        $result = mysql_query($query);
+        if ($result)
+        {
+            while ( $row = mysql_fetch_array($result) )
+            {
+                $fieldingresults[] = $row;
+            }
+        }
+        for ($m=0; $m < count($fieldingresults); $m++)
+        {
+            list($fiA,$fiPO,$fiE) = $fieldingresults[$m];
+            $bbnuke_content .= '</tbody><tr><td style="text-align:left;"><b>' . __('TOTAL FOR ', 'bbnuke') . $dseason . __(' Season', 'bbnuke') . '</b></td>
+	 	<td><b>' . $fiA . '</b></td>
+         	<td><b>' . $fiPO . '</b></td>
+             	<td><b>' . $fiE . '</b></td>
+		</tr>';
+        }
+        $bbnuke_content .= '</table><br>';
+        unset($fieldingresults);
+
+/////////////////////////////////////
+// FIELDING TOTALS FOR EACH SEASON
+/////////////////////////////////////
+        $bbnuke_content .= '<b>' . __('Fielding Statistics', 'bbnuke') . ' Career</b><br />
+                <table class="bbnuke-results-table">
+                  <thead>
+                  <tr>
+                    <th>' . __('Game', 'bbnuke') . '</th>
+                    <th>A</th>
+                    <th>PO</th>
+                    <th>E</th>
+                  </tr>
+                  </thead>
+                  <tbody> ';
+
+        for ($m=0; $m < count($past_season); $m++){
+            list($p_season) = $past_season[$m];
+            $query = 'SELECT fiTotA,fiTotPO,fiTotE,season ' .
+                'FROM ' . $wpdb->prefix . 'baseballNuke_statTotals ' .
+                'WHERE (fiTotA>0 OR fiTotPO>0 OR fiTotE>0) AND season = "' . $p_season . '" AND playerID = ' . $player_id . ' ';
+            $result = mysql_query($query);
+            if ( $result )
+            {
+                while ( $row = mysql_fetch_array($result) )
+                {
+                    $fieldingresults[] = $row;
+                }
+            }
+        }
+        for ($m=0; $m < count($fieldingresults); $m++)
+        {
+            list($fiA,$fiPO,$fiE, $c_season) = $fieldingresults[$m];
+            $bbnuke_content .= '<tr><td style="text-align:left;">' . $c_season . ' Season</a></td>
+                          <td>' . $fiA . '</td>
+                          <td>' . $fiPO . '</td>
+                          <td>' . $fiE . '</td>
+                        </tr>';
+        }
+        unset($fieldingresults);
+
+//////////////////////////
+//  FIELDING PITCHING TOTAL
+//////////////////////////
+        $query = 'SELECT sum(fiA)as fiA, sum(fiPO) as fiPO, sum(fiE) as fiE '.
+            '  FROM ' . $wpdb->prefix . 'baseballNuke_stats st, ' . $wpdb->prefix . 'baseballNuke_schedule s ' .
+            ' WHERE (battOrd>0 OR pitchOrd>0) AND st.gameID=s.gameID AND st.playerID = '. $player_id . ' ';
+        $result = mysql_query($query);
+        if ($result)
+        {
+            while ( $row = mysql_fetch_array($result) )
+            {
+                $fieldingresults[] = $row;
+            }
+        }
+
+        for ($m=0; $m < count($fieldingresults); $m++)
+        {
+            list($fiA, $fiPO, $fiE) = $fieldingresults[$m];
+            $bbnuke_content .= '<tr><td style="text-align:left;"><b>' . __('CAREER AS ', 'bbnuke') . $dteam . ' *</b></td>
+		     <td><b>' . $fiA . '</b></td>
+	             <td><b>' . $fiPO . '</b></td>
+	             <td><b>' . $fiE . '</b></td>
+	         </tr>';
+        }
+    }else{
+        $bbnuke_content .= 'No fielding stats available';
+    }
+
+
+    $bbnuke_content .= '</table>
 		   </div>
-		   <div id="Defense" class="tabContent" style="display:none;width:100%">
-			&nbsp;
-		   </div></div>';
+    </div>';
 
   if ( $bbnuke_echo )
     echo $bbnuke_content;
